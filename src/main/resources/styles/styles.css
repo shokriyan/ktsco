@@ -1,0 +1,39 @@
+/* Application wide styles */
+.button{
+	-fx-font-size: 15px;
+    -fx-border-color: #CECECE;
+    -fx-background-color: Transparent;
+    -fx-font-weight: bold
+
+}
+
+.button:hover{
+    -fx-background-color: #CECECE, -fx-outer-border, -fx-inner-border, -fx-body-color;
+
+}
+
+.button:focused {
+    -fx-border-color: transparent, black;
+    
+}
+
+.button:pressed {
+    -fx-background-color: #808080, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-text-fill: white;
+}
+
+.top-panel {
+	-fx-background-color:#708090;
+	-fx-text-fill : white
+}
+
+.side-panel {
+	-fx-background-color:#4682B4;
+	-fx-text-fill: white;
+	-fx-border-color: black
+}
+.topSecond-panel {
+	fx-border-color: black
+}
+
+

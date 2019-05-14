@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.image.Image?>
+
+<VBox nodeOrientation="RIGHT_TO_LEFT" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.TopViewController">
+   <children>
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="1366.0" styleClass="top-panel" VBox.vgrow="ALWAYS">
+      	<children>
+      		<ImageView fitHeight="80.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+      			<image>
+      				<Image url="/images/Logo.png" />
+      			</image>
+      		</ImageView>
+      		<Region prefHeight="200.0" prefWidth="300.0" HBox.hgrow="ALWAYS" />
+      		<VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+      			<children>
+      				<Text fx:id="txtCompanyName" strokeType="OUTSIDE" strokeWidth="0.0">
+      					<font>
+      						<Font size="24.0" />
+      					</font>
+      				</Text>
+      				<Text fx:id="textPanelName" layoutX="15.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0">
+      					<font>
+      						<Font size="24.0" />
+      					</font>
+      				</Text>
+      			</children>
+      			<padding>
+      				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      			</padding>
+      		</VBox>
+      		<Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+      		<VBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="300.0" spacing="20.0">
+      			<children>
+      				<Label fx:id="lblWelcomeMsg" />
+      				<Button fx:id="btnSignOut" mnemonicParsing="false" onAction="#allButtonAction" prefHeight="27.0" prefWidth="77.0" text="خروج" />
+      			</children>
+      			<padding>
+      				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      			</padding>
+      		</VBox>
+      	</children>
+      	<padding>
+      		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      	</padding>
+      </HBox>
+      <HBox prefHeight="50.0" prefWidth="200.0" style="-fx-border-color: black;" VBox.vgrow="ALWAYS">
+         <children>
+            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="NEVER" />
+            <Label fx:id="lblPanelName">
+               <HBox.margin>
+                  <Insets top="15.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+         </children>
+         <effect>
+            <Glow />
+         </effect>
+      </HBox>
+   </children>
+</VBox>

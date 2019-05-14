@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.ProductController">
+	<children>
+		<VBox prefHeight="635.0" prefWidth="1166.0">
+			<children>
+				<HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+					<children>
+						<Button fx:id="btnCategory" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="دسته بندی ها" />
+                  <Button fx:id="btnInventoryList" layoutX="20.0" layoutY="47.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="مواد اولیه" />
+					</children>
+				</HBox>
+				<HBox prefHeight="200.0" prefWidth="200.0" VBox.vgrow="NEVER">
+					<children>
+						<VBox prefHeight="200.0" prefWidth="400.0" HBox.hgrow="NEVER" />
+						<VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
+					</children>
+				</HBox>
+            <HBox layoutX="10.0" layoutY="60.0" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+			</children>
+		</VBox>
+	</children>
+</Pane>
