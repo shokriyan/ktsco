@@ -18,6 +18,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class CategoryController implements Initializable {
 
@@ -61,6 +62,7 @@ public class CategoryController implements Initializable {
 	public void allButtonAction(ActionEvent event) {
 		if (event.getSource() == btnClose) {
 			if (categoryStage.isShowing())
+				categoryStage.getOnHidden().handle(new WindowEvent(categoryStage,WindowEvent.WINDOW_HIDDEN));;
 				categoryStage.close();
 		} else if (event.getSource() == btnAdd) {
 			String value = txtCategory.getText();
@@ -74,10 +76,10 @@ public class CategoryController implements Initializable {
 			String value = txtCategory.getText();
 			modifyCategoryItem(value);
 			txtCategory.clear();
-		}else if (event.getSource() == btnSearch) {
+		} else if (event.getSource() == btnSearch) {
 			String value = txtCategory.getText();
 			searchCategoryItems(value);
-		}else if (event.getSource() == btnRefresh) {
+		} else if (event.getSource() == btnRefresh) {
 			catList = CategoryDAO.selectAllItems();
 			setCategoryTable(catList);
 			txtCategory.clear();
@@ -88,13 +90,13 @@ public class CategoryController implements Initializable {
 		catList = CategoryDAO.selectAllItems();
 		setCategoryTable(catList);
 	}
-	
+
 	private void setCategoryTable(ObservableList<CategoryModel> list) {
 		colNo.setCellValueFactory(cellData -> cellData.getValue().catIDProperty().asObject());
 		colCategory.setCellValueFactory(cellData -> cellData.getValue().categoryNameProperty());
 
 		tableCategory.setItems(list);
-		
+
 	}
 
 	public void addCategoryItem(String value) {
@@ -113,20 +115,39 @@ public class CategoryController implements Initializable {
 
 	}
 
+	private int getCategoryid() {
+		if (!tableCategory.getSelectionModel().isEmpty()) {
+			CategoryModel catModel = tableCategory.getSelectionModel().getSelectedItem();
+			return catModel.getCatId();
+		} else
+			return 0;
+	}
+
+	private String getCategoryItem() {
+		if (!tableCategory.getSelectionModel().isEmpty()) {
+			CategoryModel catModel = tableCategory.getSelectionModel().getSelectedItem();
+			return catModel.getCategoryName();
+		} else
+			return null;
+	}
+
 	public void deleteCategoryItem(String value) {
-		if (!value.isEmpty()) {
-			boolean exist = CategoryDAO.checkExistance(value);
-			if (exist) {
-				int categoryId = CategoryDAO.getCategoryID(value);
-				if (categoryId != 0) {
-					CategoryDAO.deleteCategory(categoryId);
-					populateCategoryTable();
+		boolean response = AlertsUtils.ResposeAlert("Delete Category", "حذف دسته بندی \n" + value);
+		if (response) {
+			if (!value.isEmpty()) {
+				boolean exist = CategoryDAO.checkExistance(value);
+				if (exist) {
+					int categoryId = getCategoryid();
+					if (categoryId != 0) {
+						CategoryDAO.deleteCategory(categoryId);
+						populateCategoryTable();
+					}
+				} else {
+					AlertsUtils.warningAlert("Not Exist", "‌این آیتم از قبل وجود ندارد " + "\n" + value);
 				}
 			} else {
-				AlertsUtils.warningAlert("آیتم تکراری", "‌این آیتم از قبل وجود ندارد " + "\n" + value);
+				AlertsUtils.warningAlert("Empty Field", "لطفا اطلاعات وارد کنید");
 			}
-		} else {
-			AlertsUtils.warningAlert("Empty Field", "لطفا اطلاعات وارد کنید");
 		}
 	}
 
@@ -151,12 +172,12 @@ public class CategoryController implements Initializable {
 
 		}
 	}
-	
+
 	public void searchCategoryItems(String value) {
 		if (!value.isEmpty()) {
 			catList = CategoryDAO.retrieveSearchItems(value);
 			setCategoryTable(catList);
-		}else {
+		} else {
 			AlertsUtils.warningAlert("Empty Field", "لطفا اطلاعات وارد کنید");
 		}
 	}

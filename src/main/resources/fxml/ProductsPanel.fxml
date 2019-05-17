@@ -17,16 +17,89 @@
 					<children>
 						<Button fx:id="btnCategory" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="دسته بندی ها" />
                   <Button fx:id="btnInventoryList" layoutX="20.0" layoutY="47.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="مواد اولیه" />
+                  <Button fx:id="btnAddProducts" layoutX="190.0" layoutY="22.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="ثبت محصول" />
+                  <Button fx:id="btnShowProduct" layoutX="360.0" layoutY="22.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="نمایش اطلاعات " />
 					</children>
 				</HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="30.0" prefWidth="200.0" spacing="20.0">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <Label fx:id="labelMessage" textAlignment="CENTER" />
+               </children>
+            </HBox>
 				<HBox prefHeight="200.0" prefWidth="200.0" VBox.vgrow="NEVER">
 					<children>
-						<VBox prefHeight="200.0" prefWidth="400.0" HBox.hgrow="NEVER" />
-						<VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
+						<VBox prefHeight="100.0" prefWidth="100.0" spacing="30.0">
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                     <children>
+                        <Label layoutX="30.0" layoutY="30.0" text="شماره" />
+                        <Label text="نام محصول" />
+                        <Label layoutX="20.0" layoutY="20.0" text="دسته بندی" />
+                        <Label layoutX="20.0" layoutY="47.0" text="واحد شمارش" />
+                        <Label layoutX="20.0" layoutY="74.0" text="تولید کارخانه" />
+                     </children></VBox>
+                  <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="300.0" spacing="20.0">
+                     <children>
+                        <TextField fx:id="txtProdId" layoutX="30.0" layoutY="25.0" prefWidth="400.0" />
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TextField fx:id="txtProduct" prefWidth="200.0" promptText="نام" />
+                              <TextField fx:id="txtProdSize" promptText="سایز" />
+                           </children>
+                        </HBox>
+                        <ComboBox fx:id="comboCategory" prefWidth="400.0" />
+                        <ComboBox fx:id="comboUm" layoutX="10.0" layoutY="37.0" prefWidth="400.0" />
+                        <CheckBox fx:id="checkFactoryProduct" mnemonicParsing="false" onAction="#onSelectActionForTable" />
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
+                     </padding>
+                  </VBox>
+                  <VBox fx:id="vboxProdDetail" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                           <children>
+                              <ComboBox fx:id="comboInvItem" prefHeight="27.0" prefWidth="244.0" promptText="مواد اولیه" />
+                              <TextField fx:id="txtReqQty" prefHeight="27.0" prefWidth="166.0" promptText="تعداد" />
+                              <Button fx:id="btnAddInvItem" mnemonicParsing="false" onAction="#allButtonAction" prefHeight="27.0" prefWidth="120.0" text="افزودن" />
+                              <Button fx:id="btnClearTable" layoutX="699.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonAction" prefHeight="27.0" prefWidth="120.0" text="پاک کردن جدول" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <TableView fx:id="tableDetail" editable="true" prefHeight="274.0" prefWidth="766.0">
+                          <columns>
+                            <TableColumn fx:id="colDetailInvItem" prefWidth="511.0" text="مواد اولیه" />
+                              <TableColumn fx:id="colDetailQty" prefWidth="248.0" text="مقدار" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
 					</children>
 				</HBox>
-            <HBox layoutX="10.0" layoutY="60.0" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <HBox layoutX="10.0" layoutY="60.0" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <TableView fx:id="tableProducts" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                    <columns>
+                      <TableColumn fx:id="colNo" prefWidth="200.0" resizable="false" text="شماره" />
+                      <TableColumn fx:id="colCategory" prefWidth="250.0" resizable="false" text="دسته بندی" />
+                        <TableColumn fx:id="colProduct" prefWidth="500.0" resizable="false" text="نام محصول" />
+                        <TableColumn fx:id="colUm" prefWidth="215.0" resizable="false" text="واحد شمارش" />
+                    </columns>
+                  </TableView>
+               </children></HBox>
 			</children>
 		</VBox>
 	</children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
 </Pane>

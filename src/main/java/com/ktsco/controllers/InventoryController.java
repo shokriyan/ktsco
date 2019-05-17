@@ -11,9 +11,11 @@ import com.ktsco.modelsdao.InventoryDAO;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.Constants;
+import com.ktsco.utils.ProcessService;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,6 +27,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class InventoryController implements Initializable {
 
@@ -73,6 +76,7 @@ public class InventoryController implements Initializable {
 	@FXML
 	public void allButtonAction(ActionEvent event) {
 		if (event.getSource() == btnClose) {
+			invStage.getOnHidden().handle(new WindowEvent(invStage, WindowEvent.WINDOW_HIDDEN));
 			invStage.close();
 		} else if (event.getSource() == btnAdd) {
 			SaveNewInventory();
@@ -158,26 +162,56 @@ public class InventoryController implements Initializable {
 	}
 
 	private void setLabelInfo(boolean success) {
+		Service<Void> service = new ProcessService();
 		if (success) {
 			labelInfo.setStyle("-fx-text-fill:green");
 			labelInfo.setText("انجام شد");
 			labelInfo.setVisible(true);
+			if (!service.isRunning()) {
+				service.start();
+			}
+			
+			service.setOnSucceeded(event -> {
+				labelInfo.setVisible(false);
+				service.reset();
+			});
+			
 		} else {
 			labelInfo.setStyle("-fx-text-fill:red");
 			labelInfo.setText("انجام نشد");
 			labelInfo.setVisible(true);
+			if (!service.isRunning()) {
+				service.start();
+			}
+			
+			service.setOnSucceeded(event -> {
+				labelInfo.setVisible(false);
+				service.reset();
+			});
+			
 		}
 	}
 
 	private void deleteInventory() {
+		String invValue = getInvetoryItem();
+		boolean response = AlertsUtils.ResposeAlert("Delete", "حذف مواد اولیه \n" + invValue);
+		if (response) {
+			int inv_id = getSelectedInvId();
+			if (inv_id != 0) {
+				boolean success = InventoryDAO.deleteInventoryItem(inv_id);
+				setLabelInfo(success);
+			} else
+				setLabelInfo(false);
+		}
 
-		int inv_id = getSelectedInvId();
-		if (inv_id != 0) {
-			boolean success = InventoryDAO.deleteInventoryItem(inv_id);
-			setLabelInfo(success);
-		} else
-			setLabelInfo(false);
-
+	}
+	
+	private String getInvetoryItem() {
+		if (!tableInventory.getSelectionModel().isEmpty()) {
+			InventoryModel invModel = tableInventory.getSelectionModel().getSelectedItem();
+			return invModel.getInvItem();
+		}else
+			return null;
 	}
 
 	private void updateInventory() {

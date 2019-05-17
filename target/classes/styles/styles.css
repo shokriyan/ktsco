@@ -1,4 +1,5 @@
 /* Application wide styles */
+
 .button{
 	-fx-font-size: 15px;
     -fx-border-color: #CECECE;
@@ -34,6 +35,9 @@
 }
 .topSecond-panel {
 	fx-border-color: black
+}
+.text-field{
+	
 }
 
 

@@ -58,7 +58,7 @@ public class CategoryDAO {
 		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
 		ResultSet resultSet = null;
 		try {
-			preStmt.setString(1, "%"+searchContex+"%");
+			preStmt.setString(1, "%" + searchContex + "%");
 			resultSet = preStmt.executeQuery();
 
 			while (resultSet.next()) {
@@ -205,9 +205,8 @@ public class CategoryDAO {
 
 		return catId;
 	}
-	
-	
-	public static List<String> getCategoryItemsForCombo(){
+
+	public static List<String> getCategoryItemsForCombo() {
 		List<String> list = new ArrayList<String>();
 		String query = "Select category from category";
 		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
@@ -217,11 +216,40 @@ public class CategoryDAO {
 					list.add(resultSet.getString(1));
 				}
 			}
-		}catch (SQLException e) {
-			log.error("Error in executing query {}" , query + " with error massage {}" , e.getMessage());
+		} catch (SQLException e) {
+			log.error("Error in executing query {}", query + " with error massage {}", e.getMessage());
 			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
 		}
-		return list; 
+		return list;
 	}
+
+	public static String getCategoryName(int categoryId) {
+		String catName = null;
+
+		String query = "select category from category where category_id = ? ";
+
+		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
+		ResultSet resultSet = null;
+		try {
+			preStmt.setInt(1, categoryId);
+			resultSet = preStmt.executeQuery();
+			while (resultSet.next()) {
+				catName = resultSet.getString("category");
+			}
+		} catch (SQLException e) {
+			log.error("Error in executing query {}", query + " with error massage {}", e.getMessage());
+			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
+		}finally {
+			try {
+				preStmt.close();
+				resultSet.close();
+			}catch (SQLException e) {
+				log.error(e.getMessage());
+			}
+		}
+		return catName;
+	}
+	
+	
 
 }

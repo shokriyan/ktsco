@@ -152,7 +152,8 @@ public class ViewClass {
 			pane = (Pane) loader.load(getClass().getResourceAsStream(fxml));
 			log.info("FXMl file " + fxml + "Loaded");
 		} catch (IOException e) {
-			log.error("Fail to load fxml file " + fxml + " with error massage " + e.getLocalizedMessage() + "\n" + e.getMessage()) ;
+			log.error("Fail to load fxml file " + fxml + " with error massage " + e.getMessage()) ;
+			e.printStackTrace();
 		}
 
 		return pane;

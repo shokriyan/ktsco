@@ -3,6 +3,8 @@ package com.ktsco.modelsdao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,12 @@ public class InventoryDAO {
 
 	private static final Logger log = LoggerFactory.getLogger(InventoryDAO.class);
 	private static InventoryModel invModel;
+
+	/**
+	 * Retrieve all records from database for inventroy
+	 * 
+	 * @return Observable list of Invetory Model
+	 */
 
 	public static ObservableList<InventoryModel> getAllInvetoryRecord() {
 		ObservableList<InventoryModel> list = FXCollections.observableArrayList();
@@ -52,6 +60,15 @@ public class InventoryDAO {
 
 		return list;
 	}
+
+	/**
+	 * Insert inventory value to database
+	 * 
+	 * @param items
+	 * @param catId
+	 * @param um
+	 * @return
+	 */
 
 	public static boolean insertInvetoryItems(String items, int catId, String um) {
 		boolean success = false;
@@ -212,6 +229,65 @@ public class InventoryDAO {
 		}
 
 		return list;
+	}
+
+	/**
+	 * Retrieve All inventroy Items to use in Combo Boxes
+	 * 
+	 * @return List of String
+	 */
+	public static List<String> getInvItemsForCombo() {
+		List<String> list = new ArrayList<String>();
+		String query = "select inv_name from inventory order by inv_id";
+		ResultSet result = DatabaseUtils.dbSelectExuteQuery(query);
+		log.info("Exectuing query {}", query);
+		try {
+			while (result.next()) {
+				list.add(result.getString(1));
+			}
+		} catch (SQLException e) {
+			log.error("Error Executing query {}", query + "with error massage {}", e.getMessage());
+			AlertsUtils.ErrorAlert("Database Connection", "خطا در ارتباط با دیتابیس");
+		} finally {
+			try {
+				result.close();
+			} catch (SQLException e) {
+				log.error(e.getMessage());
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Retrieve the value of Inventroy Id for Inventroy name
+	 * 
+	 * @param lookupValue
+	 * @return Integer Inv ID
+	 */
+	public static int getInvId(String lookupValue) {
+		int invId = 0;
+		String query = "select inv_id from inventory where inv_name = ?";
+		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
+		ResultSet resultSet = null;
+		try {
+			preStmt.setString(1, lookupValue);
+			resultSet = preStmt.executeQuery();
+			while (resultSet.next()) {
+				invId = resultSet.getInt(1);
+			}
+		} catch (SQLException e) {
+			log.error("Error Executing query {}", query + " with error massage " + e.getMessage());
+			AlertsUtils.ErrorAlert("Database Connection", "خطا در ارتباط با دیتابیس");
+		} finally {
+			try {
+				preStmt.close();
+				resultSet.close();
+			} catch (SQLException e) {
+				log.error(e.getMessage());
+			}
+		}
+		return invId;
 	}
 
 }
