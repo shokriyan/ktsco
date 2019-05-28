@@ -60,6 +60,7 @@ public class Commons {
 		button.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 		button.setAlignment(Pos.CENTER_LEFT);
 		button.setPrefWidth(198);
+		button.setStyle("-fx-border-color: #B0C4DE");
 		return button;
 
 	}

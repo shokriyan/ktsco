@@ -27,9 +27,7 @@ public class FactoryController implements Initializable {
 	@FXML
 	private static Button btnProducts; 
 	@FXML
-	private static Button btnInventroy; 
-	@FXML
-	private static Button btnStock; 
+	private static Button btnInvStock; 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
@@ -52,13 +50,10 @@ public class FactoryController implements Initializable {
 		List<Button> buttonList = new ArrayList<Button>();
 		btnProducts = Commons.addMenuButton("محصولات");
 		btnProducts.setOnAction(event-> allButtonsAction(event));
-		btnInventroy = Commons.addMenuButton("مواد اولیه");
-		btnInventroy.setOnAction(event -> allButtonsAction(event));
-		btnStock = Commons.addMenuButton("گدام کارخانه");
-		btnStock.setOnAction(event-> allButtonsAction(event));
+		btnInvStock = Commons.addMenuButton("گدام کارخانه");
+		btnInvStock.setOnAction(event-> allButtonsAction(event));
 		buttonList.add(btnProducts);
-		buttonList.add(btnInventroy);
-		buttonList.add(btnStock);
+		buttonList.add(btnInvStock);
 		for (int i = 0 ; i< buttonList.size(); i ++) {
 			vbox.getChildren().add(buttonList.get(i));
 		}
@@ -73,10 +68,8 @@ public class FactoryController implements Initializable {
 		if (event.getSource() == btnProducts) {
 			Commons.reloadTopView(factoryBorderPane, btnProducts);
 			openPorductPanel();
-		}else if (event.getSource() == btnInventroy) {
-			Commons.reloadTopView(factoryBorderPane, btnInventroy);
-		}else if (event.getSource() == btnStock) {
-			Commons.reloadTopView(factoryBorderPane, btnStock);
+		}else if (event.getSource() == btnInvStock) {
+			Commons.reloadTopView(factoryBorderPane, btnInvStock);
 		}
 	}
 	

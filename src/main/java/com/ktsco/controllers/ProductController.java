@@ -3,6 +3,7 @@ package com.ktsco.controllers;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
@@ -45,7 +46,8 @@ public class ProductController implements Initializable {
 	@FXML
 	private Label labelMessage;
 	@FXML
-	private Button btnCategory, btnInventoryList, btnAddProducts, btnAddInvItem, btnClearTable, btnShowProduct;
+	private Button btnCategory, btnInventoryList, btnAddProducts, btnAddInvItem, btnClearTable, btnShowProduct,
+			btnDeleteProduct, btnSaveChange, btnRefresh;
 
 	@FXML
 	private TableView<ProductModel> tableProducts;
@@ -75,13 +77,16 @@ public class ProductController implements Initializable {
 
 	private ObservableList<ProductModel> productsList = FXCollections.observableArrayList();
 	private ObservableList<ProdDetailModel> prodDetailList = FXCollections.observableArrayList();
+	private ProductModel prodModel;
+	private ProdDetailModel prodDetailModel;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		loadPrerequisition();
+
 	}
 
-	private void clearTextFiels() {
+	private void clearTextFields() {
 		txtProduct.clear();
 		txtProdSize.clear();
 		txtReqQty.clear();
@@ -115,14 +120,20 @@ public class ProductController implements Initializable {
 			InventoryController.invStage.setOnHidden(e -> populateComboItems());
 		} else if (event.getSource() == btnAddProducts) {
 			addProducts();
-			loadPrerequisition();
-			clearTextFiels();
 
 		} else if (event.getSource() == btnAddInvItem) {
 			addInventoryDetailToTable();
 
 		} else if (event.getSource() == btnClearTable) {
 			clearProdDetailTable();
+		} else if (event.getSource() == btnDeleteProduct) {
+			deleteProduct();
+		} else if (event.getSource() == btnShowProduct) {
+			showProducts();
+		} else if (event.getSource() == btnRefresh) {
+			loadPrerequisition();
+			clearProdDetailTable();
+			clearTextFields();
 		}
 
 	}
@@ -232,12 +243,17 @@ public class ProductController implements Initializable {
 
 	private void addProducts() {
 		int prodId = Integer.parseInt(txtProdId.getText());
-		String prodName = (txtProduct.getText().concat("-").concat(txtProdSize.getText()));
+		String prodName = null;
+		if (!txtProdSize.getText().isEmpty()) {
+			prodName = (txtProduct.getText().concat(" - ").concat(txtProdSize.getText()));
+		} else {
+			prodName = txtProduct.getText();
+		}
 		int catId = CategoryDAO.getCategoryID(comboCategory.getValue());
 		String prodUm = comboUm.getValue();
 		int factoryProd = Commons.getCheckBoxValue(checkFactoryProduct);
 		boolean response = false;
-		boolean isExist = ProductDAO.isProductExist(prodName.replace("-", ""));
+		boolean isExist = ProductDAO.isProductExist(prodName);
 		if (!isExist) {
 			if (!prodName.isEmpty() && !comboCategory.getValue().equals("") && !prodUm.equals("")) {
 				if (factoryProd == 1) {
@@ -253,17 +269,23 @@ public class ProductController implements Initializable {
 							response = ProductDAO.insertProductDetails(invid, prodId, reqQty);
 
 						}
-						Commons.processMessageLabel(labelMessage, response);
+
 					} else {
 						log.error("Empty List");
 						AlertsUtils.warningAlert("Empty List", "لیست خالی است");
-
+						Commons.processMessageLabel(labelMessage, response);
 					}
+					loadPrerequisition();
+					clearTextFields();
+					Commons.processMessageLabel(labelMessage, response);
 				} else {
 					response = ProductDAO.insertProducts(prodId, catId, prodName, prodUm, factoryProd);
 					Commons.processMessageLabel(labelMessage, response);
+					loadPrerequisition();
+					clearTextFields();
 				}
 			} else {
+				Commons.processMessageLabel(labelMessage, response);
 				log.error("Empty filed on Product name or category or Unit measure");
 				AlertsUtils.warningAlert("Empty List", "لطفا اطلاعات وارد کنید");
 			}
@@ -274,6 +296,75 @@ public class ProductController implements Initializable {
 	private void populateProductId() {
 		int prodId = ProductDAO.getLastProductId();
 		txtProdId.setText(String.valueOf(prodId));
+	}
+
+	private void deleteProduct() {
+		if (!tableProducts.getSelectionModel().isEmpty()) {
+			prodModel = tableProducts.getSelectionModel().getSelectedItem();
+			int prodId = prodModel.getProdId();
+			String prodName = prodModel.getProdName();
+			boolean success;
+			boolean userResponse = AlertsUtils.ResposeAlert("Delete Product", "حذف محصول \n" + prodName);
+			if (userResponse) {
+
+				success = ProductDAO.deleteProductDetail(prodId);
+				success = ProductDAO.deleteProduct(prodId);
+				Commons.processMessageLabel(labelMessage, success);
+				loadPrerequisition();
+				clearTextFields();
+			} else {
+				Commons.processMessageLabel(labelMessage, false);
+			}
+		} else {
+			AlertsUtils.warningAlert("Select Items", "لطفا از لیست انتخاب کنید");
+		}
+	}
+
+	private void showProducts() {
+		clearTextFields();
+		if (!tableProducts.getSelectionModel().isEmpty()) {
+			prodModel = tableProducts.getSelectionModel().getSelectedItem();
+			int prodid = prodModel.getProdId();
+
+			Map<String, Object> prodMap = ProductDAO.showProduct(prodid);
+			String prod_id = prodMap.get("prod_id").toString();
+			String category = prodMap.get("category").toString();
+			if (prodMap.get("prod_name").toString().contains("-")) {
+				String[] prodName = prodMap.get("prod_name").toString().split("-");
+				txtProduct.setText(prodName[0]);
+				txtProdSize.setText(prodName[1]);
+			} else {
+				String prodName = prodMap.get("prod_name").toString();
+				txtProduct.setText(prodName);
+			}
+			String prodUm = prodMap.get("prod_um").toString();
+			int factoryProd = Integer.parseInt(prodMap.get("factory_prod").toString());
+
+			txtProdId.setText(prod_id);
+			comboCategory.setValue(category);
+			comboUm.setValue(prodUm);
+			if (factoryProd == 0) {
+				checkFactoryProduct.setSelected(false);
+				onSelectActionForTable();
+			} else {
+				checkFactoryProduct.setSelected(true);
+				onSelectActionForTable();
+			}
+
+			prodDetailList = ProductDAO.showProductDetail(prodid);
+			addDetailListToTable(prodDetailList);
+		}
+	}
+
+	public void onTableDetailSelection() {
+		if (!tableDetail.getSelectionModel().isEmpty()) {
+			prodDetailModel = tableDetail.getSelectionModel().getSelectedItem();
+			String invName = prodDetailModel.getInvName();
+			double reqQty = prodDetailModel.getReqQty();
+
+			comboInvItem.setValue(invName);
+			txtReqQty.setText(String.valueOf(reqQty));
+		}
 	}
 
 }

@@ -290,4 +290,29 @@ public class InventoryDAO {
 		return invId;
 	}
 
+	public static String getInvName(int inv_id) {
+		String invName = null;
+		String query = "Select inv_name from inventory where inv_id = ?";
+		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
+		ResultSet resultSet = null;
+		try {
+			preStmt.setInt(1, inv_id);
+			resultSet = preStmt.executeQuery();
+			while (resultSet.next()) {
+				invName = resultSet.getString("inv_name");
+			}
+		} catch (SQLException e) {
+			log.error("Error Executing query {}", query + " with error massage " + e.getMessage());
+			AlertsUtils.ErrorAlert("Database Connection", "خطا در ارتباط با دیتابیس");
+		} finally {
+			try {
+				preStmt.close();
+				resultSet.close();
+			} catch (SQLException e) {
+				log.error(e.getMessage());
+			}
+		}
+		return invName;
+	}
+
 }

@@ -1,8 +1,8 @@
 /* Application wide styles */
 
 .button{
-	-fx-font-size: 15px;
-    -fx-border-color: #CECECE;
+	-fx-font-size: 15.0px;
+    -fx-border-color: #000000;
     -fx-background-color: Transparent;
     -fx-font-weight: bold
 
@@ -14,7 +14,7 @@
 }
 
 .button:focused {
-    -fx-border-color: transparent, black;
+    -fx-border-color: transparent, white;
     
 }
 
@@ -29,15 +29,11 @@
 }
 
 .side-panel {
-	-fx-background-color:#4682B4;
+	-fx-background-color:#B0C4DE;
 	-fx-text-fill: white;
 	-fx-border-color: black
 }
 .topSecond-panel {
 	fx-border-color: black
 }
-.text-field{
-	
-}
-
 

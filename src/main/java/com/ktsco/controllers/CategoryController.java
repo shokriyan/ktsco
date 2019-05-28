@@ -123,14 +123,6 @@ public class CategoryController implements Initializable {
 			return 0;
 	}
 
-	private String getCategoryItem() {
-		if (!tableCategory.getSelectionModel().isEmpty()) {
-			CategoryModel catModel = tableCategory.getSelectionModel().getSelectedItem();
-			return catModel.getCategoryName();
-		} else
-			return null;
-	}
-
 	public void deleteCategoryItem(String value) {
 		boolean response = AlertsUtils.ResposeAlert("Delete Category", "حذف دسته بندی \n" + value);
 		if (response) {
