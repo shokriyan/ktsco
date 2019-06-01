@@ -154,10 +154,10 @@ public class InventoryController implements Initializable {
 				boolean success = InventoryDAO.insertInvetoryItems(items, catId, um);
 				setLabelInfo(success);
 			} else {
-				AlertsUtils.warningAlert("آیتم تکراری", "‌این آیتم از قبل وجود دارد " + "\n" + items);
+				AlertsUtils.repeatItemAlerts(items);
 			}
 		} else {
-			AlertsUtils.warningAlert("Empty Field", "لطفا اطلاعات وارد کنید");
+			AlertsUtils.emptyFieldAlert();
 		}
 	}
 
@@ -194,7 +194,7 @@ public class InventoryController implements Initializable {
 
 	private void deleteInventory() {
 		String invValue = getInvetoryItem();
-		boolean response = AlertsUtils.ResposeAlert("Delete", "حذف مواد اولیه \n" + invValue);
+		boolean response = AlertsUtils.askForDeleteAlert(invValue);
 		if (response) {
 			int inv_id = getSelectedInvId();
 			if (inv_id != 0) {
@@ -226,7 +226,7 @@ public class InventoryController implements Initializable {
 			setLabelInfo(success);
 		} else {
 			setLabelInfo(false);
-			AlertsUtils.warningAlert("Empty Field", "لطفا اطلاعات وارد کنید");
+			AlertsUtils.emptyFieldAlert();
 		}
 	}
 

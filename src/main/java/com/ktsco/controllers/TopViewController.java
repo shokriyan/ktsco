@@ -29,7 +29,7 @@ public class TopViewController implements Initializable {
 	@FXML
 	public Label lblPanelName;
 	@FXML
-	public Text txtCompanyName; 
+	public Text txtCompanyName;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -45,17 +45,23 @@ public class TopViewController implements Initializable {
 	@FXML
 	public void allButtonAction(ActionEvent event) {
 		if (event.getSource() == btnSignOut) {
-			if (AdminController.adminStage.isShowing()) {
+			if (AdminController.adminStage != null && AdminController.adminStage.isShowing()) {
 				Constants.setDisplayPanelName(null);
 				log.info("Closing Admin Panel");
 				AdminController.adminStage.close();
 				MainApp.loginStage.show();
-			}else if (FactoryController.factoryStage.isShowing()) { 
+
+			} else if (FactoryController.factoryStage != null && FactoryController.factoryStage.isShowing()) {
 				Constants.setDisplayPanelName(null);
 				log.info("Closing CSR Panel");
 				FactoryController.factoryStage.close();
 				MainApp.loginStage.show();
-			}else {
+			} else if (CSRController.csrStage != null && CSRController.csrStage.isShowing()) {
+				Constants.setDisplayPanelName(null);
+				CSRController.csrStage.close();
+				MainApp.loginStage.show();
+
+			} else {
 				log.info("Admin Panel is not Showing at this time");
 			}
 		}

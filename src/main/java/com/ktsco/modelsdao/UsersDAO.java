@@ -45,7 +45,7 @@ public class UsersDAO {
 		} catch (SQLException e) {
 			log.error("Error while looping on results of Query " + e.getMessage());
 			log.info("list can be null at this point" + list);
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در درخواست اطلاعات از دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 		}
 
 		return list;
@@ -100,7 +100,7 @@ public class UsersDAO {
 			}
 		} catch (SQLException e) {
 			log.error("Execution failed with error massage {}" + e.getMessage());
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در درخواست اطلاعات از دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 		}
 
 		comboUsername.setItems(comboList);
@@ -127,7 +127,7 @@ public class UsersDAO {
 			}
 		} catch (SQLException e) {
 			log.error("Execution failed with error massage {}" + e.getMessage());
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در درخواست اطلاعات از دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 		}
 
 		return userID;
@@ -149,7 +149,7 @@ public class UsersDAO {
 
 		} catch (SQLException e) {
 			log.error("Execution failed with error massage {}" + e.getMessage());
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در درخواست اطلاعات از دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 		}
 		return result;
 
@@ -174,7 +174,7 @@ public class UsersDAO {
 			prestmt.executeUpdate();
 		} catch (SQLException e) {
 			log.error("Execution failed with error massage {}" + e.getMessage());
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در درخواست اطلاعات از دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 		}
 	}
 	
@@ -193,7 +193,7 @@ public class UsersDAO {
 			prestmt.executeUpdate();
 		} catch (SQLException e) {
 			log.error("Execution failed with error massage {}" + e.getMessage());
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در درخواست اطلاعات از دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 		}
 	}
 	

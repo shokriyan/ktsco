@@ -74,7 +74,7 @@ public class UsersController implements Initializable {
 			usersStage.setOnHidden(event1 -> populateUserList());
 		} else if (event.getSource() == btnDeleteUser) {
 			String userName = getSelectedUsername();
-			boolean response = AlertsUtils.ResposeAlert("Deleting Users",( "حذف کاربر ؟‌" + "\n" + userName));
+			boolean response = AlertsUtils.askForDeleteAlert(userName);
 			if (response) {
 				deleteSelectedUser();
 			}

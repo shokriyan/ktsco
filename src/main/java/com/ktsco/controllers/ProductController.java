@@ -28,10 +28,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 public class ProductController implements Initializable {
 
@@ -68,7 +70,8 @@ public class ProductController implements Initializable {
 
 	@FXML
 	private TextField txtProduct, txtReqQty, txtProdId, txtProdSize;
-
+	@FXML
+	private TableColumn<ProdDetailModel, Void> colDetailDelete;
 	@FXML
 	private TableColumn<ProductModel, Integer> colNo;
 
@@ -129,11 +132,19 @@ public class ProductController implements Initializable {
 		} else if (event.getSource() == btnDeleteProduct) {
 			deleteProduct();
 		} else if (event.getSource() == btnShowProduct) {
+			tableDetail.getItems().clear();
 			showProducts();
 		} else if (event.getSource() == btnRefresh) {
+			tableDetail.getItems().clear();
 			loadPrerequisition();
 			clearProdDetailTable();
 			clearTextFields();
+		} else if (event.getSource() == btnSaveChange) {
+			saveUpdateProducts();
+			loadPrerequisition();
+			clearProdDetailTable();
+			clearTextFields();
+
 		}
 
 	}
@@ -148,7 +159,7 @@ public class ProductController implements Initializable {
 
 	private void clearProdDetailTable() {
 		if (!tableDetail.getSelectionModel().isEmpty()) {
-			boolean response = AlertsUtils.ResposeAlert("Clear Table", "پاک کردن کل جدول");
+			boolean response = AlertsUtils.askForDeleteAlert(null);
 			if (response) {
 				tableDetail.getItems().clear();
 				comboInvItem.getItems().clear();
@@ -166,11 +177,11 @@ public class ProductController implements Initializable {
 				txtReqQty.clear();
 				populateComboItems();
 			} else {
-				AlertsUtils.warningAlert("Empty Field", "لطفا اطلاعات وارد کنید");
+				AlertsUtils.emptyFieldAlert();
 			}
 		} catch (Exception e) {
 			log.error("Empty Fields ");
-			AlertsUtils.warningAlert("Empty Field", "لطفا اطلاعات وارد کنید");
+			AlertsUtils.emptyFieldAlert();
 		}
 	}
 
@@ -223,8 +234,15 @@ public class ProductController implements Initializable {
 			prodDetailList.add(detailModel);
 		} catch (NumberFormatException e) {
 			log.error("Only numbers are acceptable at Required Qty");
-			AlertsUtils.warningAlert("Number format", "عدد وارد کنید");
+			AlertsUtils.numberEntryListAlerts();
 		}
+	}
+
+	private void deleteDetailItemFromTable(int id) {
+
+		ProductDAO.deleteDetailItem(id);
+		showProducts();
+
 	}
 
 	/**
@@ -232,23 +250,70 @@ public class ProductController implements Initializable {
 	 * 
 	 * @param list
 	 */
-
 	private void addDetailListToTable(ObservableList<ProdDetailModel> list) {
+
 		colDetailInvItem.setCellValueFactory(cellData -> cellData.getValue().getInvNameProperty());
 		colDetailQty.setCellValueFactory(cellData -> cellData.getValue().getReqQtyProperty().asObject());
+		colDetailDelete
+				.setCellFactory(new Callback<TableColumn<ProdDetailModel, Void>, TableCell<ProdDetailModel, Void>>() {
 
+					@Override
+					public TableCell<ProdDetailModel, Void> call(TableColumn<ProdDetailModel, Void> param) {
+						final TableCell<ProdDetailModel, Void> cell = new TableCell<ProdDetailModel, Void>() {
+
+							private final Button btn = new Button("حذف");
+
+							{
+								btn.setOnAction((ActionEvent event) -> {
+									prodDetailModel = tableDetail.getSelectionModel().getSelectedItem();
+									if (!tableDetail.getSelectionModel().isEmpty()) {
+										int id = prodDetailModel.getId();
+										deleteDetailItemFromTable(id);
+									}
+								});
+							}
+
+							@Override
+							public void updateItem(Void item, boolean empty) {
+								super.updateItem(item, empty);
+								if (empty) {
+									setGraphic(null);
+								} else {
+									setGraphic(btn);
+								}
+							}
+						};
+						return cell;
+					}
+				});
+		// addButtonToDetailTable();
 		tableDetail.setItems(list);
 
 	}
 
-	private void addProducts() {
-		int prodId = Integer.parseInt(txtProdId.getText());
+	/**
+	 * private getProdName concating name and size
+	 * 
+	 * @return String prodName
+	 */
+
+	private String getProdName() {
 		String prodName = null;
 		if (!txtProdSize.getText().isEmpty()) {
 			prodName = (txtProduct.getText().concat(" - ").concat(txtProdSize.getText()));
 		} else {
 			prodName = txtProduct.getText();
 		}
+		return prodName;
+	}
+
+	/**
+	 * Adding new products to database
+	 */
+	private void addProducts() {
+		int prodId = Integer.parseInt(txtProdId.getText());
+		String prodName = getProdName();
+
 		int catId = CategoryDAO.getCategoryID(comboCategory.getValue());
 		String prodUm = comboUm.getValue();
 		int factoryProd = Commons.getCheckBoxValue(checkFactoryProduct);
@@ -272,7 +337,7 @@ public class ProductController implements Initializable {
 
 					} else {
 						log.error("Empty List");
-						AlertsUtils.warningAlert("Empty List", "لیست خالی است");
+						AlertsUtils.selectFromListAlert();
 						Commons.processMessageLabel(labelMessage, response);
 					}
 					loadPrerequisition();
@@ -287,24 +352,29 @@ public class ProductController implements Initializable {
 			} else {
 				Commons.processMessageLabel(labelMessage, response);
 				log.error("Empty filed on Product name or category or Unit measure");
-				AlertsUtils.warningAlert("Empty List", "لطفا اطلاعات وارد کنید");
+				AlertsUtils.emptyFieldAlert();
 			}
 		}
 
 	}
+
+	// Get productID calculating for next products
 
 	private void populateProductId() {
 		int prodId = ProductDAO.getLastProductId();
 		txtProdId.setText(String.valueOf(prodId));
 	}
 
+	/**
+	 * Deleting product from database
+	 */
 	private void deleteProduct() {
 		if (!tableProducts.getSelectionModel().isEmpty()) {
 			prodModel = tableProducts.getSelectionModel().getSelectedItem();
 			int prodId = prodModel.getProdId();
 			String prodName = prodModel.getProdName();
 			boolean success;
-			boolean userResponse = AlertsUtils.ResposeAlert("Delete Product", "حذف محصول \n" + prodName);
+			boolean userResponse = AlertsUtils.askForDeleteAlert(prodName);
 			if (userResponse) {
 
 				success = ProductDAO.deleteProductDetail(prodId);
@@ -316,11 +386,15 @@ public class ProductController implements Initializable {
 				Commons.processMessageLabel(labelMessage, false);
 			}
 		} else {
-			AlertsUtils.warningAlert("Select Items", "لطفا از لیست انتخاب کنید");
+			AlertsUtils.selectFromListAlert();
 		}
 	}
 
+	/**
+	 * Show product detail after selection
+	 */
 	private void showProducts() {
+		clearProdDetailTable();
 		clearTextFields();
 		if (!tableProducts.getSelectionModel().isEmpty()) {
 			prodModel = tableProducts.getSelectionModel().getSelectedItem();
@@ -356,6 +430,9 @@ public class ProductController implements Initializable {
 		}
 	}
 
+	/**
+	 * Fill detail section values after selection from detail table
+	 */
 	public void onTableDetailSelection() {
 		if (!tableDetail.getSelectionModel().isEmpty()) {
 			prodDetailModel = tableDetail.getSelectionModel().getSelectedItem();
@@ -365,6 +442,30 @@ public class ProductController implements Initializable {
 			comboInvItem.setValue(invName);
 			txtReqQty.setText(String.valueOf(reqQty));
 		}
+	}
+
+	/**
+	 * Save the changes made only for product. not applicable for product detail Any
+	 * changes need happen on product detail the product should delete completely.
+	 * if the products can't delete for any reason another product should add
+	 * 
+	 */
+	public void saveUpdateProducts() {
+		if (!tableProducts.getSelectionModel().isEmpty()) {
+			prodModel = tableProducts.getSelectionModel().getSelectedItem();
+			int prodid = prodModel.getProdId();
+			String prodname = prodModel.getProdName();
+			boolean response = AlertsUtils.askForUpdateAlert(prodname);
+			if (response) {
+				String prodName = getProdName();
+				int catId = CategoryDAO.getCategoryID(comboCategory.getValue());
+				String produm = comboUm.getValue();
+				boolean success = false;
+				success = ProductDAO.updateProduct(catId, prodName, produm, prodid);
+				Commons.processMessageLabel(labelMessage, success);
+			}
+		}
+
 	}
 
 }

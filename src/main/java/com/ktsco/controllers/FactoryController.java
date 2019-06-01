@@ -48,9 +48,9 @@ public class FactoryController implements Initializable {
 		
 		VBox vbox = view.setVboxFxml(fxml);
 		List<Button> buttonList = new ArrayList<Button>();
-		btnProducts = Commons.addMenuButton("محصولات");
+		btnProducts = Commons.addMenuButton("فهرست محصولات");
 		btnProducts.setOnAction(event-> allButtonsAction(event));
-		btnInvStock = Commons.addMenuButton("گدام کارخانه");
+		btnInvStock = Commons.addMenuButton("فهرست مواد اولیه");
 		btnInvStock.setOnAction(event-> allButtonsAction(event));
 		buttonList.add(btnProducts);
 		buttonList.add(btnInvStock);
@@ -70,6 +70,7 @@ public class FactoryController implements Initializable {
 			openPorductPanel();
 		}else if (event.getSource() == btnInvStock) {
 			Commons.reloadTopView(factoryBorderPane, btnInvStock);
+			openInventoryStockPanel();
 		}
 	}
 	
@@ -79,6 +80,12 @@ public class FactoryController implements Initializable {
 	public static void openPorductPanel() {
 		Pane productPane = view.setPane(Constants.productPanelFxml);
 		factoryBorderPane.setCenter(productPane);
+	}
+	
+	//Opening Invetory Stock Panel
+	public static void openInventoryStockPanel() {
+		Pane invetoryStock = view.setPane(Constants.invetoryStockPanelFxml);
+		factoryBorderPane.setCenter(invetoryStock);
 	}
 
 }

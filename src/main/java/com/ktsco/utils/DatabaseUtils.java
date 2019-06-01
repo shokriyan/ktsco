@@ -41,7 +41,7 @@ public class DatabaseUtils {
 		} catch (SQLException e) {
 			log.error("Error in creating connection with error massage {} " + e.getMessage());
 			log.info("returning null value");
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", "ارتباط با دیتابیس موجود نمیباشد \n با ادمین در تماس شوید");
+			AlertsUtils.databaseErrorAlert();
 			return null;
 		}
 		return conn;
@@ -67,7 +67,7 @@ public class DatabaseUtils {
 		}catch (SQLException e) {
 			log.error("Error in creating connection with error massage {} ", e.getMessage());
 			log.debug("returning null value");
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", "ارتباط با دیتابیس موجود نمیباشد" + "\n" + e.getMessage());
+			AlertsUtils.databaseErrorAlert();
 			return null;
 		}
 		return preStmt;

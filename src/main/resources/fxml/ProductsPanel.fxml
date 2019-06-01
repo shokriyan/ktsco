@@ -16,7 +16,7 @@
 					</padding>
 					<children>
 						<Button fx:id="btnCategory" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="دسته بندی ها" />
-                  <Button fx:id="btnInventoryList" layoutX="20.0" layoutY="47.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="مواد اولیه" />
+                  <Button fx:id="btnInventoryList" layoutX="20.0" layoutY="47.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="لیست اقلام" />
                   <Button fx:id="btnAddProducts" layoutX="190.0" layoutY="22.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="ثبت محصول" />
                   <Button fx:id="btnShowProduct" layoutX="360.0" layoutY="22.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="نمایش اطلاعات " />
                   <Button fx:id="btnDeleteProduct" layoutX="530.0" layoutY="22.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="حذف محصول" />
@@ -81,7 +81,8 @@
                         <TableView fx:id="tableDetail" editable="true" onMouseClicked="#onTableDetailSelection" prefHeight="274.0" prefWidth="760.0">
                           <columns>
                             <TableColumn fx:id="colDetailInvItem" prefWidth="398.0" resizable="false" text="مواد اولیه" />
-                              <TableColumn fx:id="colDetailQty" prefWidth="236.0" resizable="false" text="مقدار" />
+                              <TableColumn fx:id="colDetailQty" prefWidth="175.0" resizable="false" text="مقدار" />
+                              <TableColumn fx:id="colDetailDelete" prefWidth="117.0" resizable="false" text="حذف" />
                           </columns>
                         </TableView>
                      </children>

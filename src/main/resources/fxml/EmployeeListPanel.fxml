@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity"
+	nodeOrientation="RIGHT_TO_LEFT" prefHeight="600.0" prefWidth="800.0"
+	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.ktsco.controllers.EmpListController">
+	<children>
+		<HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0"
+			styleClass="top-panel">
+			<children>
+				<VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0"
+					HBox.hgrow="ALWAYS">
+					<children>
+						<Text fx:id="txtPanelName" strokeType="OUTSIDE"
+							strokeWidth="0.0" text="فهرست کارمندان">
+							<font>
+								<Font size="18.0" />
+							</font>
+						</Text>
+					</children>
+				</VBox>
+				<VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+					<children>
+						<Button fx:id="btnClose" mnemonicParsing="false"
+							onAction="#allButtonAction" text="خروج" />
+					</children>
+				</VBox>
+			</children>
+		</HBox>
+		<VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
+			<children>
+				<HBox alignment="CENTER" prefHeight="100.0" prefWidth="30.0"
+					spacing="20.0">
+					<children>
+						<VBox prefHeight="200.0" prefWidth="200.0">
+							<children>
+								<Label text="شماره کارمند" />
+								<TextField fx:id="txtEmpID" editable="false"
+									prefHeight="27.0" prefWidth="200.0"
+									style="-fx-background-color: lightgray;" />
+							</children>
+						</VBox>
+						<VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0"
+							prefWidth="100.0" HBox.hgrow="ALWAYS">
+							<children>
+								<Label text="نام و نام خانوادگی" />
+								<TextField fx:id="txtEmpFullName" prefHeight="27.0"
+									prefWidth="312.0" />
+							</children>
+						</VBox>
+						<VBox layoutX="778.0" layoutY="10.0" prefHeight="200.0"
+							prefWidth="100.0" HBox.hgrow="ALWAYS">
+							<children>
+								<Label text="وظیفه" />
+								<TextField fx:id="txtEmpPosition" prefHeight="27.0"
+									prefWidth="312.0" />
+							</children>
+						</VBox>
+					</children>
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+				</HBox>
+				<HBox alignment="CENTER_LEFT" prefHeight="100.0"
+					prefWidth="200.0" spacing="20.0" VBox.vgrow="NEVER">
+					<children>
+						<Button fx:id="btnAdd" mnemonicParsing="false"
+							onAction="#allButtonAction" prefHeight="27.0" prefWidth="150.0"
+							text="ثبت " />
+						<Button fx:id="btnDelete" layoutX="352.0" layoutY="47.0"
+							mnemonicParsing="false" onAction="#allButtonAction"
+							prefHeight="27.0" prefWidth="150.0" text="حذف" />
+						<Button fx:id="btnModify" layoutX="522.0" layoutY="47.0"
+							mnemonicParsing="false" onAction="#allButtonAction"
+							prefHeight="27.0" prefWidth="150.0" text="تغییرات" />
+						<Button fx:id="btnSearch" layoutX="660.0" layoutY="47.0"
+							mnemonicParsing="false" onAction="#allButtonAction"
+							prefHeight="27.0" prefWidth="150.0" text="جستجو" />
+						<Button fx:id="btnRefresh" layoutX="530.0" layoutY="22.0"
+							mnemonicParsing="false" onAction="#allButtonAction"
+							prefHeight="27.0" prefWidth="150.0" text="بارگذاری مجدد" />
+					</children>
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+				</HBox>
+				<Label fx:id="labelInfoMessage" />
+			</children>
+		</VBox>
+		<HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+			<children>
+				<TableView fx:id="tableEmpList"
+					onMouseClicked="#onClickAction" prefHeight="200.0"
+					prefWidth="200.0" HBox.hgrow="ALWAYS">
+					<columns>
+						<TableColumn fx:id="colEmpID" prefWidth="200.0"
+							resizable="false" text="شماره کارمند" />
+						<TableColumn fx:id="ColEmpFullName" minWidth="300.0"
+							prefWidth="300.0" resizable="false" text="نام و نام خانوادگی" />
+						<TableColumn fx:id="colEmpPosition" minWidth="100.0"
+							prefWidth="300.0" resizable="false" text="وظیفه" />
+					</columns>
+				</TableView>
+			</children>
+		</HBox>
+	</children>
+</VBox>

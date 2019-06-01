@@ -24,12 +24,16 @@ public class Constants {
 	public static final String productPanelFxml = "/fxml/ProductsPanel.fxml";
 	public static final String categoryPanelFxml = "/fxml/CategoryPanel.fxml";
 	public static final String inventoryListPanelFxml = "/fxml/InventoryListPanel.fxml";
+	public static final String invetoryStockPanelFxml = "/fxml/InvetoryStockPanel.fxml";
+	public static final String csrPanelFxml = "/fxml/CSRPanel.fxml";
+	public static final String employeePanelFxml = "/fxml/EmployeePanel.fxml";
+	public static final String employeeListPanelFxml = "/fxml/EmployeeListPanel.fxml";
+	
 	
 	
 	public static final String title = "KTSCO Management";
 	public static final String companyName = "شرکت خراسان تک سیم";
 	
-
 	public static String buttonText; 
 	
 	public static boolean reload; 

@@ -84,7 +84,7 @@ public class EditUsersController implements Initializable{
 			
 		}catch(SQLException e) {
 			log.error("Execution failed with error massage {}" + e.getMessage());
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در درخواست اطلاعات از دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 		}
 		
 		txtPassword.setText(password);

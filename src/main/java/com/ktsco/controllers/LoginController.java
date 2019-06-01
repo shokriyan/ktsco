@@ -77,41 +77,46 @@ public class LoginController implements Initializable {
 			System.exit(0);
 		} else if (event.getSource() == btnSubmit) {
 			String accessType = Commons.getAccessType(cmbAccess.getValue());
-			Constants.setLoggedUser(txtUsername.getText()); 
-			
-			log.info("Opennin panel for {}" + accessType );
-			
+			Constants.setLoggedUser(txtUsername.getText());
+
+			log.info("Opennin panel for {}" + accessType);
+
 			if (accessType.equalsIgnoreCase("admin")) {
 				if (MainApp.loginStage.isShowing()) {
 					Constants.setPanelName("پنل مدیریت تنظیمات برنامه");
 					MainApp.loginStage.hide();
 					AdminController.initialAdminPanel();
-				}else {
+				} else {
 					log.debug("Login Window is Not Showing at this point");
 				}
-			}if (accessType.equalsIgnoreCase("factory")) {
+			} else if (accessType.equalsIgnoreCase("factory")) {
 				if (MainApp.loginStage.isShowing()) {
 					Constants.setPanelName("پنل بخش کارخانه");
 					MainApp.loginStage.hide();
 					FactoryController.initialFactoryPanel();
-				}else {
+				} else {
+					log.debug("Login Window is Not Showing at this point");
+				}
+			} else if (accessType.equalsIgnoreCase("csr")) {
+				if (MainApp.loginStage.isShowing()) {
+					Constants.setPanelName("پنل بخش اداری");
+					MainApp.loginStage.hide();
+					CSRController.initialCSRPanel();
+				} else {
 					log.debug("Login Window is Not Showing at this point");
 				}
 			}
 		}
 
 	}
-	
-	
+
 	private void createUnitMeasureList() {
-		String [] list = {"بندل","کیلو","تن","عدد","متر","سانتیمتر","کیلومتر","دانه"};
-		
-		for (int i = 0 ; i < list.length; i++) {
+		String[] list = { "بندل", "کیلو", "تن", "عدد", "متر", "سانتیمتر", "کیلومتر", "دانه", "دستگاه" };
+
+		for (int i = 0; i < list.length; i++) {
 			Constants.unitMeasureList.add(list[i]);
 		}
-		
+
 	}
-	
-	
 
 }

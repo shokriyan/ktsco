@@ -80,7 +80,7 @@ public class CreateNewUserController implements Initializable {
 			txtPassword.clear();
 			}else {
 				log.info("Username is Exist {}" + username);
-				AlertsUtils.warningAlert("کاربر تکراری", "نام کاربری انتخاب شده تکراری میباشد" + "\n" + username);
+				AlertsUtils.repeatItemAlerts(username);
 			}
 
 		} else {

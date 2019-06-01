@@ -60,7 +60,7 @@ public class ProductDAO {
 
 		} catch (SQLException e) {
 			log.error("Error in executing query {}", query + " with error massage {}", e.getMessage());
-			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				resultSet.close();
@@ -90,7 +90,7 @@ public class ProductDAO {
 			}
 		} catch (SQLException e) {
 			log.error("Error in executing query {}", query + " with error massage {}", e.getMessage());
-			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				resultSet.close();
@@ -116,7 +116,7 @@ public class ProductDAO {
 				isExist = true;
 				while (resultSet.next()) {
 					prodId = resultSet.getString(1);
-					AlertsUtils.warningAlert("Duplicate Valuer", "محصول قبلا وارد شده است \n" + prodId);
+					AlertsUtils.repeatItemAlerts(prodId);
 				}
 			} else {
 				isExist = false;
@@ -124,7 +124,7 @@ public class ProductDAO {
 		} catch (SQLException e) {
 			isExist = false;
 			log.error("Error in executing query {}", query + " with error massage {}" + e.getMessage());
-			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -154,7 +154,7 @@ public class ProductDAO {
 		} catch (SQLException e) {
 			success = false;
 			log.error("Error in executing query {}", query + " with error massage {}", e.getMessage());
-			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -182,7 +182,7 @@ public class ProductDAO {
 		} catch (SQLException e) {
 			success = false;
 			log.error("Error in executing query {}", query + " with error massage {}" + e.getMessage());
-			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -206,7 +206,7 @@ public class ProductDAO {
 		} catch (SQLException e) {
 			success = false;
 			log.error("Error in executing query {}", query + " with error massage {}" + e.getMessage());
-			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -231,7 +231,7 @@ public class ProductDAO {
 		} catch (SQLException e) {
 			success = false;
 			log.error("Error in executing query {}", query + " with error massage {}" + e.getMessage());
-			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -252,16 +252,17 @@ public class ProductDAO {
 			preStmt.setInt(1, prodId);
 			resultSet = preStmt.executeQuery();
 			while (resultSet.next()) {
+				int id = resultSet.getInt("id");
 				int invId = resultSet.getInt("inv_id");
 				String invName = InventoryDAO.getInvName(invId);
 				double reqQty = resultSet.getDouble("req_qty");
 
-				prodDetailModel = new ProdDetailModel(invName, reqQty);
+				prodDetailModel = new ProdDetailModel(id, invName, reqQty);
 				prodDetailList.add(prodDetailModel);
 			}
 		} catch (SQLException e) {
 			log.error("Error in executing query {}", query + " with error massage {}" + e.getMessage());
-			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -299,7 +300,7 @@ public class ProductDAO {
 			}
 		} catch (SQLException e) {
 			log.error("Error in executing query {}", query + " with error massage {}" + e.getMessage());
-			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -314,4 +315,48 @@ public class ProductDAO {
 
 	}
 
+	public static void deleteDetailItem(int invId) {
+		query = "delete from productDetail where id = ?";
+		preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setInt(1, invId);
+			preStmt.execute();
+		} catch (SQLException e) {
+			log.error("Error in Executing queyr " + query + " " + e.getMessage());
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				preStmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static boolean updateProduct(int catId, String prodName, String prodUm, int prodid) {
+		boolean success = false; 
+		query = "Update products set category_id = ? , prod_name = ? , prod_um = ? where prod_id = ?";
+		preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setInt(1, catId);
+			preStmt.setString(2, prodName);
+			preStmt.setString(3, prodUm);
+			preStmt.setInt(4, prodid);
+			preStmt.executeUpdate();
+			success = true;
+
+		} catch (SQLException e) {
+			log.error("Error in Executing queyr " + query + " " + e.getMessage());
+			AlertsUtils.databaseErrorAlert();
+			success = false; 
+		}finally {
+			try {
+				preStmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return success; 
+	}
 }

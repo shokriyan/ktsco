@@ -5,8 +5,6 @@ import java.text.DecimalFormat;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 
 public class ProdDetailModel {
 
@@ -38,9 +36,8 @@ public class ProdDetailModel {
 	 * @param invName
 	 * @param regQty
 	 */
-	public ProdDetailModel(int id, String prodName, String invName, double reqQty) {
+	public ProdDetailModel(int id, String invName, double reqQty) {
 		this.id = new SimpleIntegerProperty(id);
-		this.prodName = new SimpleStringProperty(prodName);
 		this.invName = new SimpleStringProperty(invName);
 		this.reqQty = new SimpleDoubleProperty(getDoubleFormat(reqQty));
 

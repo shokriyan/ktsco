@@ -49,7 +49,7 @@ public class InventoryDAO {
 			}
 		} catch (SQLException e) {
 			log.error("Error Executing query {}", query + "with error massage {}", e.getMessage());
-			AlertsUtils.ErrorAlert("Database Connection", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				resultSet.close();
@@ -118,7 +118,7 @@ public class InventoryDAO {
 				isExist = false;
 		} catch (SQLException e) {
 			log.error("Error Executing query " + query + "with error massage " + e.getMessage());
-			AlertsUtils.ErrorAlert("Database Connection", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -141,7 +141,7 @@ public class InventoryDAO {
 			success = true;
 		} catch (SQLException e) {
 			log.error("Error Executing query " + query + "with error massage " + e.getMessage());
-			AlertsUtils.ErrorAlert("Database Connection", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -168,7 +168,7 @@ public class InventoryDAO {
 			success = true;
 		} catch (SQLException e) {
 			log.error("Error Executing query " + query + "with error massage " + e.getMessage());
-			AlertsUtils.ErrorAlert("Database Connection", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 			success = false;
 		} finally {
 			try {
@@ -218,7 +218,7 @@ public class InventoryDAO {
 			}
 		} catch (SQLException e) {
 			log.error("Error Executing query {}", query + "with error massage {}", e.getMessage());
-			AlertsUtils.ErrorAlert("Database Connection", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -238,7 +238,7 @@ public class InventoryDAO {
 	 */
 	public static List<String> getInvItemsForCombo() {
 		List<String> list = new ArrayList<String>();
-		String query = "select inv_name from inventory order by inv_id";
+		String query = "select inv_name , category from inventory inner join category on inventory.category_id = category.category_id where category like 'مواد اولیه' order by inv_id;";
 		ResultSet result = DatabaseUtils.dbSelectExuteQuery(query);
 		log.info("Exectuing query {}", query);
 		try {
@@ -247,7 +247,7 @@ public class InventoryDAO {
 			}
 		} catch (SQLException e) {
 			log.error("Error Executing query {}", query + "with error massage {}", e.getMessage());
-			AlertsUtils.ErrorAlert("Database Connection", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				result.close();
@@ -278,7 +278,7 @@ public class InventoryDAO {
 			}
 		} catch (SQLException e) {
 			log.error("Error Executing query {}", query + " with error massage " + e.getMessage());
-			AlertsUtils.ErrorAlert("Database Connection", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -303,7 +303,7 @@ public class InventoryDAO {
 			}
 		} catch (SQLException e) {
 			log.error("Error Executing query {}", query + " with error massage " + e.getMessage());
-			AlertsUtils.ErrorAlert("Database Connection", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();

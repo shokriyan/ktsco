@@ -112,6 +112,7 @@ public class ViewClass {
 			log.info("FXMl file " + fxml + "Loaded");
 		} catch (IOException e) {
 			log.error("Fail to load fxml file " + fxml + " with error massage " + e.getMessage());
+			e.printStackTrace();
 		}
 
 		return vbox;

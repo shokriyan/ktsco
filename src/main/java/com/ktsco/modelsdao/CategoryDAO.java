@@ -38,7 +38,7 @@ public class CategoryDAO {
 		} catch (SQLException e) {
 			log.error("Error while executing query {}", query);
 			log.info("list can be null at this point {}", listObservable);
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در درخواست اطلاعات از دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 
 		} finally {
 			try {
@@ -72,7 +72,7 @@ public class CategoryDAO {
 		} catch (SQLException e) {
 			log.error("Error while executing query {}", query);
 			log.info("list can be null at this point {}", listObservable);
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در درخواست اطلاعات از دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 
 		} finally {
 			try {
@@ -96,7 +96,7 @@ public class CategoryDAO {
 			preStmt.execute();
 		} catch (SQLException e) {
 			log.error("Error while executing query {}", query);
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در اضافه کردن اطلاعات به دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -115,7 +115,7 @@ public class CategoryDAO {
 			preStmt.executeUpdate();
 		} catch (SQLException e) {
 			log.error("Error while executing query {}", query);
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در اضافه کردن اطلاعات به دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -134,7 +134,7 @@ public class CategoryDAO {
 			preStmt.executeUpdate();
 		} catch (SQLException e) {
 			log.error("Error while executing query {}", query);
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در اضافه کردن اطلاعات به دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -163,7 +163,7 @@ public class CategoryDAO {
 
 		} catch (SQLException e) {
 			log.error("Error while executing query {}", query);
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در درخواست اطلاعات از دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 
 		} finally {
 			try {
@@ -191,7 +191,7 @@ public class CategoryDAO {
 			}
 		} catch (SQLException e) {
 			log.error("Error while executing query {}", query);
-			AlertsUtils.ErrorAlert("خطا در دیتابیس", ("خطا در درخواست اطلاعات از دیتابیس" + "\n" + e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
 				preStmt.close();
@@ -218,7 +218,7 @@ public class CategoryDAO {
 			}
 		} catch (SQLException e) {
 			log.error("Error in executing query {}", query + " with error massage {}", e.getMessage());
-			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		}
 		return list;
 	}
@@ -238,7 +238,7 @@ public class CategoryDAO {
 			}
 		} catch (SQLException e) {
 			log.error("Error in executing query {}", query + " with error massage {}", e.getMessage());
-			AlertsUtils.ErrorAlert("Database Error", "خطا در ارتباط با دیتابیس");
+			AlertsUtils.databaseErrorAlert();
 		}finally {
 			try {
 				preStmt.close();

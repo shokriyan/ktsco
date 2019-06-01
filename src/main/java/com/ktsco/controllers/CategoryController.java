@@ -106,11 +106,10 @@ public class CategoryController implements Initializable {
 				CategoryDAO.addCategory(value);
 				populateCategoryTable();
 			} else {
-				AlertsUtils.warningAlert("آیتم تکراری", "‌این آیتم از قبل وجود دارد " + "\n" + value);
-
+				AlertsUtils.repeatItemAlerts(value);
 			}
 		} else {
-			AlertsUtils.warningAlert("Empty Field", "لطفا اطلاعات وارد کنید");
+			AlertsUtils.emptyFieldAlert();
 		}
 
 	}
@@ -124,7 +123,7 @@ public class CategoryController implements Initializable {
 	}
 
 	public void deleteCategoryItem(String value) {
-		boolean response = AlertsUtils.ResposeAlert("Delete Category", "حذف دسته بندی \n" + value);
+		boolean response = AlertsUtils.askForDeleteAlert(value);
 		if (response) {
 			if (!value.isEmpty()) {
 				boolean exist = CategoryDAO.checkExistance(value);
@@ -135,10 +134,10 @@ public class CategoryController implements Initializable {
 						populateCategoryTable();
 					}
 				} else {
-					AlertsUtils.warningAlert("Not Exist", "‌این آیتم از قبل وجود ندارد " + "\n" + value);
+					AlertsUtils.nonExistItemsAlerts(value);
 				}
 			} else {
-				AlertsUtils.warningAlert("Empty Field", "لطفا اطلاعات وارد کنید");
+				AlertsUtils.emptyFieldAlert();
 			}
 		}
 	}
@@ -157,11 +156,10 @@ public class CategoryController implements Initializable {
 					populateCategoryTable();
 				}
 			} else {
-				AlertsUtils.warningAlert("آیتم تکراری", "‌این آیتم از قبل وجود ندارد " + "\n" + value);
+				AlertsUtils.repeatItemAlerts(value);
 			}
 		} else {
-			AlertsUtils.warningAlert("Empty Field", "لطفا اطلاعات وارد کنید");
-
+			AlertsUtils.emptyFieldAlert();
 		}
 	}
 
@@ -170,7 +168,7 @@ public class CategoryController implements Initializable {
 			catList = CategoryDAO.retrieveSearchItems(value);
 			setCategoryTable(catList);
 		} else {
-			AlertsUtils.warningAlert("Empty Field", "لطفا اطلاعات وارد کنید");
+			AlertsUtils.emptyFieldAlert();
 		}
 	}
 

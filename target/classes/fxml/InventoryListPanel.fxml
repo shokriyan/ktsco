@@ -14,7 +14,7 @@
 			<children>
 				<VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
 					<children>
-						<Text fx:id="txtPanelName" strokeType="OUTSIDE" strokeWidth="0.0" text="مواد اولیه" textAlignment="CENTER">
+						<Text fx:id="txtPanelName" strokeType="OUTSIDE" strokeWidth="0.0" text="لیست اقلام" textAlignment="CENTER">
 							<font>
 								<Font size="18.0" />
 							</font>
