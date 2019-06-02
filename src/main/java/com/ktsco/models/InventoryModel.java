@@ -18,7 +18,6 @@ public class InventoryModel {
 	}
 	
 	// getter methods 
-	
 	public int getInvID() {
 		return invID.get();
 	}

@@ -135,7 +135,7 @@ public class Commons {
 					label.setVisible(false);
 					service.reset();
 				});
-			}else {
+			} else {
 				label.setStyle("-fx-text-fill : Red");
 				label.setText("خطا در پروسس اطلاعات انجام نشد");
 				label.setVisible(true);
@@ -146,6 +146,29 @@ public class Commons {
 			}
 		}
 
+	}
+
+	/**
+	 * Login Message for Database Closing
+	 * 
+	 * @param message
+	 * @return
+	 */
+	public static String dbClosingLog(String message) {
+		String logMessage = "Error at Closing ResultSet or PreparedStatement with error message" + message;
+		return logMessage;
+	}
+
+	/**
+	 * Log Message for Executing
+	 * 
+	 * @param query
+	 * @param message
+	 * @return
+	 */
+	public static String dbExcutionLog(String query, String message) {
+		String logMessage = "Error at Executing query " + query + " With Error Message " + message;
+		return logMessage;
 	}
 
 }

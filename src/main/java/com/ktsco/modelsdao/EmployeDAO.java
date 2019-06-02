@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.EmpListModel;
 import com.ktsco.utils.AlertsUtils;
+import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
 
 import javafx.collections.FXCollections;
@@ -33,6 +34,8 @@ public class EmployeDAO {
 		String logMessage = "Error at Executing query " + query + " With Error Message " + message;
 		return logMessage;
 	}
+	
+	
 
 	public static int getMaxEmpID() {
 		int employeeID = 0;
@@ -213,6 +216,29 @@ public class EmployeDAO {
 		}
 		
 		return empNameList;
+	}
+	
+	public static int getEmployeeID (String lookupValue) {
+		int empid = 0; 
+		query = "select employee_id from employee where fullname = ?"; 
+		preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setString(1, lookupValue);
+			resultSet = preStmt.executeQuery();
+			while (resultSet.next()) {
+				empid = resultSet.getInt(1);
+			}
+		}catch(SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+		}finally {
+			try {
+				preStmt.close();
+				resultSet.close();
+			}catch(SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		return empid;
 	}
 
 }

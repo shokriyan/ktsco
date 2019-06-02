@@ -210,6 +210,22 @@ public class AlertsUtils {
 		alert.show();
 	}
 	
+	/**
+	 * Alerts to Confirm for Save Items.
+	 * @return
+	 */
+	public static boolean askForSaveItems () {
+		boolean response = false; 
+		alertTitle = "Update Items";
+		alertMessage = "ثبت تغییرات" + "\n";
+		Alert alert = confirmAlerts(alertTitle, alertMessage);
+		Optional<ButtonType> buttonKeys = alert.showAndWait();
+		if (buttonKeys.get() == ButtonType.OK)
+			response = true;
+		else if (buttonKeys.get() == ButtonType.CANCEL)
+			response = false; 
+		return response; 
+	}
 	
 	
 	
