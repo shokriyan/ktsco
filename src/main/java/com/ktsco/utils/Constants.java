@@ -11,23 +11,25 @@ public class Constants {
 	public static List<String> unitMeasureList = new ArrayList<String>();
 	
 	public static final String loginPanelFxml = "/fxml/Login.fxml";
-	public static final String adminPanelFxml = "/fxml/AdminPanel.fxml";
+	public static final String adminPanelFxml = "/fxml/admin/AdminPanel.fxml";
 	public static final String topViewFxml = "/fxml/TopViewPanel.fxml";
 	public static final String styleSheetPath = "/styles/styles.css";
 	public static final String sideMenuFxml = "/fxml/SideMenuPanel.fxml";
-	public static final String usersPaneFxml = "/fxml/UsersPane.fxml";
-	public static final String settingsPaneFxml = "/fxml/SettingsPane.fxml";
-	public static final String createNewUserFxml = "/fxml/CreateNewUser.fxml";
-	public static final String editUsersFxml = "/fxml/EditUsers.fxml";
-	public static final String deleteusersFxml = "/fxml/DeleteUsers.fxml";
-	public static final String factoryPanel = "/fxml/FactoryPanel.fxml";
-	public static final String productPanelFxml = "/fxml/ProductsPanel.fxml";
-	public static final String categoryPanelFxml = "/fxml/CategoryPanel.fxml";
-	public static final String inventoryListPanelFxml = "/fxml/InventoryListPanel.fxml";
-	public static final String invetoryStockPanelFxml = "/fxml/InvetoryStockPanel.fxml";
-	public static final String csrPanelFxml = "/fxml/CSRPanel.fxml";
-	public static final String employeePanelFxml = "/fxml/EmployeePanel.fxml";
-	public static final String employeeListPanelFxml = "/fxml/EmployeeListPanel.fxml";
+	public static final String usersPaneFxml = "/fxml/admin/UsersPane.fxml";
+	public static final String settingsPaneFxml = "/fxml/admin/SettingsPane.fxml";
+	public static final String createNewUserFxml = "/fxml/admin/CreateNewUser.fxml";
+	public static final String editUsersFxml = "/fxml/admin/EditUsers.fxml";
+	public static final String deleteusersFxml = "/fxml/admin/DeleteUsers.fxml";
+	public static final String factoryPanel = "/fxml/factory/FactoryPanel.fxml";
+	public static final String productPanelFxml = "/fxml/factory/ProductsPanel.fxml";
+	public static final String categoryPanelFxml = "/fxml/factory/CategoryPanel.fxml";
+	public static final String inventoryListPanelFxml = "/fxml/factory/InventoryListPanel.fxml";
+	public static final String invetoryStockPanelFxml = "/fxml/factory/InvetoryStockPanel.fxml";
+	public static final String csrPanelFxml = "/fxml/csr/CSRPanel.fxml";
+	public static final String employeePanelFxml = "/fxml/csr/EmployeePanel.fxml";
+	public static final String employeeListPanelFxml = "/fxml/csr/EmployeeListPanel.fxml";
+	public static final String importSearchPanelFxml = "/fxml/factory/ImportSearchPanel.fxml";
+	public static final String productionPanelFxml = "/fxml/factory/ProductionPanel.fxml";
 	
 	
 	

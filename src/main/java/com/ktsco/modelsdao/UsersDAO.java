@@ -5,7 +5,7 @@ import java.sql.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ktsco.models.UsersModels;
+import com.ktsco.models.admin.UsersModels;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Constants;
 import com.ktsco.utils.DatabaseUtils;

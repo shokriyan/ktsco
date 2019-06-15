@@ -4,15 +4,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.ResultSetMetaData;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ktsco.models.ProdDetailModel;
-import com.ktsco.models.ProductModel;
+import com.ktsco.models.factory.ProdDetailModel;
+import com.ktsco.models.factory.ProductModel;
 import com.ktsco.utils.AlertsUtils;
+import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
 
 import javafx.collections.FXCollections;
@@ -358,5 +361,29 @@ public class ProductDAO {
 		}
 		
 		return success; 
+	}
+
+	
+	public static List<String> getProductList(){
+		List<String> list = new ArrayList<String>();
+		query = "select prod_name from products";
+		try {
+			resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+			while (resultSet.next()) {
+				list.add(resultSet.getString(1));
+			}
+		}catch(SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				resultSet.close();
+			}catch(SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		
+		return list; 
 	}
 }

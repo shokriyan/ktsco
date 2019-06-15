@@ -9,7 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ktsco.models.EmpListModel;
+import com.ktsco.models.csr.EmpListModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;

@@ -7,11 +7,13 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ktsco.models.InvStockDetailModel;
-import com.ktsco.models.InvStockModel;
+import com.ktsco.models.factory.InvStockDetailModel;
+import com.ktsco.models.factory.InvStockModel;
+import com.ktsco.models.factory.InventoryImportModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
+import com.ktsco.utils.DateUtils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,8 +25,9 @@ public class InventoryStockDAO {
 	private static PreparedStatement preStmt;
 	private static ObservableList<InvStockDetailModel> invStockDetailList;
 	private static ObservableList<InvStockModel> rawMaterialList;
+	private static ObservableList<InventoryImportModel> importList;
 	private static InvStockDetailModel invStockModel;
-	private static InvStockModel rawModel; 
+	private static InvStockModel rawModel;
 
 	public static ObservableList<InvStockDetailModel> populateInvList() {
 		invStockDetailList = FXCollections.observableArrayList();
@@ -143,14 +146,126 @@ public class InventoryStockDAO {
 		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
-		}finally {
+		} finally {
 			try {
 				resultSet.close();
-			}catch(SQLException e) {
+			} catch (SQLException e) {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
 
 		return rawMaterialList;
 	}
+
+	public static ObservableList<InventoryImportModel> getSearchRecords(String importID, String startString,
+			String endDate, String employeeID) {
+		importList = FXCollections.observableArrayList();
+		StringBuilder sb = new StringBuilder();
+		sb.append("select imp.import_id, imp.import_date, imp.employee_id, emp.fullname from invImport imp ");
+		sb.append("inner join employee emp on imp.employee_id = emp.employee_id ");
+		sb.append("where imp.import_id like ? AND (imp.import_date between ? AND ?) AND emp.employee_id like ?");
+		query = String.valueOf(sb);
+		InventoryImportModel importModel;
+		preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setString(1, "%" + importID + "%");
+			preStmt.setString(2, startString);
+			preStmt.setString(3, endDate);
+			preStmt.setString(4, "%" + employeeID + "%");
+			resultSet = preStmt.executeQuery();
+			while (resultSet.next()) {
+				int id = resultSet.getInt(1);
+				String date = DateUtils.convertGregoryToJalali(resultSet.getString(2));
+				String responsible = resultSet.getString(4);
+				importModel = new InventoryImportModel(id, date, responsible);
+				importList.add(importModel);
+			}
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				preStmt.close();
+				resultSet.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		return importList;
+	}
+
+	public static ObservableList<InvStockModel> getImportDetailList(int importID) {
+		rawMaterialList = FXCollections.observableArrayList();
+		query = "select detail.detail_id , inv.inv_name, inv.inv_um, detail.import_qty "
+				+ "from invImportDetail detail inner join inventory inv "
+				+ "on detail.inv_item = inv.inv_id where detail.invImportID = ? " + "order by detail.detail_id ASC ";
+		preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setInt(1, importID);
+			resultSet = preStmt.executeQuery();
+			while (resultSet.next()) {
+				int detailID = resultSet.getInt(1);
+				String invName = resultSet.getString(2);
+				String invUm = resultSet.getString(3);
+				String importQty = resultSet.getString(4);
+				rawModel = new InvStockModel(detailID, importID, invName, invUm, importQty);
+				rawMaterialList.add(rawModel);
+
+			}
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				preStmt.close();
+				resultSet.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		return rawMaterialList;
+	}
+
+	public static void deleteImport(int importID) {
+		query = "delete from invImport where import_id = ?";
+		preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setInt(1, importID);
+			preStmt.execute();
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				preStmt.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+	}
+
+	public static boolean updateInventoryImportQty(double newImportQty, int detailID) {
+		boolean success = false; 
+		query = "update invImportDetail set import_qty = ? where detail_id = ?";
+		
+		preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setDouble(1, newImportQty);
+			preStmt.setInt(2, detailID);
+			preStmt.executeUpdate();
+			success = true;
+		}catch(SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				preStmt.close();
+			}catch(SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		return success;
+	}
+
 }

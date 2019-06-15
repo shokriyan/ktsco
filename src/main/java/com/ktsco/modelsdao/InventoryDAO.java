@@ -9,7 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ktsco.models.InventoryModel;
+import com.ktsco.models.factory.InventoryModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.DatabaseUtils;
 

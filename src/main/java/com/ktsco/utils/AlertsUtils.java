@@ -217,7 +217,7 @@ public class AlertsUtils {
 	public static boolean askForSaveItems () {
 		boolean response = false; 
 		alertTitle = "Update Items";
-		alertMessage = "ثبت تغییرات" + "\n";
+		alertMessage = "ثبت اطلاعات" + "\n";
 		Alert alert = confirmAlerts(alertTitle, alertMessage);
 		Optional<ButtonType> buttonKeys = alert.showAndWait();
 		if (buttonKeys.get() == ButtonType.OK)
@@ -226,7 +226,17 @@ public class AlertsUtils {
 			response = false; 
 		return response; 
 	}
-	
+	/**
+	 * Date Wrong Entry Alerts 
+	 * 
+	 * @param expectedParameter Entry Expected Parameter
+	 */
+	public static void wrongDateEntryAlert(String expectedParameter) {
+		alertTitle = "Wrong Date Entry";
+		alertMessage = "اشتباه ورودی تاریخ" + "\n" + expectedParameter + "استفاده شود";
+		Alert alert = errorAlerts(alertTitle, alertMessage);
+		alert.show();
+	}
 	
 	
 

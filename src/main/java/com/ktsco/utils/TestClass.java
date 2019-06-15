@@ -1,7 +1,7 @@
 package com.ktsco.utils;
 
 
-import com.ktsco.models.ProdDetailModel;
+import com.ktsco.models.factory.ProdDetailModel;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
