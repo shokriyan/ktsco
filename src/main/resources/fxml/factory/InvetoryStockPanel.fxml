@@ -7,36 +7,23 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity"
-	nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0"
-	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="com.ktsco.controllers.factory.InvStockController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.factory.InvStockController">
 	<children>
 		<VBox prefHeight="635.0" prefWidth="1166.0">
 			<children>
-				<HBox alignment="CENTER_LEFT" prefHeight="50.0"
-					prefWidth="200.0" spacing="20.0">
+				<HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
 					<children>
-						<Button fx:id="btnCategory" mnemonicParsing="false"
-							onAction="#allButtonAction" prefWidth="150.0" text="دسته بندی" />
-						<Button fx:id="btnInvetoryItems" layoutX="30.0"
-							layoutY="37.0" mnemonicParsing="false"
-							onAction="#allButtonAction" prefWidth="150.0" text="لیست اقلام" />
-						<Button fx:id="btnSaveInvImport" layoutX="140.0"
-							layoutY="22.0" mnemonicParsing="false"
-							onAction="#allButtonAction" prefWidth="150.0"
-							text="ثبت وردی انبار" />
-						<Button fx:id="btnSearch" layoutX="360.0" layoutY="22.0"
-							mnemonicParsing="false" onAction="#allButtonAction"
-							prefWidth="150.0" text="جستجو" />
+						<Button fx:id="btnCategory" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="دسته بندی" />
+						<Button fx:id="btnInvetoryItems" layoutX="30.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="لیست اقلام" />
+						<Button fx:id="btnSaveInvImport" layoutX="140.0" layoutY="22.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="ثبت وردی انبار" />
+						<Button fx:id="btnSearch" layoutX="360.0" layoutY="22.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="جستجو" />
+                  <Button fx:id="btnDetailList" layoutX="530.0" layoutY="22.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="لیست اقلام ورودی" />
 					</children>
 					<padding>
 						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 					</padding>
 				</HBox>
-				<HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0"
-					style="-fx-border-color: lightgray;" VBox.vgrow="NEVER">
+				<HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" style="-fx-border-color: lightgray;" VBox.vgrow="NEVER">
 					<children>
 						<Label fx:id="labelMessage" />
 					</children>
@@ -47,24 +34,19 @@
 							<children>
 								<HBox prefHeight="50.0" prefWidth="200.0" spacing="20.0">
 									<children>
-										<VBox alignment="CENTER_LEFT" prefWidth="100.0"
-											HBox.hgrow="ALWAYS">
+										<VBox alignment="CENTER_LEFT" prefWidth="100.0" HBox.hgrow="ALWAYS">
 											<children>
 												<Label text="شماره" />
-												<TextField fx:id="txtImportId" editable="false"
-													prefWidth="100.0" style="-fx-background-color: lightgray;" />
+												<TextField fx:id="txtImportId" editable="false" prefWidth="100.0" style="-fx-background-color: lightgray;" />
 											</children>
 										</VBox>
-										<VBox alignment="CENTER_LEFT" prefHeight="200.0"
-											prefWidth="200.0">
+										<VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0">
 											<children>
 												<Label text="تاریخ ورودی" VBox.vgrow="ALWAYS" />
-												<TextField fx:id="txtImportDate" prefWidth="200.0"
-													promptText="1397-01-01" />
+												<TextField fx:id="txtImportDate" prefWidth="200.0" promptText="1397-01-01" />
 											</children>
 										</VBox>
-										<VBox alignment="CENTER_LEFT" prefHeight="200.0"
-											prefWidth="200.0">
+										<VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0">
 											<children>
 												<Label text="مسئول" VBox.vgrow="ALWAYS" />
 												<ComboBox fx:id="comboEmployee" prefWidth="200.0" />
@@ -72,46 +54,34 @@
 										</VBox>
 									</children>
 									<padding>
-										<Insets bottom="10.0" left="10.0" right="10.0"
-											top="10.0" />
+										<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 									</padding>
 								</HBox>
-								<TableView fx:id="tableImportList" prefHeight="200.0"
-									prefWidth="200.0" VBox.vgrow="ALWAYS">
+								<TableView fx:id="tableImportList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
 									<columns>
-										<TableColumn fx:id="colInvItem" prefWidth="220.0"
-											text="مواد اولیه" />
-										<TableColumn fx:id="colUM" minWidth="0.0"
-											prefWidth="169.0" text="واحد شمارش" />
-										<TableColumn fx:id="colImportQty"
-											onEditCommit="#editableImportQty" prefWidth="192.0"
-											text="مقدار ورودی" />
+										<TableColumn fx:id="colInvItem" prefWidth="220.0" text="مواد اولیه" />
+										<TableColumn fx:id="colUM" minWidth="0.0" prefWidth="169.0" text="واحد شمارش" />
+										<TableColumn fx:id="colImportQty" onEditCommit="#editableImportQty" prefWidth="192.0" text="مقدار ورودی" />
 									</columns>
 								</TableView>
 							</children>
 						</VBox>
 						<VBox prefHeight="200.0" prefWidth="583.0">
 							<children>
-								<HBox alignment="CENTER" prefHeight="65.0"
-									prefWidth="583.0">
+								<HBox alignment="CENTER" prefHeight="65.0" prefWidth="583.0">
 									<children>
-										<Text strokeType="OUTSIDE" strokeWidth="0.0"
-											text="موجودی انبار مواد اولیه">
+										<Text strokeType="OUTSIDE" strokeWidth="0.0" text="موجودی انبار مواد اولیه">
 											<font>
 												<Font size="14.0" />
 											</font>
 										</Text>
 									</children>
 								</HBox>
-								<TableView fx:id="tableInvStock" prefHeight="200.0"
-									prefWidth="200.0" VBox.vgrow="ALWAYS">
+								<TableView fx:id="tableInvStock" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
 									<columns>
-										<TableColumn fx:id="colInvItem1" prefWidth="220.0"
-											text="مواد اولیه" />
-										<TableColumn fx:id="colUM1" minWidth="0.0"
-											prefWidth="169.0" text="واحد شمارش" />
-										<TableColumn fx:id="colTotalQty" prefWidth="192.0"
-											text="موجودی" />
+										<TableColumn fx:id="colInvItem1" prefWidth="220.0" text="مواد اولیه" />
+										<TableColumn fx:id="colUM1" minWidth="0.0" prefWidth="169.0" text="واحد شمارش" />
+										<TableColumn fx:id="colTotalQty" prefWidth="192.0" text="موجودی" />
 									</columns>
 								</TableView>
 							</children>

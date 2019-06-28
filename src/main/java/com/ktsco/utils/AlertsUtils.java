@@ -182,7 +182,7 @@ public class AlertsUtils {
 	/**
 	 * Alerts for Number formats
 	 */
-	public static void numberEntryListAlerts() {
+	public static void numberEntryFormatErrorAlerts() {
 		alertTitle = "Wrong Number Format";
 		alertMessage = "عدد وارد کنید";
 		Alert alert = errorAlerts(alertTitle, alertMessage);
@@ -218,6 +218,19 @@ public class AlertsUtils {
 		boolean response = false; 
 		alertTitle = "Update Items";
 		alertMessage = "ثبت اطلاعات" + "\n";
+		Alert alert = confirmAlerts(alertTitle, alertMessage);
+		Optional<ButtonType> buttonKeys = alert.showAndWait();
+		if (buttonKeys.get() == ButtonType.OK)
+			response = true;
+		else if (buttonKeys.get() == ButtonType.CANCEL)
+			response = false; 
+		return response; 
+	}
+	
+	public static boolean askForReloadPage () {
+		boolean response = false; 
+		alertTitle = "Reloading Page";
+		alertMessage = "بارگذاری مجدد در صورت تایید " +"\n"+ "اطلاعات ذخیره نشده پاک میشود";
 		Alert alert = confirmAlerts(alertTitle, alertMessage);
 		Optional<ButtonType> buttonKeys = alert.showAndWait();
 		if (buttonKeys.get() == ButtonType.OK)

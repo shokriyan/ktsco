@@ -14,6 +14,7 @@ public class ProdDetailModel {
 	private SimpleStringProperty prodName;
 	private SimpleStringProperty invName;
 	private SimpleDoubleProperty reqQty;
+	private SimpleStringProperty invUnit;
 
 	/**
 	 * Constructor for Adding and showing on Table
@@ -22,9 +23,10 @@ public class ProdDetailModel {
 	 * @param reqQty
 	 */
 
-	public ProdDetailModel(String invName, double reqQty) {
+	public ProdDetailModel(String invName, String invUnit , double reqQty) {
 		this.invName = new SimpleStringProperty(invName);
 		this.reqQty = new SimpleDoubleProperty(getDoubleFormat(reqQty));
+		this.invUnit = new SimpleStringProperty(invUnit);
 
 	}
 
@@ -36,9 +38,10 @@ public class ProdDetailModel {
 	 * @param invName
 	 * @param regQty
 	 */
-	public ProdDetailModel(int id, String invName, double reqQty) {
+	public ProdDetailModel(int id, String invName,String invUnit, double reqQty) {
 		this.id = new SimpleIntegerProperty(id);
 		this.invName = new SimpleStringProperty(invName);
+		this.invUnit = new SimpleStringProperty(invUnit);
 		this.reqQty = new SimpleDoubleProperty(getDoubleFormat(reqQty));
 
 	}
@@ -64,7 +67,10 @@ public class ProdDetailModel {
 	public double getReqQty() {
 		return reqQty.get();
 	}
-
+	
+	public String getInvUnit() {
+		return invUnit.get();
+	}
 
 	// Setters
 
@@ -82,6 +88,9 @@ public class ProdDetailModel {
 
 	public void setReqQty(double reqQty) {
 		this.reqQty.set(reqQty);
+	}
+	public void setInvUnit(String invUnit) {
+		this.invUnit.set(invUnit);
 	}
 
 
@@ -101,6 +110,10 @@ public class ProdDetailModel {
 
 	public SimpleDoubleProperty getReqQtyProperty() {
 		return reqQty;
+	}
+	
+	public SimpleStringProperty getInvUnitProperty() {
+		return invUnit;
 	}
 
 }

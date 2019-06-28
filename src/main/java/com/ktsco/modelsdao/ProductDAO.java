@@ -31,13 +31,38 @@ public class ProductDAO {
 	private static ObservableList<ProdDetailModel> prodDetailList;
 	private static ProdDetailModel prodDetailModel;
 	private static ResultSetMetaData resultSetMetaData;
+	
+	public static int getProductID (String productName) {
+		int prodID = 0;
+		query = "select prod_id from products where prod_name = ?";
+		preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setString(1, productName);
+			resultSet = preStmt.executeQuery();
+			while (resultSet.next()) {
+				prodID = resultSet.getInt(1);
+			}
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				preStmt.close();
+				resultSet.close();
+			}catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		return prodID;
+	}
 
 	/**
 	 * Select All Product from database to add to the table view.
 	 * 
 	 * @return Observable List
 	 */
-
+	
 	public static ObservableList<ProductModel> selectAll() {
 		list = FXCollections.observableArrayList();
 
@@ -258,9 +283,11 @@ public class ProductDAO {
 				int id = resultSet.getInt("id");
 				int invId = resultSet.getInt("inv_id");
 				String invName = InventoryDAO.getInvName(invId);
+				String invUnit = InventoryDAO.getInventoryUnit(invName);
+				
 				double reqQty = resultSet.getDouble("req_qty");
 
-				prodDetailModel = new ProdDetailModel(id, invName, reqQty);
+				prodDetailModel = new ProdDetailModel(id, invName,invUnit, reqQty);
 				prodDetailList.add(prodDetailModel);
 			}
 		} catch (SQLException e) {
@@ -366,7 +393,7 @@ public class ProductDAO {
 	
 	public static List<String> getProductList(){
 		List<String> list = new ArrayList<String>();
-		query = "select prod_name from products";
+		query = "select prod_name from products where factory_prod = 1 ";
 		try {
 			resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 			while (resultSet.next()) {
@@ -385,5 +412,29 @@ public class ProductDAO {
 		
 		
 		return list; 
+	}
+	
+	public static String getUnitMeasure (String products) {
+		String unit = null; 
+		query = "Select prod_um from products where prod_name = ?"; 
+		preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setString(1, products);
+			resultSet = preStmt.executeQuery();
+			while (resultSet.next()) {
+				unit = resultSet.getString(1);
+			}
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				preStmt.close();
+				resultSet.close();
+			}catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		return unit;
 	}
 }

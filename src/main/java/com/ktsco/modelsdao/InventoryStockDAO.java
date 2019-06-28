@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ktsco.models.factory.DetailReportModel;
 import com.ktsco.models.factory.InvStockDetailModel;
 import com.ktsco.models.factory.InvStockModel;
 import com.ktsco.models.factory.InventoryImportModel;
@@ -245,27 +246,86 @@ public class InventoryStockDAO {
 	}
 
 	public static boolean updateInventoryImportQty(double newImportQty, int detailID) {
-		boolean success = false; 
+		boolean success = false;
 		query = "update invImportDetail set import_qty = ? where detail_id = ?";
-		
+
 		preStmt = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStmt.setDouble(1, newImportQty);
 			preStmt.setInt(2, detailID);
 			preStmt.executeUpdate();
 			success = true;
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				preStmt.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+
+		return success;
+	}
+
+	public static ObservableList<InvStockModel> retrieveRawMaterialStock() {
+		ObservableList<InvStockModel> list = FXCollections.observableArrayList();
+		query = "select inv.inv_id, inv.inv_name, inv.inv_um, rmi.totalImport, tpr.totalUsage " + "from inventory inv "
+				+ "left outer join rawmaterialimport rmi on inv.inv_id = rmi.inv_id "
+				+ "left outer join tatalproductionraw tpr on inv.inv_id = tpr.inv_id "
+				+ "where rmi.totalImport is not null";
+		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+		try {
+			while (resultSet.next()) {
+				String invName = resultSet.getString("inv_name");
+				String invUnit = resultSet.getString("inv_um");
+				double totalImport = Commons.setDoubleFormat(resultSet.getDouble("totalImport"));
+				double totalUsage = Commons.setDoubleFormat(resultSet.getDouble("totalUsage"));
+				double stockQuantity = totalImport - totalUsage; 
+				rawModel = new InvStockModel(invName, invUnit, String.valueOf(Commons.setDoubleFormat(stockQuantity)));
+				list.add(rawModel);
+			}
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+		}
+
+		return list;
+
+	}
+
+	public static ObservableList<DetailReportModel> getDetailItemRecord(String lookupValue) {
+		ObservableList<DetailReportModel> list = FXCollections.observableArrayList();
+		query = "SELECT INV.INV_ID,INVD.DETAIL_ID, INV.INV_NAME, INV.INV_UM, INVI.IMPORT_DATE, INVD.IMPORT_QTY FROM INVENTORY INV " + 
+				"INNER JOIN INVIMPORTDETAIL INVD ON INV.INV_ID = INVD.INV_ITEM " + 
+				"INNER JOIN invImport INVI ON INVD.INVIMPORTID = INVI.IMPORT_ID " + 
+				"WHERE INV.INV_ID LIKE ? AND INVD.IMPORT_QTY != 0";
+		preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setString(1, "%"+lookupValue+"%");
+			resultSet = preStmt.executeQuery();
+			while (resultSet.next()) {
+				int idnumber = resultSet.getInt(2);
+				String item = resultSet.getString(3);
+				String unit = resultSet.getString(4);
+				String date = DateUtils.convertGregoryToJalali(resultSet.getString(5));
+				String quantity = String.valueOf(Commons.setDoubleFormat(resultSet.getDouble(6)));
+				DetailReportModel detailModel = new DetailReportModel(idnumber, item, unit, date, quantity);
+				list.add(detailModel);
+			}
+		}catch (SQLException e) {
+			Commons.dbExcutionLog(query, e.getMessage());
 			AlertsUtils.databaseErrorAlert();
 		}finally {
 			try {
 				preStmt.close();
-			}catch(SQLException e) {
-				log.error(Commons.dbClosingLog(e.getMessage()));
+				resultSet.close();
+			}catch (SQLException e) {
+				Commons.dbClosingLog(e.getMessage());
 			}
 		}
 		
-		return success;
+		return list;
 	}
 
 }

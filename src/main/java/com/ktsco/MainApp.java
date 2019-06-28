@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ktsco.utils.Commons;
 import com.ktsco.utils.Constants;
 import com.ktsco.utils.ViewClass;
 
@@ -26,7 +27,7 @@ public class MainApp extends Application {
 
         log.info("Starting KTSCO Management application");
 
-        loginScene = view.setSplitPane(Constants.loginPanelFxml);
+        loginScene = view.setSplitPane(Commons.getFxmlPanel("loginPanelFxml"));
         loginStage = view.setSceneAndShowStage(loginScene, Constants.title, false, false);
         
         

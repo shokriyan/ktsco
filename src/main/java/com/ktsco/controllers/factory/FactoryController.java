@@ -37,9 +37,9 @@ public class FactoryController implements Initializable {
 	
 	public static void initialFactoryPanel() {
 		
-		factoryBorderPane = view.setBorderPane(Constants.factoryPanel);
-		factoryBorderPane.setTop(view.setVboxFxml(Constants.topViewFxml));
-		factoryBorderPane.setRight(setSideMenu(Constants.sideMenuFxml));
+		factoryBorderPane = view.setBorderPane(Commons.getFxmlPanel("factoryPanel"));
+		factoryBorderPane.setTop(view.setVboxFxml(Commons.getFxmlPanel("topViewFxml")));
+		factoryBorderPane.setRight(setSideMenu(Commons.getFxmlPanel("sideMenuFxml")));
 		
 		factoryStage = view.setSceneAndShowStage(factoryBorderPane, Constants.title, true, false);
 		
@@ -86,18 +86,18 @@ public class FactoryController implements Initializable {
 	 * Openning Product Panel and set in Center Pane
 	 */
 	public static void openPorductPanel() {
-		Pane productPane = view.setPane(Constants.productPanelFxml);
+		Pane productPane = view.setPane(Commons.getFxmlPanel("productPanelFxml"));
 		factoryBorderPane.setCenter(productPane);
 	}
 	
 	//Opening Invetory Stock Panel
 	public static void openInventoryStockPanel() {
-		Pane invetoryStock = view.setPane(Constants.invetoryStockPanelFxml);
+		Pane invetoryStock = view.setPane(Commons.getFxmlPanel("invetoryStockPanelFxml"));
 		factoryBorderPane.setCenter(invetoryStock);
 	}
 	//Opening production panel
 	public static void openProductionPanel() {
-		Pane production = view.setPane(Constants.productionPanelFxml);
+		Pane production = view.setPane(Commons.getFxmlPanel("productionPanelFxml"));
 		factoryBorderPane.setCenter(production);
 	}
 

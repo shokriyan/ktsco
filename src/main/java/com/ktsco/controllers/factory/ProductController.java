@@ -28,12 +28,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 public class ProductController implements Initializable {
 
@@ -63,7 +62,9 @@ public class ProductController implements Initializable {
 	@FXML
 	private TableColumn<ProdDetailModel, Double> colDetailQty;
 	@FXML
-	private TableColumn<ProdDetailModel, String> colDetailInvItem;
+	private TableColumn<ProdDetailModel, String> colDetailInvItem, colDetailInvUnit;
+	@FXML
+	private MenuItem menuItemDeleteRow;
 
 	@FXML
 	private ComboBox<String> comboCategory, comboUm, comboInvItem;
@@ -148,6 +149,12 @@ public class ProductController implements Initializable {
 		}
 
 	}
+	public void handleDeleteMenu(ActionEvent event) {
+		if (!tableDetail.getSelectionModel().isEmpty()) {
+			deleteDetailRowFromTable();
+			populateProductTable();
+		}
+	}
 
 	public void onSelectActionForTable() {
 		if (checkFactoryProduct.isSelected()) {
@@ -186,15 +193,14 @@ public class ProductController implements Initializable {
 	}
 
 	private void openCategoryPanel() {
-		log.info("Loading FXML to penel {}", Constants.categoryPanelFxml);
-		VBox category = view.setVboxFxml(Constants.categoryPanelFxml);
+		log.info("Loading FXML to penel {}", Commons.getFxmlPanel("categoryPanelFxml"));
+		VBox category = view.setVboxFxml(Commons.getFxmlPanel("categoryPanelFxml"));
 		log.info("Loading stage and show");
 		CategoryController.categoryStage = view.setSceneAndShowStage(category, "", false, false);
 	}
 
 	private void openInventoryPanel() {
-		log.info("Loading FXML to penel {}", Constants.inventoryListPanelFxml);
-		VBox inventoryList = view.setVboxFxml(Constants.inventoryListPanelFxml);
+		VBox inventoryList = view.setVboxFxml(Commons.getFxmlPanel("inventoryListPanelFxml"));
 		log.info("Loading stage and show");
 		InventoryController.invStage = view.setSceneAndShowStage(inventoryList, "", false, false);
 	}
@@ -230,19 +236,20 @@ public class ProductController implements Initializable {
 		try {
 			String InvName = comboInvItem.getValue();
 			double reqQty = Double.parseDouble(txtReqQty.getText());
-			ProdDetailModel detailModel = new ProdDetailModel(InvName, reqQty);
+			String invUnit = InventoryDAO.getInventoryUnit(InvName);
+			ProdDetailModel detailModel = new ProdDetailModel(InvName,invUnit, reqQty);
 			prodDetailList.add(detailModel);
 		} catch (NumberFormatException e) {
 			log.error("Only numbers are acceptable at Required Qty");
-			AlertsUtils.numberEntryListAlerts();
+			AlertsUtils.numberEntryFormatErrorAlerts();
 		}
 	}
 
-	private void deleteDetailItemFromTable(int id) {
-
-		ProductDAO.deleteDetailItem(id);
-		showProducts();
-
+	private void deleteDetailRowFromTable() {
+		if (!prodDetailList.isEmpty()) {
+			int selectedIndex = tableDetail.getSelectionModel().getSelectedIndex();
+			prodDetailList.remove(selectedIndex);
+		}
 	}
 
 	/**
@@ -253,42 +260,10 @@ public class ProductController implements Initializable {
 	private void addDetailListToTable(ObservableList<ProdDetailModel> list) {
 
 		colDetailInvItem.setCellValueFactory(cellData -> cellData.getValue().getInvNameProperty());
+		colDetailInvUnit.setCellValueFactory(cellData -> cellData.getValue().getInvUnitProperty());
 		colDetailQty.setCellValueFactory(cellData -> cellData.getValue().getReqQtyProperty().asObject());
-		colDetailDelete
-				.setCellFactory(new Callback<TableColumn<ProdDetailModel, Void>, TableCell<ProdDetailModel, Void>>() {
-
-					@Override
-					public TableCell<ProdDetailModel, Void> call(TableColumn<ProdDetailModel, Void> param) {
-						final TableCell<ProdDetailModel, Void> cell = new TableCell<ProdDetailModel, Void>() {
-
-							private final Button btn = new Button("حذف");
-
-							{
-								btn.setOnAction((ActionEvent event) -> {
-									prodDetailModel = tableDetail.getSelectionModel().getSelectedItem();
-									if (!tableDetail.getSelectionModel().isEmpty()) {
-										int id = prodDetailModel.getId();
-										deleteDetailItemFromTable(id);
-									}
-								});
-							}
-
-							@Override
-							public void updateItem(Void item, boolean empty) {
-								super.updateItem(item, empty);
-								if (empty) {
-									setGraphic(null);
-								} else {
-									setGraphic(btn);
-								}
-							}
-						};
-						return cell;
-					}
-				});
-		// addButtonToDetailTable();
+		
 		tableDetail.setItems(list);
-
 	}
 
 	/**

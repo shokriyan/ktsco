@@ -1,6 +1,9 @@
 package com.ktsco.utils;
 
+import java.io.FileInputStream;
+import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -21,6 +24,7 @@ public class Commons {
 
 	private static final Logger log = LoggerFactory.getLogger(Commons.class);
 	private static ViewClass view = new ViewClass();
+	private static DecimalFormat df = new DecimalFormat("#.##");
 
 	/**
 	 * This function will return the key of access type based on its value <br>
@@ -94,7 +98,7 @@ public class Commons {
 
 	public static void reloadTopView(BorderPane borderPane, Button button) {
 		Constants.setDisplayPanelName(button.getText());
-		borderPane.setTop(view.setVboxFxml(Constants.topViewFxml));
+		borderPane.setTop(view.setVboxFxml(Commons.getFxmlPanel("topViewFxml")));
 	}
 
 	public static void populateAllComboBox(ComboBox<String> combo, List<String> items) {
@@ -169,6 +173,58 @@ public class Commons {
 	public static String dbExcutionLog(String query, String message) {
 		String logMessage = "Error at Executing query " + query + " With Error Message " + message;
 		return logMessage;
+	}
+
+	public static double setDoubleFormat(double reqQty) {
+		return Double.parseDouble(df.format(reqQty));
+	}
+
+	public static Properties loadPropertyFile(String filePath) {
+		Properties properties = new Properties();
+		try {
+			FileInputStream fileInputStream = new FileInputStream(filePath);
+			properties.load(fileInputStream);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return properties;
+	}
+
+	public static String getConfigurationPropertyValue(String key) {
+		String output = "";
+		Properties properties = loadPropertyFile(Constants.configFilePath);
+		output = String.valueOf(properties.get(key));
+		log.info("Property output is ::::" + output);
+		return output;
+	}
+
+	public static String getFxmlPanel(String key) {
+		String output = "";
+		Properties properties = loadPropertyFile(Constants.fxmlsPropFilePath);
+		output = String.valueOf(properties.get(key));
+		log.info("FXML output is ::::" + output);
+		return output;
+	}
+
+	public static String getComboValue(ComboBox<String> combo) {
+		String value = "";
+		if (!"".equalsIgnoreCase(combo.getValue()))
+			value = combo.getValue();
+
+		return value;
+	}
+	
+	public static String checkAndConvertNumbers(String input) {
+		String newValue = "";
+		
+		try {
+			double convertedQty = Commons.setDoubleFormat(Double.parseDouble(input));
+			newValue = String.valueOf(convertedQty);
+		}catch (NumberFormatException e) {
+			AlertsUtils.numberEntryFormatErrorAlerts();
+		}
+		
+		return newValue;
 	}
 
 }

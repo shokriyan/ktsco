@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.factory.InventoryModel;
 import com.ktsco.utils.AlertsUtils;
+import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
 
 import javafx.collections.FXCollections;
@@ -313,6 +314,32 @@ public class InventoryDAO {
 			}
 		}
 		return invName;
+	}
+	
+	public static String getInventoryUnit (String lookUpValue) {
+		int invID = getInvId(lookUpValue);
+		String invUnit = null;
+		String query = "Select inv_um from inventory where inv_id = ?";
+		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
+		ResultSet resultSet = null;
+		try {
+			preStmt.setInt(1, invID);
+			resultSet = preStmt.executeQuery();
+			while (resultSet.next()) {
+				invUnit = resultSet.getString(1);
+			}
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				preStmt.close();
+				resultSet.close();
+			}catch (SQLException e) {
+				log.error(e.getMessage());
+			}
+		}
+		return invUnit;
 	}
 
 }

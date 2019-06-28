@@ -56,8 +56,8 @@ public class ViewClass {
 		Stage stage = new Stage();
 		Scene scene = new Scene(rootNote);
 		log.info("Create Root from {}" + rootNote);
-		scene.getStylesheets().add(getClass().getResource(Constants.styleSheetPath).toExternalForm());
-		log.info("Initial Style Sheet from {}" + Constants.styleSheetPath);
+		scene.getStylesheets().add(getClass().getResource(Commons.getFxmlPanel("styleSheetPath")).toExternalForm());
+		log.info("Initial Style Sheet from {}" + Commons.getFxmlPanel("styleSheetPath"));
 		stage.setScene(scene);
 		stage.setResizable(false);
 		stage.setTitle(title);

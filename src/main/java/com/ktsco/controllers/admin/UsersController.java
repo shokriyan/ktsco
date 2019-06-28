@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.ktsco.models.admin.UsersModels;
 import com.ktsco.modelsdao.UsersDAO;
 import com.ktsco.utils.AlertsUtils;
+import com.ktsco.utils.Commons;
 import com.ktsco.utils.Constants;
 import com.ktsco.utils.ViewClass;
 
@@ -64,12 +65,12 @@ public class UsersController implements Initializable {
 			populateUserList();
 		} else if (event.getSource() == btnAddNewUser) {
 			Constants.buttonText = btnAddNewUser.getText();
-			usersScene = view.setVboxFxml(Constants.createNewUserFxml);
+			usersScene = view.setVboxFxml(Commons.getFxmlPanel("createNewUserFxml"));
 			usersStage = view.setSceneAndShowStage(usersScene, "", false, false);
 			usersStage.setOnHidden(event1 -> populateUserList());
 		} else if (event.getSource() == btnEditUser) {
 			Constants.buttonText = btnEditUser.getText();
-			usersScene = view.setVboxFxml(Constants.editUsersFxml);
+			usersScene = view.setVboxFxml(Commons.getFxmlPanel("editUsersFxml"));
 			usersStage = view.setSceneAndShowStage(usersScene, "", false, false);
 			usersStage.setOnHidden(event1 -> populateUserList());
 		} else if (event.getSource() == btnDeleteUser) {

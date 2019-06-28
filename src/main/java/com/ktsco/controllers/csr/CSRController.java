@@ -36,9 +36,9 @@ public class CSRController implements Initializable{
 	} 
 	
 	public static void initialCSRPanel() {
-		csrBorderScene = views.setBorderPane(Constants.csrPanelFxml);
-		csrBorderScene.setTop(views.setVboxFxml(Constants.topViewFxml));
-		csrBorderScene.setRight(setSideMenu(Constants.sideMenuFxml));
+		csrBorderScene = views.setBorderPane(Commons.getFxmlPanel("csrPanelFxml"));
+		csrBorderScene.setTop(views.setVboxFxml(Commons.getFxmlPanel("topViewFxml")));
+		csrBorderScene.setRight(setSideMenu(Commons.getFxmlPanel("sideMenuFxml")));
 		
 		csrStage = views.setSceneAndShowStage(csrBorderScene, Constants.title, true, false);
 	}
@@ -61,7 +61,7 @@ public class CSRController implements Initializable{
 	public static void allButtonActions(ActionEvent event) {
 		if (event.getSource() == btnEmployeePanel) {
 			Commons.reloadTopView(csrBorderScene, btnEmployeePanel);
-			setCenterPanel(Constants.employeePanelFxml);
+			setCenterPanel(Commons.getFxmlPanel("employeePanelFxml"));
 		}
 	}
 	

@@ -16,12 +16,12 @@ public class DatabaseUtils {
 	
 	private static DataSource getMySqlDataSource() throws SQLException {
 		MysqlDataSource dataSource = new MysqlDataSource();
-		dataSource.setServerName("localhost");
-		dataSource.setPort(3306);
-		dataSource.setDatabaseName("ktscodb");
-		dataSource.setUser("root");
-		dataSource.setPassword("");
-		dataSource.setServerTimezone("EST");
+		dataSource.setServerName(Commons.getConfigurationPropertyValue("serverName"));
+		dataSource.setPort(Integer.parseInt(Commons.getConfigurationPropertyValue("serverPort")));
+		dataSource.setDatabaseName(Commons.getConfigurationPropertyValue("databaseName"));
+		dataSource.setUser(Commons.getConfigurationPropertyValue("user"));
+		dataSource.setPassword(Commons.getConfigurationPropertyValue("password"));
+		dataSource.setServerTimezone(Commons.getConfigurationPropertyValue("serverTimeZon"));
 		return dataSource;
 	}
 

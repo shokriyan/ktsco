@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ktsco.utils.Constants;
+import com.ktsco.utils.Commons;
 import com.ktsco.utils.ViewClass;
 
 import javafx.event.ActionEvent;
@@ -31,7 +31,7 @@ public class EmployeeController implements Initializable {
 	@FXML
 	public void allButtonActions(ActionEvent event) {
 		if (event.getSource() == btnEmployeeList) {
-			openEmployeeListPanel(Constants.employeeListPanelFxml);
+			openEmployeeListPanel(Commons.getFxmlPanel("employeeListPanelFxml"));
 		}
 	}
 	

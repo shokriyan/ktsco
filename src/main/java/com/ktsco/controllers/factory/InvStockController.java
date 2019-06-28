@@ -14,7 +14,6 @@ import com.ktsco.modelsdao.InventoryDAO;
 import com.ktsco.modelsdao.InventoryStockDAO;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
-import com.ktsco.utils.Constants;
 import com.ktsco.utils.DateUtils;
 import com.ktsco.utils.ViewClass;
 
@@ -26,12 +25,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class InvStockController implements Initializable {
 	private static final Logger log = LoggerFactory.getLogger(InvStockController.class);
@@ -41,7 +42,7 @@ public class InvStockController implements Initializable {
 	private ObservableList<InvStockDetailModel> invStockDetailList;
 
 	@FXML
-	private Button btnCategory, btnInvetoryItems, btnSaveInvImport, btnSearch;
+	private Button btnCategory, btnInvetoryItems, btnSaveInvImport, btnSearch, btnDetailList;
 
 	@FXML
 	private TextField txtImportId, txtImportDate;
@@ -88,32 +89,40 @@ public class InvStockController implements Initializable {
 			boolean response = AlertsUtils.askForSaveItems();
 			if (response) {
 				addInvImportDetail();
-				
+
 			}
 		}
 		if (event.getSource() == btnSearch) {
 			openSearchPanel();
 			ImportSearchController.importSearchStage.setOnHidden(e -> reloadPrerequisition());
+		}if (event.getSource() == btnDetailList) {
+			openDetailList();
 		}
 	}
 
 	// Opening Category panel
 	private void openCategoryPanel() {
 		log.info("Openning Category Panel");
-		VBox category = view.setVboxFxml(Constants.categoryPanelFxml);
+		VBox category = view.setVboxFxml(Commons.getFxmlPanel("categoryPanelFxml"));
 		CategoryController.categoryStage = view.setSceneAndShowStage(category, "", false, false);
 	}
 
 	private void openSearchPanel() {
 		log.info("Openning Search panel");
-		VBox searchPanel = view.setVboxFxml(Constants.importSearchPanelFxml);
+		VBox searchPanel = view.setVboxFxml(Commons.getFxmlPanel("importSearchPanelFxml"));
 		ImportSearchController.importSearchStage = view.setSceneAndShowStage(searchPanel, "", false, false);
+	}
+
+	private void openDetailList() {
+		log.info("Openning Detail list panel");
+		VBox searchPanel = view.setVboxFxml(Commons.getFxmlPanel("importDetailList"));
+		ImportDetailReportController.importDetailStage = view.setSceneAndShowStage(searchPanel, "", false, false);
 	}
 
 	// Opening InvetoryItem Panel
 	private void openInventoryItemsPanel() {
 		log.info("Opening Inventory list panel");
-		VBox invItems = view.setVboxFxml(Constants.inventoryListPanelFxml);
+		VBox invItems = view.setVboxFxml(Commons.getFxmlPanel("inventoryListPanelFxml"));
 		InventoryController.invStage = view.setSceneAndShowStage(invItems, "", false, false);
 	}
 
@@ -147,6 +156,7 @@ public class InvStockController implements Initializable {
 		colImportQty.setCellValueFactory(cellData -> cellData.getValue().getImportQtyProperty());
 
 		colImportQty.setCellFactory(TextFieldTableCell.forTableColumn());
+		
 		tableImportList.setItems(list);
 	}
 
@@ -154,6 +164,34 @@ public class InvStockController implements Initializable {
 		colInvItem1.setCellValueFactory(cellData -> cellData.getValue().getInvNameProperty());
 		colUM1.setCellValueFactory(cellData -> cellData.getValue().getUMProperty());
 		colTotalQty.setCellValueFactory(cellData -> cellData.getValue().getImportQtyProperty());
+
+		colTotalQty.setCellFactory(column -> {
+		    return new TableCell<InvStockModel, String>() {
+		        @Override
+		        protected void updateItem(String item, boolean empty) {
+		            super.updateItem(item, empty);
+
+		            if (item == null || empty) {
+		            	setText(null);
+		                setStyle("");
+		            } else {
+		                //Converts String to Double
+		            	double quantity = Double.parseDouble(item);
+
+		                // Style all dates in March with a different color.
+		                if (quantity < 0) {
+		                	setText(String.valueOf(quantity));
+		                    setTextFill(Color.CHOCOLATE);
+		                    setStyle("-fx-background-color: yellow");
+		                } else {
+		                	setText(String.valueOf(quantity));
+		                    setTextFill(Color.BLACK);
+		                    setStyle("");
+		                }
+		            }
+		        }
+		    };
+		});
 
 		tableInvStock.setItems(list);
 	}
@@ -214,11 +252,9 @@ public class InvStockController implements Initializable {
 	}
 
 	private void populatRawMaterialInventory() {
-		rawMaterialList = InventoryStockDAO.getRawMaterialInventory();
+		rawMaterialList = InventoryStockDAO.retrieveRawMaterialStock();
 		generateRawMaterialTableList(rawMaterialList);
+		
 	}
-	
-	
-	
 
 }

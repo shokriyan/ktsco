@@ -36,9 +36,9 @@ public class AdminController implements Initializable {
 	}
 
 	public static void initialAdminPanel() {
-		adminScene = view.setBorderPane(Constants.adminPanelFxml);
-		adminScene.setTop(view.setVboxFxml(Constants.topViewFxml));
-		adminScene.setRight(setSideMenu(Constants.sideMenuFxml));
+		adminScene = view.setBorderPane(Commons.getFxmlPanel("adminPanelFxml"));
+		adminScene.setTop(view.setVboxFxml(Commons.getFxmlPanel("topViewFxml")));
+		adminScene.setRight(setSideMenu(Commons.getFxmlPanel("sideMenuFxml")));
 		adminStage = view.setSceneAndShowStage(adminScene, Constants.title, true, false);
 	}
 
@@ -67,10 +67,10 @@ public class AdminController implements Initializable {
 	public static void allButtonActions(ActionEvent event) {
 		if (event.getSource() == btnUsers) {
 			Commons.reloadTopView(adminScene, btnUsers);
-			adminScene.setCenter(view.setPane(Constants.usersPaneFxml));
+			adminScene.setCenter(view.setPane(Commons.getFxmlPanel("usersPaneFxml")));
 			
 		}else if (event.getSource() == btnSetting) {
-			adminScene.setCenter(view.setCenterPanel(Constants.settingsPaneFxml));
+			adminScene.setCenter(view.setCenterPanel(Commons.getFxmlPanel("settingsPaneFxml")));
 			Commons.reloadTopView(adminScene, btnSetting);
 		}
 	}
