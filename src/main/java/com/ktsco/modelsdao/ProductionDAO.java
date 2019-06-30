@@ -99,16 +99,16 @@ public class ProductionDAO {
 
 	public static ObservableList<ProductionDetailModel> getProductionStockQuantity() {
 		ObservableList<ProductionDetailModel> list = FXCollections.observableArrayList();
-		query = "select prod.prod_name, prod.prod_um, Sum(prodDetail.quantity) from products prod "
-				+ "left outer join productionDetail prodDetail on prod.prod_id = prodDetail.product_id "
-				+ "where prod.factory_prod = 1 group by prod.prod_id order by prod.prod_id";
+		query = "Select prodTotal.prod_id , prodTotal.prod_name , prodTotal.prod_um , "
+				+ "(prodTotal.productionTotal - exportTotal.ExportTotal) from productionTotalView prodTotal "
+				+ "inner join productionExportTotalView exportTotal " + "on prodTotal.prod_id = exportTotal.prod_id";
 
 		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 		try {
 			while (resultSet.next()) {
-				String productName = resultSet.getString(1);
-				String productUnit = resultSet.getString(2);
-				String quantity = resultSet.getString(3);
+				String productName = resultSet.getString(2);
+				String productUnit = resultSet.getString(3);
+				String quantity = resultSet.getString(4);
 				ProductionDetailModel detailModel = new ProductionDetailModel(productName, productUnit, quantity);
 				list.add(detailModel);
 			}

@@ -1,10 +1,13 @@
 /* Application wide styles */
+.root {
+  -fx-font: 12px Tahoma;
+}
+
 
 .button{
-	-fx-font-size: 15.0px;
+	-fx-font-size: 12.0px;
     -fx-border-color: #000000;
     -fx-background-color: Transparent;
-    -fx-font-weight: bold
 
 }
 

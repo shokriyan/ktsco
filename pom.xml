@@ -21,6 +21,15 @@
 		<slf4j.version>1.7.12</slf4j.version>
 		<log4j.version>2.11.2</log4j.version>
 	</properties>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>oss-sonatype-snapshots</id>
+			<url>https://oss.sonatype.org/content/groups/public/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<build>
 
@@ -104,29 +113,6 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.16</version>
 		</dependency>
-		<dependency>
-			<groupId>net.time4j</groupId>
-			<artifactId>time4j-base</artifactId>
-			<version>5.3</version>
-		</dependency>
-		<dependency>
-			<groupId>net.time4j</groupId>
-			<artifactId>time4j-sqlxml</artifactId>
-			<version>5.3</version>
-		</dependency>
-		<dependency>
-			<groupId>net.time4j</groupId>
-			<artifactId>time4j-tzdata</artifactId>
-			<version>5.0-2019a</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/net.time4j/time4j-ui -->
-		<dependency>
-			<groupId>net.time4j</groupId>
-			<artifactId>time4j-ui</artifactId>
-			<version>5.3</version>
-		</dependency>
-
-
 	</dependencies>
 
 </project>

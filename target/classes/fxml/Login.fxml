@@ -19,11 +19,17 @@
 					<children>
 						<Text strokeType="OUTSIDE" strokeWidth="0.0" text="ورود به سیستم">
 							<font>
-								<Font size="36.0" />
+								<Font name="Arial Black" size="36.0" />
 							</font>
 						</Text>
-						<TextField fx:id="txtUsername" promptText="نام کاربری" />
-                  <PasswordField fx:id="txtPassword" promptText="رمز ورود" />
+						<TextField fx:id="txtUsername" promptText="نام کاربری">
+                     <font>
+                        <Font name="Arial" size="13.0" />
+                     </font></TextField>
+                  <PasswordField fx:id="txtPassword" promptText="رمز ورود">
+                     <font>
+                        <Font name="Arial" size="13.0" />
+                     </font></PasswordField>
 						<ComboBox fx:id="cmbAccess" prefWidth="300.0" promptText="نوغ دسترسی" />
 						<Button fx:id="btnSubmit" mnemonicParsing="false" onAction="#onButtonClick" prefWidth="300.0" text="تایید">
 							<VBox.margin>
@@ -53,7 +59,7 @@
 						<Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
 						<Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="سیستم مدیریت اطلاعات" textAlignment="CENTER" wrappingWidth="240.0">
 							<font>
-								<Font size="36.0" />
+								<Font name="Arial Black" size="28.0" />
 							</font>
 						</Text>
 					</children>
