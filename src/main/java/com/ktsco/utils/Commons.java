@@ -19,6 +19,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 
 public class Commons {
 
@@ -61,6 +62,7 @@ public class Commons {
 
 		Button button = new Button();
 		button.setText(label);
+		button.setFont(Font.font("Tahome"));
 		button.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 		button.setAlignment(Pos.CENTER_LEFT);
 		button.setPrefWidth(198);
