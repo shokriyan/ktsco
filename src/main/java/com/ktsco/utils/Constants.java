@@ -9,8 +9,8 @@ public class Constants {
 	
 	public static Map<String, String> accessValue = new HashMap<String, String>();
 	public static List<String> unitMeasureList = new ArrayList<String>();
-	public static final String configFilePath = System.getProperty("user.dir") + "/src/main/resources/configuration/config.properties";
-	public static final String fxmlsPropFilePath = System.getProperty("user.dir") + "/src/main/resources/configuration/fxmls.properties";
+	public static final String configFilePath = "/configuration/config.properties";
+	public static final String fxmlsPropFilePath = "/configuration/fxmls.properties";
 
 	public static final String title = Commons.getConfigurationPropertyValue("applicationTitle");
 	public static final String companyName = "شرکت خراسان تک سیم";

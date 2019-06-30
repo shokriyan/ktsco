@@ -1,6 +1,8 @@
 package com.ktsco.utils;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Properties;
@@ -181,10 +183,12 @@ public class Commons {
 		return Double.parseDouble(df.format(reqQty));
 	}
 
-	public static Properties loadPropertyFile(String filePath) {
+	public Properties loadPropertyFile(String filePath) {
 		Properties properties = new Properties();
 		try {
-			FileInputStream fileInputStream = new FileInputStream(filePath);
+			
+			InputStream fileInputStream = Commons.class.getResourceAsStream(filePath);
+			
 			properties.load(fileInputStream);
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -194,7 +198,8 @@ public class Commons {
 
 	public static String getConfigurationPropertyValue(String key) {
 		String output = "";
-		Properties properties = loadPropertyFile(Constants.configFilePath);
+		Commons commons = new Commons();
+		Properties properties = commons.loadPropertyFile(Constants.configFilePath);
 		output = String.valueOf(properties.get(key));
 		log.info("Property output is ::::" + output);
 		return output;
@@ -202,7 +207,8 @@ public class Commons {
 
 	public static String getFxmlPanel(String key) {
 		String output = "";
-		Properties properties = loadPropertyFile(Constants.fxmlsPropFilePath);
+		Commons commons = new Commons();
+		Properties properties = commons.loadPropertyFile(Constants.fxmlsPropFilePath);
 		output = String.valueOf(properties.get(key));
 		log.info("FXML output is ::::" + output);
 		return output;
