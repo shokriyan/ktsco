@@ -24,12 +24,12 @@
       			<children>
       				<Text fx:id="txtCompanyName" strokeType="OUTSIDE" strokeWidth="0.0">
       					<font>
-      						<Font size="24.0" />
+      						<Font name="Tahoma" size="20.0" />
       					</font>
       				</Text>
       				<Text fx:id="textPanelName" layoutX="15.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0">
       					<font>
-      						<Font size="24.0" />
+      						<Font name="Tahoma" size="20.0" />
       					</font>
       				</Text>
       			</children>
@@ -40,7 +40,10 @@
       		<Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
       		<VBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="300.0" spacing="20.0">
       			<children>
-      				<Label fx:id="lblWelcomeMsg" />
+      				<Label fx:id="lblWelcomeMsg">
+                     <font>
+                        <Font name="Tahoma" size="12.0" />
+                     </font></Label>
       				<Button fx:id="btnSignOut" mnemonicParsing="false" onAction="#allButtonAction" prefHeight="27.0" prefWidth="77.0" text="خروج" />
       			</children>
       			<padding>
@@ -60,7 +63,7 @@
                   <Insets top="15.0" />
                </HBox.margin>
                <font>
-                  <Font size="22.0" />
+                  <Font name="Tahoma" size="20.0" />
                </font>
             </Label>
          </children>
