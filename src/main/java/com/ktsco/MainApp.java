@@ -24,7 +24,8 @@ public class MainApp extends Application {
     public static Stage loginStage = new Stage(); 
     
     public void start(Stage stage) throws Exception {
-
+    	System.setProperty("prism.txt", "t2k");
+    	System.setProperty("prism.lcdtext", "false");
         log.info("Starting KTSCO Management application");
 
         loginScene = view.setSplitPane(Commons.getFxmlPanel("loginPanelFxml"));
