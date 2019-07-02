@@ -11,6 +11,7 @@ public class Constants {
 	public static List<String> unitMeasureList = new ArrayList<String>();
 	public static final String configFilePath = "/configuration/config.properties";
 	public static final String fxmlsPropFilePath = "/configuration/fxmls.properties";
+	public static final String farsiTextPath = "/configuration/farsiTexts.properties";
 
 	public static final String title = Commons.getConfigurationPropertyValue("applicationTitle");
 	public static final String companyName = "شرکت خراسان تک سیم";
