@@ -2,7 +2,12 @@ package com.ktsco.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Properties;
@@ -203,6 +208,22 @@ public class Commons {
 		output = String.valueOf(properties.get(key));
 		log.info("Property output is ::::" + output);
 		return output;
+	}
+	
+	public static void updateConfigurationPropertyValue(String newValue , String key) {
+		Commons commons = new Commons();
+		Properties properties = commons.loadPropertyFile(Constants.configFilePath);
+		try {
+			
+			URL resourceUrl = Commons.class.getResource(Constants.configFilePath);
+			File file = new File(resourceUrl.toURI());
+			FileOutputStream output = new FileOutputStream(file);
+			properties.setProperty(key, newValue);
+			properties.store(output, null);
+			output.close();
+		}catch (IOException | URISyntaxException e) {
+			log.error(e.getMessage());
+		}
 	}
 
 	public static String getFxmlPanel(String key) {

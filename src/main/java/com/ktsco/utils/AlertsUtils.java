@@ -250,6 +250,14 @@ public class AlertsUtils {
 		Alert alert = errorAlerts(alertTitle, alertMessage);
 		alert.show();
 	}
+
+	public static void SuccessfullyDoneAlrt() {
+		
+		alertTitle = "Success";
+		alertMessage = "با موفقیت انجام شد";
+		Alert alert = infoAlerts(alertTitle, alertMessage);
+		alert.show();		
+	}
 	
 	
 
