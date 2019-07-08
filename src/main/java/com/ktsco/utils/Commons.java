@@ -1,15 +1,17 @@
 package com.ktsco.utils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -26,13 +28,16 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class Commons {
 
 	private static final Logger log = LoggerFactory.getLogger(Commons.class);
 	private static ViewClass view = new ViewClass();
 	private static DecimalFormat df = new DecimalFormat("#.##");
+	private static DecimalFormat df2 = new DecimalFormat("#.##########");
 
 	/**
 	 * This function will return the key of access type based on its value <br>
@@ -187,13 +192,16 @@ public class Commons {
 	public static double setDoubleFormat(double reqQty) {
 		return Double.parseDouble(df.format(reqQty));
 	}
+	public static double setCurrencyFormat(double reqQty) {
+		return Double.parseDouble(df2.format(reqQty));
+	}
 
 	public Properties loadPropertyFile(String filePath) {
 		Properties properties = new Properties();
 		try {
-			
+
 			InputStream fileInputStream = Commons.class.getResourceAsStream(filePath);
-			
+
 			properties.load(fileInputStream);
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -209,19 +217,19 @@ public class Commons {
 		log.info("Property output is ::::" + output);
 		return output;
 	}
-	
-	public static void updateConfigurationPropertyValue(String newValue , String key) {
+
+	public static void updateConfigurationPropertyValue(String newValue, String key) {
 		Commons commons = new Commons();
 		Properties properties = commons.loadPropertyFile(Constants.configFilePath);
 		try {
-			
+
 			URL resourceUrl = Commons.class.getResource(Constants.configFilePath);
 			File file = new File(resourceUrl.toURI());
 			FileOutputStream output = new FileOutputStream(file);
 			properties.setProperty(key, newValue);
 			properties.store(output, null);
 			output.close();
-		}catch (IOException | URISyntaxException e) {
+		} catch (IOException | URISyntaxException e) {
 			log.error(e.getMessage());
 		}
 	}
@@ -242,18 +250,100 @@ public class Commons {
 
 		return value;
 	}
-	
+
 	public static String checkAndConvertNumbers(String input) {
 		String newValue = "";
-		
+
 		try {
 			double convertedQty = Commons.setDoubleFormat(Double.parseDouble(input));
 			newValue = String.valueOf(convertedQty);
-		}catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			AlertsUtils.numberEntryFormatErrorAlerts();
 		}
-		
+
 		return newValue;
+	}
+
+	public static Stage openPanelsUndecorate(String fxml) {
+		ViewClass view = new ViewClass();
+		log.info("Loading FXML to penel {}", fxml);
+		VBox scene = view.setVboxFxml(fxml);
+		log.info("Loading stage and show");
+		return view.setSceneAndShowStage(scene, "", false, false);
+	}
+
+	public static List<String> getListValuesFromMap(Map<String, String> map) {
+
+		List<String> list = new ArrayList<String>();
+		Set<String> keys = map.keySet();
+		for (String key : keys) {
+			list.add(map.get(key));
+		}
+
+		return list;
+
+	}
+	
+	public static ObservableList<String> getObservableValuesFromMap(Map<String, String> map) {
+
+		ObservableList<String> list = FXCollections.observableArrayList();
+		Set<String> keys = map.keySet();
+		for (String key : keys) {
+			list.add(map.get(key));
+		}
+
+		return list;
+
+	}
+
+	public static String getCurrencyKey(String lookupValue) {
+		String currency = "";
+		if (!Constants.currencies.isEmpty()) {
+			Set<String> keys = Constants.currencies.keySet();
+			for (String key : keys) {
+				String value = Constants.currencies.get(key);
+				if (lookupValue.equalsIgnoreCase(value)) {
+					currency = key;
+					break;
+				}
+			}
+			if ("".equalsIgnoreCase(currency)) {
+				log.error("Can't find the match " + lookupValue);
+			}
+		} else {
+			log.error("Currency Map is Empty ");
+		}
+
+		return currency;
+	}
+	
+	public static String getCurrencyValue(String lookupKey) {
+		String currency = "";
+		if (!Constants.currencies.isEmpty()) {
+			Set<String> keys = Constants.currencies.keySet();
+			for (String key : keys) {
+				
+				if (lookupKey.equalsIgnoreCase(key)) {
+					currency =  Constants.currencies.get(key);;
+					break;
+				}
+			}
+			if ("".equalsIgnoreCase(currency)) {
+				log.debug("Can't find the match " + lookupKey);
+			}
+		} else {
+			log.error("Currency Map is Empty ");
+		}
+
+		return currency; 
+	}
+	
+	public static String getTodaysDate () {
+		String todayDate = null; 
+		LocalDate now = LocalDate.now();
+		todayDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(now);
+		
+		return todayDate;
 	}
 
 }

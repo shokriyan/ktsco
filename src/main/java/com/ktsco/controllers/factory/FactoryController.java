@@ -83,14 +83,14 @@ public class FactoryController implements Initializable {
 	}
 	
 	/**
-	 * Openning Product Panel and set in Center Pane
+	 * Opening Product Panel and set in Center Pane
 	 */
 	public static void openPorductPanel() {
 		Pane productPane = view.setPane(Commons.getFxmlPanel("productPanelFxml"));
 		factoryBorderPane.setCenter(productPane);
 	}
 	
-	//Opening Invetory Stock Panel
+	//Opening Inventory Stock Panel
 	public static void openInventoryStockPanel() {
 		Pane invetoryStock = view.setPane(Commons.getFxmlPanel("invetoryStockPanelFxml"));
 		factoryBorderPane.setCenter(invetoryStock);

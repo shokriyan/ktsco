@@ -43,6 +43,7 @@ public class LoginController implements Initializable {
 		populateComboItem();
 		log.info("Initializing the List of Unit Measures");
 		createUnitMeasureList();
+		generateCurrencies();
 	}
 
 	/**
@@ -56,6 +57,14 @@ public class LoginController implements Initializable {
 		SetAccessItems("admin", "ادمین");
 
 		Commons.populateAccessCombo(cmbAccess);
+	}
+	
+	private void generateCurrencies() {
+		Constants.currencies.put("USD", "دالر");
+		Constants.currencies.put("AFN", "افغانی");
+		Constants.currencies.put("EUR", "یورو");
+		Constants.currencies.put("PKR", "کلدار");
+		Constants.currencies.put("TOM", "تومان");
 	}
 
 	/**
@@ -114,7 +123,7 @@ public class LoginController implements Initializable {
 	}
 
 	private void createUnitMeasureList() {
-		String[] list = { "بندل", "کیلو", "تن", "عدد", "متر", "سانتیمتر", "کیلومتر", "دانه", "دستگاه" };
+		String[] list = { "بندل", "کیلو", "تن", "عدد", "متر",  "دستگاه" };
 
 		for (int i = 0; i < list.length; i++) {
 			Constants.unitMeasureList.add(list[i]);

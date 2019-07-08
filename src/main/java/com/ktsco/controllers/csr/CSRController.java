@@ -26,7 +26,7 @@ public class CSRController implements Initializable{
 	
 	
 	@FXML
-	private static Button btnEmployeePanel;
+	private static Button btnEmployeePanel, btnSalesPanel;
 
 
 	@Override
@@ -48,9 +48,11 @@ public class CSRController implements Initializable{
 		List<Button> buttonList = new ArrayList<Button>(); 
 		btnEmployeePanel = Commons.addMenuButton("صفحه کارمندان");
 		btnEmployeePanel.setOnAction(event -> allButtonActions(event));
+		btnSalesPanel = Commons.addMenuButton("فروشات");
+		btnSalesPanel.setOnAction(event -> allButtonActions(event));
 		
 		buttonList.add(btnEmployeePanel);
-		
+		buttonList.add(btnSalesPanel);
 		for (int i = 0; i < buttonList.size() ; i ++) {
 			vbox.getChildren().add(buttonList.get(i));
 		}
@@ -62,6 +64,9 @@ public class CSRController implements Initializable{
 		if (event.getSource() == btnEmployeePanel) {
 			Commons.reloadTopView(csrBorderScene, btnEmployeePanel);
 			setCenterPanel(Commons.getFxmlPanel("employeePanelFxml"));
+		}else if (event.getSource() == btnSalesPanel) {
+			Commons.reloadTopView(csrBorderScene, btnSalesPanel);
+			setCenterPanel(Commons.getFxmlPanel("SalepanelFxml"));
 		}
 	}
 	

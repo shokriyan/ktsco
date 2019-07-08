@@ -49,4 +49,7 @@
 .list-cell:empty {
     -fx-background-color: white;
 }
-
+.copyable-label, .copyable-label:focused {
+    -fx-background-color: transparent ;
+    -fx-background-insets: 0px ;
+}

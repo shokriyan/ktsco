@@ -258,6 +258,13 @@ public class AlertsUtils {
 		Alert alert = infoAlerts(alertTitle, alertMessage);
 		alert.show();		
 	}
+
+	public static void zeroEntryAlert() {
+		alertTitle = "Error";
+		alertMessage = "صفر قابل قبول نیست";
+		Alert alert = errorAlerts(alertTitle, alertMessage);
+		alert.show();
+	}
 	
 	
 
