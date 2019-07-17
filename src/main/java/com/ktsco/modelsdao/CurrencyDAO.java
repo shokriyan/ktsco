@@ -185,6 +185,67 @@ public class CurrencyDAO {
 		return isSuccess;
 	}
 	
+	public static String getCurrencyRate (String currency, String date) {
+		String value = ""; 
+		query = "SELECT RATE FROM CURRENCIES WHERE CURRENCY LIKE ? AND ENTRYDATE = ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setString(1, "%"+currency+"%");
+			preStatement.setString(2, date);
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				@SuppressWarnings("deprecation")
+				BigDecimal bg = resultSet.getBigDecimal(1, 9);
+				value = bg.toPlainString();
+			}
+			
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		return value; 
+	}
+	public static String getCurrencyRate (String date) {
+		String value = ""; 
+		query = "SELECT RATE FROM CURRENCIES WHERE ENTRYDATE = ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			
+			preStatement.setString(1, date);
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				@SuppressWarnings("deprecation")
+				BigDecimal bg = resultSet.getBigDecimal(1, 9);
+				value = bg.toPlainString();
+			}
+			
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		return value; 
+	}
+	
 	
 
 }

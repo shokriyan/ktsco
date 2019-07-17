@@ -7,9 +7,12 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -23,11 +26,13 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -192,6 +197,7 @@ public class Commons {
 	public static double setDoubleFormat(double reqQty) {
 		return Double.parseDouble(df.format(reqQty));
 	}
+
 	public static double setCurrencyFormat(double reqQty) {
 		return Double.parseDouble(df2.format(reqQty));
 	}
@@ -283,7 +289,7 @@ public class Commons {
 		return list;
 
 	}
-	
+
 	public static ObservableList<String> getObservableValuesFromMap(Map<String, String> map) {
 
 		ObservableList<String> list = FXCollections.observableArrayList();
@@ -316,15 +322,16 @@ public class Commons {
 
 		return currency;
 	}
-	
+
 	public static String getCurrencyValue(String lookupKey) {
 		String currency = "";
 		if (!Constants.currencies.isEmpty()) {
 			Set<String> keys = Constants.currencies.keySet();
 			for (String key : keys) {
-				
+
 				if (lookupKey.equalsIgnoreCase(key)) {
-					currency =  Constants.currencies.get(key);;
+					currency = Constants.currencies.get(key);
+					;
 					break;
 				}
 			}
@@ -335,15 +342,73 @@ public class Commons {
 			log.error("Currency Map is Empty ");
 		}
 
-		return currency; 
+		return currency;
 	}
-	
-	public static String getTodaysDate () {
-		String todayDate = null; 
+
+	public static String getTodaysDate() {
+		String todayDate = null;
 		LocalDate now = LocalDate.now();
 		todayDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(now);
-		
+
 		return todayDate;
+	}
+
+	public static void setCenterPanel(BorderPane borderPane, String fxml) {
+		ViewClass views = new ViewClass();
+		Pane centerPane = views.setPane(fxml);
+		borderPane.setCenter(centerPane);
+	}
+
+	public static Integer getPayTermValue(String lookupValue) {
+		int payTerm = 0;
+		payTerm = Integer.parseInt(lookupValue.split("-")[0].trim());
+		return payTerm;
+	}
+
+	public static String calculateLineTotal(String quantity, String unitprice) {
+		double result = 0;
+		try {
+			result = Double.parseDouble(quantity) * Double.parseDouble(unitprice);
+		} catch (NumberFormatException e) {
+			AlertsUtils.numberEntryFormatErrorAlerts();
+		}
+		return String.valueOf(result);
+
+	}
+
+	public static String calculateDueDate(String inputDate, int payTerm) {
+		String calculatedDueDate = "";
+		Calendar c = Calendar.getInstance();
+		Date dueDate;
+		SimpleDateFormat dmyFormat = new SimpleDateFormat("yyyy-MM-dd");
+		;
+		switch (payTerm) {
+		case 0:
+			calculatedDueDate = dmyFormat.format(inputDate);
+			break;
+		case 7:
+			c.add(Calendar.DAY_OF_MONTH, 7);
+			dueDate = c.getTime();
+			calculatedDueDate = dmyFormat.format(dueDate);
+			break;
+		case 30:
+			c.add(Calendar.MONTH, 1);
+			dueDate = c.getTime();
+			calculatedDueDate = dmyFormat.format(dueDate);
+			break;
+
+		case 60:
+			c.add(Calendar.MONTH, 2);
+			dueDate = c.getTime();
+			calculatedDueDate = dmyFormat.format(dueDate);
+			break;
+		default:
+			throw new RuntimeException("Wrong Entry");
+
+		}
+
+		return calculatedDueDate;
+
 	}
 
 }

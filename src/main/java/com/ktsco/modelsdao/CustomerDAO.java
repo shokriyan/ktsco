@@ -3,6 +3,8 @@ package com.ktsco.modelsdao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +75,7 @@ public class CustomerDAO {
 		return list;
 	}
 
+	
 	public static boolean insertCustomerRecord(int code, String company, String poc, String phone, String address,
 			String currency) {
 		boolean isSuccess = false;
@@ -222,6 +225,63 @@ public class CustomerDAO {
 
 		return list;
 
+	}
+	
+	public static List<String> getCustomersList(){
+		List<String> list = new ArrayList<String>();
+		query = "SELECT CUSTOMER_ID, COMPANY, CURRENCY FROM CUSTOMERS";
+		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+		try {
+			while (resultSet.next()) {
+				int code = resultSet.getInt("customer_id");
+				String company = resultSet.getString("company");
+				String currency = Commons.getCurrencyValue(resultSet.getString("currency"));
+				
+				//Customer name should be : id + company + currency
+				String customerNameForCombo = String.valueOf(code) + " - " + company +" - " + currency;
+				list.add(customerNameForCombo);
+			}
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				resultSet.close();
+			}catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		return list;
+	}
+	
+	public static String getCurrency(String lookupValue){
+		String currency = new String();
+		query = "SELECT CURRENCY FROM CUSTOMERS WHERE CUSTOMER_ID = ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			 int code = Integer.parseInt(lookupValue.split("-")[0].trim());
+			preStatement.setInt(1, code);
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				
+				currency = Commons.getCurrencyValue(resultSet.getString("currency"));
+				
+				
+			}
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				preStatement.close();
+				resultSet.close();
+			}catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		return currency;
 	}
 
 }

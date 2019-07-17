@@ -16,7 +16,7 @@
 					<children>
 						<Text strokeType="OUTSIDE" strokeWidth="0.0" text="فرم خروجی محصولات از کارخانه" textAlignment="CENTER">
 							<font>
-								<Font size="18.0" />
+								<Font name="Tahoma" size="18.0" />
 							</font>
 						</Text>
 					</children>
@@ -108,7 +108,7 @@
 							<columns>
 								<TableColumn fx:id="colItem" minWidth="150.0" prefWidth="385.0" resizable="false" text="نوع جنس" />
 								<TableColumn fx:id="colUnit" minWidth="67.0" prefWidth="193.0" resizable="false" text="واحد شمارش" />
-								<TableColumn fx:id="colQuantity" minWidth="105.0" onEditCommit="#columnEditHandle" prefWidth="203.0" resizable="false" text="تعداد" />
+								<TableColumn fx:id="colQuantity" minWidth="105.0" onEditCommit="#columnEditHandle" prefWidth="204.0" resizable="false" text="تعداد" />
 							</columns>
 							<contextMenu>
 								<ContextMenu>

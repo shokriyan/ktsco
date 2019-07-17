@@ -44,6 +44,7 @@ public class LoginController implements Initializable {
 		log.info("Initializing the List of Unit Measures");
 		createUnitMeasureList();
 		generateCurrencies();
+		generatePayTerms();
 	}
 
 	/**
@@ -65,6 +66,13 @@ public class LoginController implements Initializable {
 		Constants.currencies.put("EUR", "یورو");
 		Constants.currencies.put("PKR", "کلدار");
 		Constants.currencies.put("TOM", "تومان");
+	}
+	
+	private void generatePayTerms() {
+		Constants.payTerms.add(0 + " - "+ "نقد");
+		Constants.payTerms.add(7 + " - "+ "یک هفته");
+		Constants.payTerms.add(30 + " - "+ "یک ماه");
+		Constants.payTerms.add(60 + " - "+ "دو ماه");
 	}
 
 	/**
@@ -130,5 +138,6 @@ public class LoginController implements Initializable {
 		}
 
 	}
+	
 
 }

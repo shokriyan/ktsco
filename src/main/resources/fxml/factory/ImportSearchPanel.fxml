@@ -8,69 +8,45 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity"
-	nodeOrientation="RIGHT_TO_LEFT" prefHeight="600.0" prefWidth="800.0"
-	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="com.ktsco.controllers.factory.ImportSearchController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.factory.ImportSearchController">
 	<children>
-		<HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0"
-			styleClass="top-panel">
+		<HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" styleClass="top-panel">
 			<children>
-				<VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0"
-					HBox.hgrow="ALWAYS">
+				<VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
 					<children>
-						<Text fx:id="txtPanelName" strokeType="OUTSIDE"
-							strokeWidth="0.0" text="لیست اقلام" textAlignment="CENTER">
+						<Text fx:id="txtPanelName" strokeType="OUTSIDE" strokeWidth="0.0" text="لیست اقلام" textAlignment="CENTER">
 							<font>
-								<Font size="18.0" />
+								<Font name="Tahoma" size="18.0" />
 							</font>
 						</Text>
 					</children>
 				</VBox>
 				<VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
 					<children>
-						<Button fx:id="btnClose" mnemonicParsing="false"
-							onAction="#allButtonAction" text="خروج" />
+						<Button fx:id="btnClose" mnemonicParsing="false" onAction="#allButtonAction" text="خروج" />
 					</children>
 				</VBox>
 			</children>
 		</HBox>
 		<VBox prefHeight="100.0" prefWidth="100.0">
 			<children>
-				<HBox alignment="CENTER_LEFT" prefHeight="100.0"
-					prefWidth="30.0" spacing="20.0" VBox.vgrow="ALWAYS">
+				<HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="30.0" spacing="20.0" VBox.vgrow="ALWAYS">
 					<children>
-						<TextField fx:id="txtImportID" prefHeight="27.0"
-							prefWidth="91.0" promptText="شماره ورودی" HBox.hgrow="ALWAYS" />
-						<TextField fx:id="txtStartDate" layoutX="20.0"
-							layoutY="22.0" prefHeight="27.0" prefWidth="164.0"
-							promptText="تاریخ شروع" />
-						<TextField fx:id="txtEndDate" layoutX="324.0"
-							layoutY="22.0" prefHeight="27.0" prefWidth="183.0"
-							promptText="تاریخ پایان" />
-						<ComboBox fx:id="comboEmployee" prefHeight="27.0"
-							prefWidth="227.0" promptText="مسئول" HBox.hgrow="ALWAYS" />
+						<TextField fx:id="txtImportID" prefHeight="27.0" prefWidth="91.0" promptText="شماره ورودی" HBox.hgrow="ALWAYS" />
+						<TextField fx:id="txtStartDate" layoutX="20.0" layoutY="22.0" prefHeight="27.0" prefWidth="164.0" promptText="تاریخ شروع" />
+						<TextField fx:id="txtEndDate" layoutX="324.0" layoutY="22.0" prefHeight="27.0" prefWidth="183.0" promptText="تاریخ پایان" />
+						<ComboBox fx:id="comboEmployee" prefHeight="27.0" prefWidth="227.0" promptText="مسئول" HBox.hgrow="ALWAYS" />
 					</children>
 					<padding>
 						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 					</padding>
 				</HBox>
-				<HBox alignment="CENTER_LEFT" prefHeight="100.0"
-					prefWidth="200.0" spacing="60.0" VBox.vgrow="NEVER">
+				<HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="60.0" VBox.vgrow="NEVER">
 					<children>
-						<Button fx:id="btnDelete" layoutX="352.0" layoutY="47.0"
-							mnemonicParsing="false" onAction="#allButtonAction"
-							prefHeight="27.0" prefWidth="150.0" text="حذف" />
-						<Button fx:id="btnModify" layoutX="522.0" layoutY="47.0"
-							mnemonicParsing="false" onAction="#allButtonAction"
-							prefHeight="27.0" prefWidth="150.0" text="تغییرات" />
-						<Button fx:id="btnSearch" layoutX="660.0" layoutY="47.0"
-							mnemonicParsing="false" onAction="#allButtonAction"
-							prefHeight="27.0" prefWidth="150.0" text="جستجو" />
-						<Button fx:id="btnRefresh" layoutX="530.0" layoutY="22.0"
-							mnemonicParsing="false" onAction="#allButtonAction"
-							prefHeight="27.0" prefWidth="150.0" text="بارگذاری مجدد" />
+						<Button fx:id="btnDelete" layoutX="352.0" layoutY="47.0" mnemonicParsing="false" onAction="#allButtonAction" prefHeight="27.0" prefWidth="150.0" text="حذف" />
+						<Button fx:id="btnModify" layoutX="522.0" layoutY="47.0" mnemonicParsing="false" onAction="#allButtonAction" prefHeight="27.0" prefWidth="150.0" text="تغییرات" />
+						<Button fx:id="btnSearch" layoutX="660.0" layoutY="47.0" mnemonicParsing="false" onAction="#allButtonAction" prefHeight="27.0" prefWidth="150.0" text="جستجو" />
+						<Button fx:id="btnRefresh" layoutX="530.0" layoutY="22.0" mnemonicParsing="false" onAction="#allButtonAction" prefHeight="27.0" prefWidth="150.0" text="بارگذاری مجدد" />
 					</children>
 					<padding>
 						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -78,13 +54,14 @@
 				</HBox>
 			</children>
 		</VBox>
-		<HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="100.0"
-			VBox.vgrow="NEVER">
+		<HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="100.0" VBox.vgrow="NEVER">
 			<children>
-				<Label fx:id="labelInfo" disable="true" text="" textFill="RED"
-					visible="false" />
+				<Label fx:id="labelInfo" disable="true" text="" textFill="RED" visible="false" />
 				<Region prefHeight="200.0" prefWidth="300.0" />
-				<Label text="لیست ورودی مواد اولیه" />
+				<Label text="لیست ورودی مواد اولیه">
+               <font>
+                  <Font name="Tahoma" size="13.0" />
+               </font></Label>
 			</children>
 			<effect>
 				<Glow />
@@ -100,34 +77,23 @@
 			<children>
 				<VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
 					<children>
-						<TableView fx:id="tableImport"
-							onMouseClicked="#onTableSelectionAction" prefHeight="383.0"
-							prefWidth="397.0" VBox.vgrow="ALWAYS">
+						<TableView fx:id="tableImport" onMouseClicked="#onTableSelectionAction" prefHeight="383.0" prefWidth="397.0" VBox.vgrow="ALWAYS">
 							<columns>
-								<TableColumn fx:id="colNo" prefWidth="52.0"
-									resizable="false" text="شماره" />
-								<TableColumn fx:id="colDate" minWidth="150.0"
-									prefWidth="164.0" resizable="false" text="تاریخ" />
-								<TableColumn fx:id="colEmployee" minWidth="100.0"
-									prefWidth="182.0" resizable="false" text="مسئول" />
+								<TableColumn fx:id="colNo" prefWidth="52.0" resizable="false" text="شماره" />
+								<TableColumn fx:id="colDate" minWidth="150.0" prefWidth="155.0" resizable="false" text="تاریخ" />
+								<TableColumn fx:id="colEmployee" minWidth="100.0" prefWidth="175.0" resizable="false" text="مسئول" />
 							</columns>
 						</TableView>
 					</children>
 				</VBox>
 				<VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
 					<children>
-						<TableView fx:id="tableImportDetail" prefHeight="383.0"
-							prefWidth="397.0">
+						<TableView fx:id="tableImportDetail" prefHeight="383.0" prefWidth="397.0">
 							<columns>
-								<TableColumn fx:id="colDetailID" prefWidth="69.0"
-									resizable="false" text="شماره" visible="false" />
-								<TableColumn fx:id="colRawMaterial"
-									prefWidth="168.0" resizable="false" text="نوع جنس" />
-								<TableColumn fx:id="colUnit" minWidth="131.0"
-									prefWidth="100.0" resizable="false" text="واحد شمارش" />
-								<TableColumn fx:id="colImportQty" minWidth="87.0"
-									onEditCommit="#editableColumnAction" prefWidth="100.0"
-									resizable="false" text="مقدار" />
+								<TableColumn fx:id="colDetailID" prefWidth="69.0" resizable="false" text="شماره" visible="false" />
+								<TableColumn fx:id="colRawMaterial" prefWidth="151.0" resizable="false" text="نوع جنس" />
+								<TableColumn fx:id="colUnit" minWidth="131.0" prefWidth="90.0" resizable="false" text="واحد شمارش" />
+								<TableColumn fx:id="colImportQty" minWidth="87.0" onEditCommit="#editableColumnAction" prefWidth="100.0" resizable="false" text="مقدار" />
 							</columns>
 						</TableView>
 					</children>

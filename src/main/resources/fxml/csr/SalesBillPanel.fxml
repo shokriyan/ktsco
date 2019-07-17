@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.csr.SalesBillController">
+	<children>
+		<VBox prefHeight="635.0" prefWidth="1166.0">
+			<children>
+				<HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="20.0">
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+					<children>
+                  <Button fx:id="btnNew" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="جدید" />
+						<Button fx:id="btnSave" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="ثبت" />
+						<Button fx:id="btnSaveClose" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="ثبت و خروج" />
+						<Button fx:id="btnSeah" layoutX="190.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="جستجو" />
+						<Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+						<Button fx:id="btnReturn" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="120.0" text="بازگشت " />
+					</children>
+				</HBox>
+				<HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
+					<children>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                     <children>
+      						<Text strokeType="OUTSIDE" strokeWidth="0.0" text="فاکتور فروش">
+      							<font>
+      								<Font name="Tahoma Bold" size="18.0" />
+      							</font>
+      						</Text>
+                        <Label fx:id="labelInfoMessage" />
+                     </children>
+                  </VBox>
+					</children>
+				</HBox>
+				<HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="90.0" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+					<children>
+						<VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+							<children>
+								<HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+									<children>
+										<VBox prefHeight="60.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+											<children>
+												<Label text="شماره" />
+												<TextField fx:id="txtCode" />
+											</children>
+										</VBox>
+										<VBox layoutX="20.0" layoutY="20.0" prefHeight="60.0" prefWidth="350.0" HBox.hgrow="ALWAYS">
+											<children>
+												<Label text="انتخاب مشتری" />
+												<ComboBox fx:id="comboCustomer" onAction="#onCustomerComboAction" prefWidth="350.0" VBox.vgrow="ALWAYS" />
+											</children>
+										</VBox>
+										<VBox layoutX="1066.0" layoutY="20.0" prefHeight="60.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+											<children>
+												<Label text="تاریخ فاکتور" />
+												<TextField fx:id="txtBillDate" prefHeight="27.0" prefWidth="486.0" />
+											</children>
+										</VBox>
+										<VBox layoutX="685.0" layoutY="20.0" prefHeight="60.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+											<children>
+												<Label text="مهلت پرداخت" />
+												<ComboBox fx:id="comboPayTerm" prefWidth="200.0" />
+											</children>
+										</VBox>
+										<VBox layoutX="817.0" layoutY="20.0" prefHeight="60.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+											<children>
+												<Label text="نوع ارز" />
+												<TextField fx:id="txtCurrencyType" editable="false" prefHeight="27.0" prefWidth="486.0" style="-fx-background-color: lightgray;" />
+											</children>
+										</VBox>
+									</children>
+									<VBox.margin>
+										<Insets />
+									</VBox.margin>
+									<padding>
+										<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+									</padding>
+								</HBox>
+								<TableView fx:id="tableBillDetail" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+									<columns>
+										<TableColumn fx:id="colno" prefWidth="98.0" text="شماره" />
+										<TableColumn fx:id="colItems" onEditCommit="#onItemChangeAction" prefWidth="300.0" text="نوع جنس" />
+										<TableColumn fx:id="colUnit" prefWidth="150.0" text="واحد شمارش" />
+										<TableColumn fx:id="colQuantity" onEditCommit="#onQauntityChangeAction" prefWidth="200.0" text="تعداد" />
+										<TableColumn fx:id="colUnitPrice" onEditCommit="#onUnitPriceChangeAction" prefWidth="200.0" text="فیات" />
+										<TableColumn fx:id="colLineTotal" prefWidth="200.0" text="مبلغ ردیف" />
+									</columns>
+                           <contextMenu>
+                              <ContextMenu>
+                                <items>
+                                  <MenuItem fx:id="menuAddRow" mnemonicParsing="false" onAction="#allButtonActions" text="ردیف جدید" />
+                                    <MenuItem fx:id="menuDeleteRow" mnemonicParsing="false" onAction="#allButtonActions" text="حذف ردیف" />
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
+								</TableView>
+							</children>
+						</VBox>
+					</children>
+				</HBox>
+				<HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+					<children>
+						<VBox prefHeight="100.0" prefWidth="89.0">
+							<children>
+								<HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+									<children>
+										<Label text="مجموع فاکتور" />
+									</children>
+									<padding>
+										<Insets left="10.0" />
+									</padding>
+								</HBox>
+								<HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+									<padding>
+										<Insets left="10.0" />
+									</padding>
+									<children>
+										<Label text="نرخ ارز" />
+									</children>
+								</HBox>
+								<HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="60.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+									<padding>
+										<Insets left="10.0" />
+									</padding>
+									<children>
+										<Label text="مجموع به دلار" />
+									</children>
+								</HBox>
+							</children>
+						</VBox>
+						<VBox layoutX="843.0" layoutY="10.0" prefHeight="100.0" prefWidth="205.0">
+							<children>
+								<HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
+									<children>
+										<Label fx:id="labelBillTotal" text="0" />
+									</children>
+									<padding>
+										<Insets left="10.0" />
+									</padding>
+								</HBox>
+								<HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
+									<children>
+										<Label fx:id="labelExRate" text="0" />
+									</children>
+									<padding>
+										<Insets left="10.0" />
+									</padding>
+								</HBox>
+								<HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="60.0" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
+									<children>
+										<Label fx:id="labelUSDAmount" text="0" />
+									</children>
+									<padding>
+										<Insets left="10.0" />
+									</padding>
+								</HBox>
+							</children>
+						</VBox>
+					</children>
+				</HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <Label text="توضیحات" />
+                  <TextField fx:id="txtmemo" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+			</children>
+		</VBox>
+	</children>
+</Pane>

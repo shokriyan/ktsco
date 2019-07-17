@@ -57,11 +57,17 @@ public class DateUtils {
 			int day = Integer.parseInt(splittedDate[2]);
 
 			int[] convertedDate = DateConvertor.jalali_to_gregorian(year, month, day);
-			for (int i = 0; i < convertedDate.length; i++) {
-				outputList.add(String.valueOf(convertedDate[i]));
-			}
+			int gy = convertedDate[0];
+			String gm = String.format("%02d", convertedDate[1]);
+			String gd = String.format("%02d" , convertedDate[2]);
+//			for (int i = 0; i < convertedDate.length; i++) {
+//				if (i>0) {
+//					
+//				}
+//				outputList.add(String.valueOf(convertedDate[i]));
+//			}
 
-			gregoryDate = String.join("-", outputList);
+			gregoryDate = gy + "-" + gm + "-"+gd;
 		}
 
 		return gregoryDate;
@@ -86,14 +92,18 @@ public class DateUtils {
 			int day = Integer.parseInt(splittedDate[2]);
 
 			int[] convertedDate = DateConvertor.gregorian_to_jalali(year, month, day);
-			for (int i = 0; i < convertedDate.length; i++) {
-				outputList.add(String.valueOf(convertedDate[i]));
-			}
+			int jy = convertedDate[0];
+			String jm = String.format("%02d", convertedDate[1]);
+			String jd = String.format("%02d" , convertedDate[2]);
+//			for (int i = 0; i < convertedDate.length; i++) {
+//				outputList.add(String.valueOf(convertedDate[i]));
+//			}
 
-			jalaliDate = String.join("-", outputList);
+			jalaliDate = jy + "-" + jm + "-"+jd;
 		}
 
 		return jalaliDate;
 	}
+	
 
 }

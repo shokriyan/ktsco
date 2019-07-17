@@ -9,6 +9,8 @@ public class Constants {
 	
 	public static Map<String, String> accessValue = new HashMap<String, String>();
 	public static Map<String, String> currencies = new HashMap<String, String>();
+	public static List<String> payTerms = new ArrayList<String>();
+	
 	
 	public static List<String> unitMeasureList = new ArrayList<String>();
 	public static final String configFilePath = "/configuration/config.properties";

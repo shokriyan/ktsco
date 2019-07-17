@@ -437,4 +437,28 @@ public class ProductDAO {
 		}
 		return unit;
 	}
+	
+	public static ObservableList<String> getProductObservableList(){
+		ObservableList<String> list = FXCollections.observableArrayList();
+		query = "select prod_name from products";
+		try {
+			resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+			while (resultSet.next()) {
+				list.add(resultSet.getString(1));
+			}
+		}catch(SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				resultSet.close();
+			}catch(SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		
+		return list; 
+	}
+	
 }

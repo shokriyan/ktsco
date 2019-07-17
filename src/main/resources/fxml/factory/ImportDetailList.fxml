@@ -16,7 +16,7 @@
 					<children>
 						<Text strokeType="OUTSIDE" strokeWidth="0.0" text="لیست قلام" textAlignment="CENTER">
 							<font>
-								<Font size="18.0" />
+								<Font name="Tahoma" size="18.0" />
 							</font>
 						</Text>
 					</children>
@@ -59,7 +59,10 @@
 			<children>
 				<Label fx:id="labelInfo" disable="true" text="" textFill="RED" visible="false" />
 				<Region prefHeight="200.0" prefWidth="300.0" />
-				<Label text="نتیجه جستجو" />
+				<Label text="نتیجه جستجو">
+               <font>
+                  <Font name="Tahoma" size="13.0" />
+               </font></Label>
 			</children>
 			<effect>
 				<Glow />
@@ -81,7 +84,7 @@
 								<TableColumn fx:id="colItem" minWidth="150.0" prefWidth="218.0" resizable="false" text="نوع جنس" />
 								<TableColumn fx:id="colUnit" minWidth="100.0" prefWidth="170.0" resizable="false" text="واحد شمارش" />
 								<TableColumn fx:id="colDate" minWidth="143.0" prefWidth="170.0" resizable="false" text="تاریخ" />
-								<TableColumn fx:id="colQuantity" minWidth="105.0" prefWidth="169.0" resizable="false" text="تعداد" />
+								<TableColumn fx:id="colQuantity" minWidth="105.0" prefWidth="172.0" resizable="false" text="تعداد" />
 							</columns>
 						</TableView>
 					</children>

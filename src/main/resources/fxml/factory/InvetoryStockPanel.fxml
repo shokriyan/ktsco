@@ -59,9 +59,9 @@
 								</HBox>
 								<TableView fx:id="tableImportList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
 									<columns>
-										<TableColumn fx:id="colInvItem" prefWidth="220.0" text="مواد اولیه" />
-										<TableColumn fx:id="colUM" minWidth="0.0" prefWidth="169.0" text="واحد شمارش" />
-										<TableColumn fx:id="colImportQty" onEditCommit="#editableImportQty" prefWidth="192.0" text="مقدار ورودی" />
+										<TableColumn fx:id="colInvItem" prefWidth="210.0" text="مواد اولیه" />
+										<TableColumn fx:id="colUM" minWidth="0.0" prefWidth="160.0" text="واحد شمارش" />
+										<TableColumn fx:id="colImportQty" onEditCommit="#editableImportQty" prefWidth="195.0" text="مقدار ورودی" />
 									</columns>
 								</TableView>
 							</children>
@@ -72,16 +72,16 @@
 									<children>
 										<Text strokeType="OUTSIDE" strokeWidth="0.0" text="موجودی انبار مواد اولیه">
 											<font>
-												<Font size="14.0" />
+												<Font name="Tahoma" size="14.0" />
 											</font>
 										</Text>
 									</children>
 								</HBox>
 								<TableView fx:id="tableInvStock" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
 									<columns>
-										<TableColumn fx:id="colInvItem1" prefWidth="220.0" text="مواد اولیه" />
-										<TableColumn fx:id="colUM1" minWidth="0.0" prefWidth="169.0" text="واحد شمارش" />
-										<TableColumn fx:id="colTotalQty" prefWidth="192.0" text="موجودی" />
+										<TableColumn fx:id="colInvItem1" prefWidth="210.0" text="مواد اولیه" />
+										<TableColumn fx:id="colUM1" minWidth="0.0" prefWidth="160.0" text="واحد شمارش" />
+										<TableColumn fx:id="colTotalQty" prefWidth="195.0" text="موجودی" />
 									</columns>
 								</TableView>
 							</children>

@@ -265,6 +265,14 @@ public class AlertsUtils {
 		Alert alert = errorAlerts(alertTitle, alertMessage);
 		alert.show();
 	}
+
+	public static void CurrencyEntryAlert(String currencyType) {
+		alertTitle = "Error";
+		alertMessage = "نرخ ارز برای تاریخ انتخاب شده موجود نمیباشد" + "\n" + currencyType;
+		Alert alert = errorAlerts(alertTitle, alertMessage);
+		alert.show();
+		
+	}
 	
 	
 

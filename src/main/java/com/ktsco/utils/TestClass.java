@@ -1,25 +1,15 @@
 package com.ktsco.utils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Formatter;
 
 public class TestClass {
 
+	static NumberFormat formatter = new DecimalFormat("#0.00");
 
-	public static void main(String[] args) throws Exception {
-		System.out.println(DateUtils.convertGregoryToJalali(getTodaysDate()));
-	}
-	
-	public static String getTodaysDate () {
-		String todayDate = null; 
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/DD");
-		LocalDate now = LocalDate.now();
-		
-		todayDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(now);
-		
-		return todayDate;
+	public static void main(String[] args) {
 	}
 
 }

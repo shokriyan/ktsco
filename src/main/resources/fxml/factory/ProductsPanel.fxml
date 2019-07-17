@@ -81,7 +81,7 @@
 								<TableView fx:id="tableDetail" editable="true" onMouseClicked="#onTableDetailSelection" prefHeight="274.0" prefWidth="760.0">
 									<columns>
 										<TableColumn fx:id="colDetailInvItem" prefWidth="300.0" resizable="false" text="مواد اولیه" />
-                              <TableColumn fx:id="colDetailInvUnit" prefWidth="250.0" resizable="false" text="دسته بندی" />
+                              <TableColumn fx:id="colDetailInvUnit" prefWidth="236.0" resizable="false" text="دسته بندی" />
 										<TableColumn fx:id="colDetailQty" prefWidth="212.0" resizable="false" text="مقدار" />
 									</columns>
                            <contextMenu>
@@ -101,7 +101,7 @@
 						<TableView fx:id="tableProducts" prefHeight="303.0" prefWidth="1147.0" HBox.hgrow="ALWAYS">
 							<columns>
 								<TableColumn fx:id="colNo" prefWidth="200.0" resizable="false" text="شماره" />
-								<TableColumn fx:id="colCategory" prefWidth="300.0" resizable="false" text="دسته بندی" />
+								<TableColumn fx:id="colCategory" prefWidth="285.0" resizable="false" text="دسته بندی" />
 								<TableColumn fx:id="colProduct" prefWidth="450.0" resizable="false" text="نام محصول" />
 								<TableColumn fx:id="colUm" prefWidth="213.0" resizable="false" text="واحد شمارش" />
 							</columns>

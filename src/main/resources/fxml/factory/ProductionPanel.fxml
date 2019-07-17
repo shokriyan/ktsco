@@ -84,9 +84,9 @@
                         </HBox>
                         <TableView fx:id="tableProductList" prefHeight="357.0" prefWidth="583.0" VBox.vgrow="ALWAYS">
                            <columns>
-                              <TableColumn fx:id="colProductItemList" prefWidth="220.0" text="محصول" />
-                              <TableColumn fx:id="colUMList" minWidth="0.0" prefWidth="169.0" text="واحد شمارش" />
-                              <TableColumn fx:id="colQuantityList" prefWidth="192.0" text="مقدار ورودی" />
+                              <TableColumn fx:id="colProductItemList" prefWidth="210.0" text="محصول" />
+                              <TableColumn fx:id="colUMList" minWidth="0.0" prefWidth="160.0" text="واحد شمارش" />
+                              <TableColumn fx:id="colQuantityList" prefWidth="195.0" text="مقدار ورودی" />
                            </columns>
                            <contextMenu>
                               <ContextMenu>
@@ -104,16 +104,16 @@
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="موجودی تولیدات کارخانه">
                                  <font>
-                                    <Font size="14.0" />
+                                    <Font name="Tahoma" size="14.0" />
                                  </font>
                               </Text>
                            </children>
                         </HBox>
                         <TableView fx:id="tableProductionStock" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                            <columns>
-                              <TableColumn fx:id="colProductStock" prefWidth="220.0" text="مواد اولیه" />
-                              <TableColumn fx:id="colUMStock" minWidth="0.0" prefWidth="169.0" text="واحد شمارش" />
-                              <TableColumn fx:id="colQuantityStock" prefWidth="192.0" text="موجودی" />
+                              <TableColumn fx:id="colProductStock" prefWidth="210.0" text="مواد اولیه" />
+                              <TableColumn fx:id="colUMStock" minWidth="0.0" prefWidth="160.0" text="واحد شمارش" />
+                              <TableColumn fx:id="colQuantityStock" prefWidth="195.0" text="موجودی" />
                            </columns>
                         </TableView>
                      </children>

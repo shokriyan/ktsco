@@ -16,7 +16,7 @@
 					<children>
 						<Text strokeType="OUTSIDE" strokeWidth="0.0" text="مشتریان">
 							<font>
-								<Font size="18.0" />
+								<Font name="Tahoma" size="18.0" />
 							</font>
 						</Text>
 					</children>
@@ -91,14 +91,14 @@
 		</VBox>
 		<HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
 			<children>
-				<TableView fx:id="tableCustomerList" editable="true" onMouseClicked="#onTableClickAction" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" HBox.hgrow="ALWAYS">
+				<TableView fx:id="tableCustomerList" editable="true" onMouseClicked="#onTableClickAction" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
 					<columns>
-						<TableColumn fx:id="colCode" prefWidth="71.0" text="کد مشتری" />
-						<TableColumn fx:id="colCompany" minWidth="154.0" onEditCommit="#onCompnayCellEdit" prefWidth="200.0" text="شرکت" />
-						<TableColumn fx:id="colPOC" minWidth="100.0" onEditCommit="#onPOCCellEdit" prefWidth="200.0" text="نام مسئول" />
-						<TableColumn fx:id="colPhone" minWidth="100.0" onEditCommit="#onPhoneCellEdit" prefWidth="150.0" text="شماره تماس" />
-						<TableColumn fx:id="colAddress" minWidth="100.0" onEditCommit="#onAddressCellEdit" prefWidth="190.0" text="آدرس" />
-						<TableColumn fx:id="colCurrency" minWidth="59.0" onEditCommit="#onCurrencyCellEdit" prefWidth="71.0" text="نوع ارز" />
+						<TableColumn fx:id="colCode" prefWidth="71.0" resizable="false" text="کد مشتری" />
+						<TableColumn fx:id="colCompany" minWidth="154.0" onEditCommit="#onCompnayCellEdit" prefWidth="200.0" resizable="false" text="شرکت" />
+						<TableColumn fx:id="colPOC" minWidth="100.0" onEditCommit="#onPOCCellEdit" prefWidth="200.0" resizable="false" text="نام مسئول" />
+						<TableColumn fx:id="colPhone" minWidth="100.0" onEditCommit="#onPhoneCellEdit" prefWidth="150.0" resizable="false" text="شماره تماس" />
+						<TableColumn fx:id="colAddress" minWidth="100.0" onEditCommit="#onAddressCellEdit" prefWidth="190.0" resizable="false" text="آدرس" />
+						<TableColumn fx:id="colCurrency" minWidth="59.0" onEditCommit="#onCurrencyCellEdit" prefWidth="71.0" resizable="false" text="نوع ارز" />
 					</columns>
                <contextMenu>
                   <ContextMenu>

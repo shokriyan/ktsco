@@ -15,6 +15,7 @@ import com.ktsco.modelsdao.CurrencyDAO;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.Constants;
+import com.ktsco.utils.DateUtils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -69,9 +70,11 @@ public class CurrenciesController implements Initializable {
 	}
 
 	private void loadPrerequisitions() {
+		setTodayDate();
 		populateTableEntry();
 		populateCurrencyListTable();
 	}
+	
 
 	@FXML
 	private void allButtonAction(ActionEvent event) {
@@ -229,6 +232,10 @@ public class CurrenciesController implements Initializable {
 			txtResult.setStyle("-fx-text-fill : Red");
 			txtResult.setText("عدد وارد کنید");
 		}
+	}
+	private void setTodayDate() {
+		String todayDate = DateUtils.convertGregoryToJalali(Commons.getTodaysDate());
+		txtDate.setText(todayDate);
 	}
 
 }

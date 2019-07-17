@@ -14,9 +14,9 @@
 			<children>
 				<VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
 					<children>
-						<Text strokeType="OUTSIDE" strokeWidth="0.0" text="جستجو و تغییرات" textAlignment="CENTER">
+						<Text strokeType="OUTSIDE" strokeWidth="0.0" text="جستجو" textAlignment="CENTER">
 							<font>
-								<Font size="18.0" />
+								<Font name="Tahoma" size="18.0" />
 							</font>
 						</Text>
 					</children>
@@ -78,7 +78,10 @@
 			<children>
 				<Label fx:id="labelInfo" disable="true" text="" textFill="RED" visible="false" />
 				<Region prefHeight="200.0" prefWidth="300.0" />
-				<Label text="لیست تولیدات کارخانه" />
+				<Label text="لیست تولیدات کارخانه">
+               <font>
+                  <Font name="Tahoma" size="13.0" />
+               </font></Label>
 			</children>
 			<effect>
 				<Glow />
@@ -96,9 +99,9 @@
 					<children>
 						<TableView fx:id="tableSearchResult" onMouseClicked="#onTableSelectionAction" prefHeight="383.0" prefWidth="397.0" VBox.vgrow="ALWAYS">
 							<columns>
-								<TableColumn fx:id="colNo" prefWidth="52.0" resizable="false" text="شماره" />
-								<TableColumn fx:id="colDate" minWidth="150.0" prefWidth="164.0" resizable="false" text="تاریخ" />
-								<TableColumn fx:id="colEmployee" minWidth="100.0" prefWidth="182.0" resizable="false" text="مسئول" />
+								<TableColumn fx:id="colNo" prefWidth="50.0" resizable="false" text="شماره" />
+								<TableColumn fx:id="colDate" minWidth="150.0" prefWidth="160.0" resizable="false" text="تاریخ" />
+								<TableColumn fx:id="colEmployee" minWidth="100.0" prefWidth="172.0" resizable="false" text="مسئول" />
 							</columns>
 						</TableView>
 					</children>
@@ -108,9 +111,9 @@
 						<TableView fx:id="tableItemDetail" prefHeight="383.0" prefWidth="397.0">
 							<columns>
 								<TableColumn fx:id="colDetailID" prefWidth="69.0" resizable="false" text="شماره" visible="false" />
-								<TableColumn fx:id="colItem" prefWidth="168.0" resizable="false" text="نوع جنس" />
+								<TableColumn fx:id="colItem" prefWidth="160.0" resizable="false" text="نوع جنس" />
 								<TableColumn fx:id="colUnit" minWidth="131.0" prefWidth="100.0" resizable="false" text="واحد شمارش" />
-								<TableColumn fx:id="colQuantity" minWidth="87.0" onEditCommit="#editableColumnAction" prefWidth="100.0" resizable="false" text="مقدار" />
+								<TableColumn fx:id="colQuantity" minWidth="87.0" onEditCommit="#editableColumnAction" prefWidth="91.0" resizable="false" text="مقدار" />
 							</columns>
 						</TableView>
 					</children>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
@@ -17,8 +18,32 @@
 					<children>
 						<Button fx:id="btnCustomerList" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="لیست مشتریان" />
                   <Button fx:id="btnCurrencyList" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="لیست نرخ ارز" />
+                  <Button fx:id="btnBillEntry" layoutX="190.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="فاکتور فروش" />
 					</children>
 				</HBox>
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="موجودی انبار مرکزی">
+                     <font>
+                        <Font name="Tahoma Bold" size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="90.0" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <TableView fx:id="tableMainStockList" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                    <columns>
+                      <TableColumn fx:id="colCode" prefWidth="98.0" text="کد محصول" />
+                      <TableColumn fx:id="colItems" prefWidth="300.0" text="نوع جنس" />
+                        <TableColumn fx:id="colUnit" prefWidth="150.0" text="واحد شمارش" />
+                        <TableColumn fx:id="colImport" prefWidth="200.0" text="تعداد ورودی" />
+                        <TableColumn fx:id="colExport" prefWidth="200.0" text="تعداد خروجی" />
+                        <TableColumn fx:id="colReminder" prefWidth="200.0" text="موجودی انبار" />
+                    </columns>
+                  </TableView>
+               </children>
+            </HBox>
 			</children>
 		</VBox>
 	</children>
