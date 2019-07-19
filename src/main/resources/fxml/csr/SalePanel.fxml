@@ -38,8 +38,8 @@
                       <TableColumn fx:id="colItems" prefWidth="300.0" text="نوع جنس" />
                         <TableColumn fx:id="colUnit" prefWidth="150.0" text="واحد شمارش" />
                         <TableColumn fx:id="colImport" prefWidth="200.0" text="تعداد ورودی" />
-                        <TableColumn fx:id="colExport" prefWidth="200.0" text="تعداد خروجی" />
-                        <TableColumn fx:id="colReminder" prefWidth="200.0" text="موجودی انبار" />
+                        <TableColumn fx:id="colSales" prefWidth="200.0" text="تعداد خروجی" />
+                        <TableColumn fx:id="colRemain" prefWidth="200.0" text="موجودی انبار" />
                     </columns>
                   </TableView>
                </children>

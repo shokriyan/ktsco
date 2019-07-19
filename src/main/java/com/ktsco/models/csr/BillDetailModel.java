@@ -11,15 +11,17 @@ public class BillDetailModel {
 	private static DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 
 	private SimpleIntegerProperty id;
+	private SimpleIntegerProperty lineNumber;
 	private SimpleStringProperty items;
 	private SimpleStringProperty unit;
 	private SimpleStringProperty quantity;
 	private SimpleStringProperty unitprice;
 	private SimpleStringProperty linetotal;
 
-	public BillDetailModel(int id) {
+	public BillDetailModel(int lineNumber) {
 		decimalFormat.setRoundingMode(RoundingMode.UP);
-		this.id = new SimpleIntegerProperty(id);
+		this.id = new SimpleIntegerProperty(0);
+		this.lineNumber = new SimpleIntegerProperty(lineNumber);
 		this.items = new SimpleStringProperty();
 		this.unit = new SimpleStringProperty();
 		this.quantity = new SimpleStringProperty(decimalFormat.format(0));
@@ -28,20 +30,24 @@ public class BillDetailModel {
 
 	}
 
-	public BillDetailModel(int id, String product, String unit, String quantity, String unitprice, String linetotal) {
+	public BillDetailModel(int id,int lineNumber, String product, String unit, String quantity, String unitprice, String linetotal) {
 		decimalFormat.setRoundingMode(RoundingMode.UP);
 		this.id = new SimpleIntegerProperty(id);
+		this.lineNumber = new SimpleIntegerProperty(lineNumber);
 		this.items = new SimpleStringProperty(product);
 		this.unit = new SimpleStringProperty(unit);
-		this.quantity = new SimpleStringProperty(decimalFormat.format(quantity));
-		this.unitprice = new SimpleStringProperty(decimalFormat.format(unitprice));
-		this.linetotal = new SimpleStringProperty(decimalFormat.format(linetotal));
+		this.quantity = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(quantity)));
+		this.unitprice = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(unitprice)));
+		this.linetotal = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(linetotal)));
 
 	}
 
 	// getters
 	public int getID() {
 		return this.id.get();
+	}
+	public int getLineNumber() {
+		return this.lineNumber.get();
 	}
 	public String getItems() {
 		return this.items.get();
@@ -62,6 +68,9 @@ public class BillDetailModel {
 	//Setter
 	public void setID(int id) {
 		this.id = new SimpleIntegerProperty(id);
+	}
+	public void setLineNumber(int lineNumber) {
+		this.lineNumber = new SimpleIntegerProperty(lineNumber);
 	}
 	public void setItems (String product) {
 		this.items = new SimpleStringProperty(product);
@@ -86,6 +95,9 @@ public class BillDetailModel {
 	
 	public SimpleIntegerProperty getIDProperty() {
 		return this.id;
+	}
+	public SimpleIntegerProperty getLineNumberProperty() {
+		return this.lineNumber;
 	}
 	public SimpleStringProperty getItemsProperty() {
 		return this.items;

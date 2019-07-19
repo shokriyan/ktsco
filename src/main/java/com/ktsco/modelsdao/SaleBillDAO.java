@@ -3,19 +3,22 @@ package com.ktsco.modelsdao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ktsco.models.csr.BillDetailModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
 import com.ktsco.utils.DateUtils;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class SaleBillDAO {
 
@@ -124,5 +127,172 @@ public class SaleBillDAO {
 
 		return isSuccess;
 	}
+
+	public static boolean insertBillDetail(int id, int billID, String product, String quantity, String unitPrice) {
+		boolean isSuccess = false;
+		int detailID = (id > 0) ? id : 0;
+		int productID = ProductDAO.getProductID(product);
+		double quantityValue = Double.parseDouble(quantity.replace(",", ""));
+		double unitpriceValue = Double.parseDouble(unitPrice.replace(",", ""));
+
+		query = "INSERT INTO SALEDETAIL (ID, BILL_ID, PRODUCT_ID, QUANTITY, UNITPRICE) VALUES (?,?,?,?,?)"
+				+ " ON DUPLICATE KEY UPDATE PRODUCT_ID = ? , QUANTITY = ? , UNITPRICE = ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+
+			preStatement.setInt(1, detailID);
+			preStatement.setInt(2, billID);
+			preStatement.setInt(3, productID);
+			preStatement.setDouble(4, quantityValue);
+			preStatement.setDouble(5, unitpriceValue);
+			preStatement.setInt(6, productID);
+			preStatement.setDouble(7, quantityValue);
+			preStatement.setDouble(8, unitpriceValue);
+			preStatement.execute();
+			isSuccess = true;
+
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+
+		return isSuccess;
+	}
+
+	public static ObservableList<BillDetailModel> retrieveSaleDateAfterSave(int billID) {
+		ObservableList<BillDetailModel> list = FXCollections.observableArrayList();
+		int lineNumber = 1;
+
+		query = "SELECT ID, P.PROD_NAME AS PRODUCT, QUANTITY, UNITPRICE FROM SALEDETAIL SD "
+				+ "INNER JOIN PRODUCTS P ON SD.PRODUCT_ID = P.PROD_ID WHERE BILL_ID = ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setInt(1, billID);
+			
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				int id = resultSet.getInt("id");
+				String product = resultSet.getString("product");
+				String unit = ProductDAO.getUnitMeasure(product);
+				String quantity = String.valueOf(resultSet.getDouble("quantity"));
+				String unitPrice = String.valueOf(resultSet.getDouble("unitprice"));
+				String lineTotal = Commons.calculateLineTotal(quantity, unitPrice);
+				BillDetailModel model = new BillDetailModel(id, lineNumber, product, unit, quantity, unitPrice, lineTotal);
+				list.add(model);
+				lineNumber ++;
+			}
+			
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+
+		return list;
+	}
+
+	public static Map<String, Object> retieveSaleBillDate(int billID) {
+		Map <String, Object> data = new HashMap<String, Object>();
+		query =	"SELECT * FROM SALEBILLS WHERE BILL_ID = ? ";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setInt(1, billID);
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				int customerCode = resultSet.getInt("customer_id");
+				data.put("customerCode", customerCode);
+				String billDate = resultSet.getString("billDate");
+				data.put("billDate", billDate);
+				String dueDate = resultSet.getString("dueDate");
+				data.put("dueDate", dueDate);
+				String billMemo = resultSet.getString("billmemo");
+				data.put("billMemo", billMemo);
+			}
+			
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		return data; 
+	}
+	
+	public static boolean deleteSaleBill (int billID ) {
+		boolean isSuccess = false; 
+		query = "Delete from salebills where bill_id = ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setInt(1, billID);
+			preStatement.execute();
+			isSuccess = true;
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		return isSuccess;
+	}
+	
+	public static boolean deleteSaleDetail (int id) {
+		boolean isSuccess = false; 
+		query = "Delete from saleDetail where id = ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setInt(1, id);
+			preStatement.execute();
+			isSuccess = true;
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		return isSuccess;
+	}
+	
+	
 
 }

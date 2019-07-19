@@ -265,13 +265,19 @@ public class AlertsUtils {
 		Alert alert = errorAlerts(alertTitle, alertMessage);
 		alert.show();
 	}
-
 	public static void CurrencyEntryAlert(String currencyType) {
 		alertTitle = "Error";
 		alertMessage = "نرخ ارز برای تاریخ انتخاب شده موجود نمیباشد" + "\n" + currencyType;
 		Alert alert = errorAlerts(alertTitle, alertMessage);
 		alert.show();
 		
+	}
+	
+	public static void warningForStockRemain(String object, String quantity) {
+		alertTitle = "Warning";
+		alertMessage = "موجودی انبار کم است" + "\n" + object + "\n" + quantity;
+		Alert alert = warningAlerts(alertTitle, alertMessage);
+		alert.show();
 	}
 	
 	

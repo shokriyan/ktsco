@@ -1,6 +1,7 @@
 package com.ktsco.utils;
 
 import java.io.File;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +11,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,7 +28,6 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -384,7 +385,7 @@ public class Commons {
 		;
 		switch (payTerm) {
 		case 0:
-			calculatedDueDate = dmyFormat.format(inputDate);
+			calculatedDueDate = inputDate;
 			break;
 		case 7:
 			c.add(Calendar.DAY_OF_MONTH, 7);
@@ -409,6 +410,14 @@ public class Commons {
 
 		return calculatedDueDate;
 
+	}
+
+	public static long calucateDayBtwDates(String startDate, String endDate) {
+		long days = 0;
+		LocalDate from = LocalDate.parse(startDate);
+		LocalDate to = LocalDate.parse(endDate);
+		days = ChronoUnit.DAYS.between(from, to);
+		return days;
 	}
 
 }

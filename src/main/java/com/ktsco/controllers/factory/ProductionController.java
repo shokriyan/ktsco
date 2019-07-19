@@ -260,4 +260,5 @@ public class ProductionController implements Initializable {
 		generateProductionStockTable(list);
 	}
 
+	
 }
