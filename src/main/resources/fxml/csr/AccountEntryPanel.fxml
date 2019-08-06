@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.csr.AccountController">
+	<children>
+		<VBox prefHeight="635.0" prefWidth="1166.0">
+			<children>
+				<HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="20.0">
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+					<children>
+						<Button fx:id="btnNew" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="جدید" />
+                  <Button fx:id="btnSave" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="ثبت " />
+                  <Button fx:id="btnSaveReturn" layoutX="190.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="ثبت و خروج" />
+                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnReturn" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="بازگشت" />
+					</children>
+				</HBox>
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="فرم ثبت حساب بانکی">
+                           <font>
+                              <Font name="Tahoma Bold" size="18.0" />
+                           </font>
+                        </Text>
+                        <Label fx:id="labelInformation" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="150.0" spacing="20.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0">
+                           <font>
+                              <Font name="Tahoma Bold" size="13.0" />
+                           </font>
+                        </Text>
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
+                           <children>
+                              <Label text="شماره حساب">
+                                 <padding>
+                                    <Insets top="10.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
+                           <children>
+                              <Label text="نام بانک" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="96.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
+                           <children>
+                              <Label text="تاریخ شروع حساب" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="146.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
+                           <children>
+                              <Label text="موجودی اولیه" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="مشخصات حساب بانکی">
+                           <font>
+                              <Font name="Tahoma Bold" size="13.0" />
+                           </font>
+                        </Text>
+                        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
+                           <children>
+                              <TextField fx:id="txtAccountNumber" prefHeight="27.0" prefWidth="235.0" styleClass="customTextField">
+                                 <padding>
+                                    <Insets top="10.0" />
+                                 </padding>
+                              </TextField>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
+                           <children>
+                              <TextField fx:id="txtBankName" prefHeight="27.0" prefWidth="235.0" styleClass="customTextField" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="96.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
+                           <children>
+                              <TextField fx:id="txtOpeningDate" prefHeight="27.0" prefWidth="235.0" styleClass="customTextField" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="146.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
+                           <children>
+                              <TextField fx:id="txtOpeningBalance" prefHeight="27.0" prefWidth="235.0" styleClass="customTextField" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="لیست بانک ها" />
+                        <TableView fx:id="tableAccounts" prefHeight="200.0" prefWidth="200.0" styleClass="noBorderTableView" VBox.vgrow="ALWAYS">
+                          <columns>
+                            <TableColumn fx:id="colCode" prefWidth="75.0" text="کد" />
+                            <TableColumn fx:id="colBankAccount" prefWidth="168.0" text="شماره حساب" />
+                              <TableColumn fx:id="colBankName" prefWidth="162.0" text="نام بانک" />
+                              <TableColumn fx:id="colStartDate" prefWidth="129.0" text="تاریخ شروع" />
+                              <TableColumn fx:id="colOpeningBalance" prefWidth="143.0" text="موجودی اولیه" />
+                          </columns>
+                        </TableView>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </HBox>
+			</children>
+		</VBox>
+	</children>
+</Pane>

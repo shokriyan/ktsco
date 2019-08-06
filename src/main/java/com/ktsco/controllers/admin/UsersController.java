@@ -66,12 +66,12 @@ public class UsersController implements Initializable {
 		} else if (event.getSource() == btnAddNewUser) {
 			Constants.buttonText = btnAddNewUser.getText();
 			usersScene = view.setVboxFxml(Commons.getFxmlPanel("createNewUserFxml"));
-			usersStage = view.setSceneAndShowStage(usersScene, "", false, false);
+			usersStage = view.setSceneAndShowWaitStage(usersScene, "", false);
 			usersStage.setOnHidden(event1 -> populateUserList());
 		} else if (event.getSource() == btnEditUser) {
 			Constants.buttonText = btnEditUser.getText();
 			usersScene = view.setVboxFxml(Commons.getFxmlPanel("editUsersFxml"));
-			usersStage = view.setSceneAndShowStage(usersScene, "", false, false);
+			usersStage = view.setSceneAndShowWaitStage(usersScene, "", false);
 			usersStage.setOnHidden(event1 -> populateUserList());
 		} else if (event.getSource() == btnDeleteUser) {
 			String userName = getSelectedUsername();

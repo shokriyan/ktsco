@@ -39,7 +39,7 @@ public class AdminController implements Initializable {
 		adminScene = view.setBorderPane(Commons.getFxmlPanel("adminPanelFxml"));
 		adminScene.setTop(view.setVboxFxml(Commons.getFxmlPanel("topViewFxml")));
 		adminScene.setRight(setSideMenu(Commons.getFxmlPanel("sideMenuFxml")));
-		adminStage = view.setSceneAndShowStage(adminScene, Constants.title, true, false);
+		adminStage = view.setSceneShowStage(adminScene, Constants.title, true);
 	}
 
 	private static VBox setSideMenu(String fxml) {

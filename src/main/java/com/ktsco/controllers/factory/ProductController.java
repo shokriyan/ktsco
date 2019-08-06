@@ -196,13 +196,13 @@ public class ProductController implements Initializable {
 		log.info("Loading FXML to penel {}", Commons.getFxmlPanel("categoryPanelFxml"));
 		VBox category = view.setVboxFxml(Commons.getFxmlPanel("categoryPanelFxml"));
 		log.info("Loading stage and show");
-		CategoryController.categoryStage = view.setSceneAndShowStage(category, "", false, false);
+		CategoryController.categoryStage = view.setSceneAndShowWaitStage(category, "", false);
 	}
 
 	private void openInventoryPanel() {
 		VBox inventoryList = view.setVboxFxml(Commons.getFxmlPanel("inventoryListPanelFxml"));
 		log.info("Loading stage and show");
-		InventoryController.invStage = view.setSceneAndShowStage(inventoryList, "", false, false);
+		InventoryController.invStage = view.setSceneAndShowWaitStage(inventoryList, "", false);
 	}
 
 	private void setProductTable(ObservableList<ProductModel> list) {

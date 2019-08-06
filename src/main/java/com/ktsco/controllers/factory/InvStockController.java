@@ -104,26 +104,26 @@ public class InvStockController implements Initializable {
 	private void openCategoryPanel() {
 		log.info("Openning Category Panel");
 		VBox category = view.setVboxFxml(Commons.getFxmlPanel("categoryPanelFxml"));
-		CategoryController.categoryStage = view.setSceneAndShowStage(category, "", false, false);
+		CategoryController.categoryStage = view.setSceneAndShowWaitStage(category, "", false);
 	}
 
 	private void openSearchPanel() {
 		log.info("Openning Search panel");
 		VBox searchPanel = view.setVboxFxml(Commons.getFxmlPanel("importSearchPanelFxml"));
-		ImportSearchController.importSearchStage = view.setSceneAndShowStage(searchPanel, "", false, false);
+		ImportSearchController.importSearchStage = view.setSceneAndShowWaitStage(searchPanel, "", false);
 	}
 
 	private void openDetailList() {
 		log.info("Openning Detail list panel");
 		VBox searchPanel = view.setVboxFxml(Commons.getFxmlPanel("importDetailList"));
-		ImportDetailReportController.importDetailStage = view.setSceneAndShowStage(searchPanel, "", false, false);
+		ImportDetailReportController.importDetailStage = view.setSceneAndShowWaitStage(searchPanel, "", false);
 	}
 
 	// Opening InvetoryItem Panel
 	private void openInventoryItemsPanel() {
 		log.info("Opening Inventory list panel");
 		VBox invItems = view.setVboxFxml(Commons.getFxmlPanel("inventoryListPanelFxml"));
-		InventoryController.invStage = view.setSceneAndShowStage(invItems, "", false, false);
+		InventoryController.invStage = view.setSceneAndShowWaitStage(invItems, "", false);
 	}
 
 	// Populating Combo Items.

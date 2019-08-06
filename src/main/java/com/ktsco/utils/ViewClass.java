@@ -42,17 +42,17 @@ public class ViewClass {
 
 		return borderPane;
 	}
-	
+
 	/**
 	 * This method will set the scene and show the stage.
 	 * 
 	 * @param rootNote
 	 * @param title
 	 * @param decorate
-	 * @param wait 
+	 * @param wait
 	 * @return Stage
 	 */
-	public Stage setSceneAndShowStage(Parent rootNote, String title, boolean decorate, boolean wait) {
+	public Stage setSceneAndShowWaitStage(Parent rootNote, String title, boolean decorate) {
 		Stage stage = new Stage();
 		Scene scene = new Scene(rootNote);
 		log.info("Create Root from {}" + rootNote);
@@ -65,22 +65,44 @@ public class ViewClass {
 			log.info("Not Decorating wht Stage");
 			stage.initStyle(StageStyle.UNDECORATED);
 		}
-		if (wait == false) {
-			log.info("Showing the Stage without Wait ");
-			stage.show();
-		}else if (wait == true){
-			log.info("Show the Stage and wait");
-			stage.showAndWait();
-		}
+		stage.setAlwaysOnTop(false);
+		stage.show();
 		return stage;
 	}
-/**
- * This method with take FXML with HBOX
- * and return at HBox
- * 
- * @param fxml
- * @return HBox
- */
+	
+	/**
+	 * This method will set the scene and show the stage.
+	 * 
+	 * @param rootNote
+	 * @param title
+	 * @param decorate
+	 * @param wait
+	 * @return Stage
+	 */
+	public Stage setSceneShowStage(Parent rootNote, String title, boolean decorate) {
+		Stage stage = new Stage();
+		Scene scene = new Scene(rootNote);
+		log.info("Create Root from {}" + rootNote);
+		scene.getStylesheets().add(getClass().getResource(Commons.getFxmlPanel("styleSheetPath")).toExternalForm());
+		log.info("Initial Style Sheet from {}" + Commons.getFxmlPanel("styleSheetPath"));
+		stage.setScene(scene);
+		stage.setResizable(false);
+		stage.setTitle(title);
+		if (!decorate) {
+			log.info("Not Decorating Stage");
+			stage.initStyle(StageStyle.UNDECORATED);
+		}
+		stage.show();
+		return stage;
+	}
+	
+
+	/**
+	 * This method with take FXML with HBOX and return at HBox
+	 * 
+	 * @param fxml
+	 * @return HBox
+	 */
 	public HBox setHboxFxml(String fxml) {
 		log.info("Setting FXML for HBOX");
 		HBox hbox = new HBox();
@@ -95,10 +117,10 @@ public class ViewClass {
 
 		return hbox;
 	}
-	
+
 	/**
-	 * this method will take FXML with VBox
-	 * and return as Vbox
+	 * this method will take FXML with VBox and return as Vbox
+	 * 
 	 * @param fxml
 	 * @return VBox
 	 */
@@ -117,10 +139,10 @@ public class ViewClass {
 
 		return vbox;
 	}
-	
+
 	/**
-	 * This method will take FXML with SplitPate
-	 * and return splitPane
+	 * This method will take FXML with SplitPate and return splitPane
+	 * 
 	 * @param fxml
 	 * @return SplitPane
 	 */
@@ -137,10 +159,9 @@ public class ViewClass {
 
 		return splitPane;
 	}
-	
+
 	/**
-	 * This method will take FXML with Pane 
-	 * and return Pane
+	 * This method will take FXML with Pane and return Pane
 	 * 
 	 * @param fxml
 	 * @return Pane
@@ -153,16 +174,16 @@ public class ViewClass {
 			pane = (Pane) loader.load(getClass().getResourceAsStream(fxml));
 			log.info("FXMl file " + fxml + "Loaded");
 		} catch (IOException e) {
-			log.error("Fail to load fxml file " + fxml + " with error massage " + e.getMessage()) ;
+			log.error("Fail to load fxml file " + fxml + " with error massage " + e.getMessage());
 			e.printStackTrace();
 		}
 
 		return pane;
 	}
-	
+
 	/**
-	 * This Method will take FXML with StackPane
-	 * and return Stack Pane
+	 * This Method will take FXML with StackPane and return Stack Pane
+	 * 
 	 * @param fxml
 	 * @return StackPane
 	 */

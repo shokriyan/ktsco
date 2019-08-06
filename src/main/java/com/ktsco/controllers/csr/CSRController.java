@@ -26,7 +26,7 @@ public class CSRController implements Initializable{
 	
 	
 	@FXML
-	private static Button btnEmployeePanel, btnSalesPanel;
+	private static Button btnEmployeePanel, btnSalesPanel, btnBanksPanel;
 
 
 	@Override
@@ -40,7 +40,7 @@ public class CSRController implements Initializable{
 		csrBorderScene.setTop(views.setVboxFxml(Commons.getFxmlPanel("topViewFxml")));
 		csrBorderScene.setRight(setSideMenu(Commons.getFxmlPanel("sideMenuFxml")));
 		
-		csrStage = views.setSceneAndShowStage(csrBorderScene, Constants.title, true, false);
+		csrStage = views.setSceneShowStage(csrBorderScene, Constants.title, true);
 	}
 	
 	public static VBox setSideMenu(String fxml) {
@@ -50,8 +50,11 @@ public class CSRController implements Initializable{
 		btnEmployeePanel.setOnAction(event -> allButtonActions(event));
 		btnSalesPanel = Commons.addMenuButton("فروشات");
 		btnSalesPanel.setOnAction(event -> allButtonActions(event));
+		btnBanksPanel = Commons.addMenuButton("بانک");
+		btnBanksPanel.setOnAction(event -> allButtonActions(event));
 		
 		buttonList.add(btnEmployeePanel);
+		buttonList.add(btnBanksPanel);
 		buttonList.add(btnSalesPanel);
 		for (int i = 0; i < buttonList.size() ; i ++) {
 			vbox.getChildren().add(buttonList.get(i));
@@ -67,6 +70,9 @@ public class CSRController implements Initializable{
 		}else if (event.getSource() == btnSalesPanel) {
 			Commons.reloadTopView(csrBorderScene, btnSalesPanel);
 			setCenterPanel(Commons.getFxmlPanel("SalepanelFxml"));
+		}else if (event.getSource() == btnBanksPanel) {
+			Commons.reloadTopView(csrBorderScene, btnBanksPanel);
+			setCenterPanel(Commons.getFxmlPanel("banksPanel"));
 		}
 	}
 	

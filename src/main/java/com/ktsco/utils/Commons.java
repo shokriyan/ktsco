@@ -1,7 +1,9 @@
 package com.ktsco.utils;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -161,7 +163,7 @@ public class Commons {
 				});
 			} else {
 				label.setStyle("-fx-text-fill : Red");
-				label.setText("خطا در پروسس اطلاعات انجام نشد");
+				label.setText("خطا در پروسس اطلاعات");
 				label.setVisible(true);
 				service.setOnSucceeded(event -> {
 					label.setVisible(false);
@@ -276,7 +278,7 @@ public class Commons {
 		log.info("Loading FXML to penel {}", fxml);
 		VBox scene = view.setVboxFxml(fxml);
 		log.info("Loading stage and show");
-		return view.setSceneAndShowStage(scene, "", false, false);
+		return view.setSceneAndShowWaitStage(scene, "", false);
 	}
 
 	public static List<String> getListValuesFromMap(Map<String, String> map) {
@@ -418,6 +420,13 @@ public class Commons {
 		LocalDate to = LocalDate.parse(endDate);
 		days = ChronoUnit.DAYS.between(from, to);
 		return days;
+	}
+	
+	public static void copyToClipboard(Object text) {
+		String textToCopy = String.valueOf(text);
+		StringSelection stringSelection = new StringSelection(textToCopy);
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboard.setContents(stringSelection, null);
 	}
 
 }

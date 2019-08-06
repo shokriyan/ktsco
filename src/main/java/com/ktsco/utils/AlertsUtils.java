@@ -9,6 +9,7 @@ import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Modality;
 
 public class AlertsUtils {
 	private static final Logger log = LoggerFactory.getLogger(AlertsUtils.class);
@@ -72,6 +73,7 @@ public class AlertsUtils {
 		alert.setTitle(title);
 		alert.setContentText(alertMessage);
 		alert.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+		alert.initModality(Modality.APPLICATION_MODAL);
 		return alert;
 	}
 	
@@ -87,6 +89,7 @@ public class AlertsUtils {
 		alert.setTitle(title);
 		alert.setContentText(alertMessage);
 		alert.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+		alert.initModality(Modality.APPLICATION_MODAL);
 		return alert;
 	}
 	/**
@@ -101,6 +104,7 @@ public class AlertsUtils {
 		alert.setTitle(alertTitle);
 		alert.setContentText(alertMessage);
 		alert.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+		alert.initModality(Modality.APPLICATION_MODAL);
 		return alert;
 	}
 	/**
@@ -115,6 +119,7 @@ public class AlertsUtils {
 		alert.setTitle(alertTitle);
 		alert.setContentText(alertMessage);
 		alert.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+		alert.initModality(Modality.APPLICATION_MODAL);
 		return alert;
 	}
 	/**

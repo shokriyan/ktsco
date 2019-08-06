@@ -39,6 +39,6 @@ public class EmployeeController implements Initializable {
 			log.info("Loading FXML to penel {}", fxml);
 			VBox employeeListPanel = view.setVboxFxml(fxml);
 			log.info("Loading stage and show");
-			EmpListController.empListStage = view.setSceneAndShowStage(employeeListPanel, "", false, false);
+			EmpListController.empListStage = view.setSceneAndShowWaitStage(employeeListPanel, "", false);
 	}
 }

@@ -38,6 +38,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.VBox;
 
 public class SalesBillController implements Initializable {
 
@@ -67,21 +68,20 @@ public class SalesBillController implements Initializable {
 
 	private ObservableList<BillDetailModel> tableItems = FXCollections.observableArrayList();
 	private ObservableList<MainStockModel> stockList = FXCollections.observableArrayList();
-	
+
 	private List<String> customerList = new ArrayList<String>();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		loadPrerequisitions();
 		generateOneRow();
-		stockList = MainStockDAO.retrieveStockItems();
-		
+
 		txtBillDate.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
-				if (newValue.length() == 10) {
-					String getDate = DateUtils.convertJalaliToGregory(txtBillDate.getText());
+				if (newValue.length() >= 10) {
+					String getDate = DateUtils.convertJalaliToGregory(newValue);
 					String currencyType = Commons.getCurrencyKey(txtCurrencyType.getText());
 					String exRate = CurrencyDAO.getCurrencyRate(currencyType, getDate);
 					if (!"".equalsIgnoreCase(exRate)) {
@@ -164,6 +164,27 @@ public class SalesBillController implements Initializable {
 			} else {
 				AlertsUtils.emptyFieldAlert();
 			}
+		} else if (event.getSource() == btnSaveClose) {
+			if (checkFlag()) {
+				boolean result = insertIntoSaleBill();
+				if (result) {
+					boolean isSuccess = insertIntoSaleDetail();
+					if (isSuccess) {
+						regenrateDetailTable();
+						Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("SalepanelFxml"));
+
+					} else {
+						// Call to Delete Bill from Database
+					}
+
+					Commons.processMessageLabel(labelInfoMessage, isSuccess);
+				} else {
+					Commons.processMessageLabel(labelInfoMessage, result);
+				}
+
+			} else {
+				AlertsUtils.emptyFieldAlert();
+			}
 		} else if (event.getSource() == menuDeleteRow) {
 			if (tableItems.size() >= 0) {
 				if (!tableBillDetail.getSelectionModel().isEmpty()) {
@@ -178,6 +199,7 @@ public class SalesBillController implements Initializable {
 							boolean isSuccess = SaleBillDAO.deleteSaleDetail(id);
 							regenrateDetailTable();
 							Commons.processMessageLabel(labelInfoMessage, isSuccess);
+
 						}
 					}
 					calucalteBillTotal();
@@ -194,11 +216,15 @@ public class SalesBillController implements Initializable {
 			tableItems.clear();
 			generateOneRow();
 			calucalteBillTotal();
+		} else if (event.getSource() == btnSearch) {
+			SaleSearchController.saleSearchStage = Commons
+					.openPanelsUndecorate(Commons.getFxmlPanel("SalesSearchPanel"));
 		}
 
 	}
 
 	private void loadPrerequisitions() {
+		stockList = MainStockDAO.retrieveStockItems();
 		setTodayDate();
 		populateCustomerCombo();
 		populatePayTermCombo();
@@ -364,6 +390,8 @@ public class SalesBillController implements Initializable {
 	private void setBillData() {
 		int billID = Integer.parseInt(txtCode.getText());
 		Map<String, Object> billData = SaleBillDAO.retieveSaleBillDate(billID);
+		String billDate = billData.get("billDate").toString();
+		txtBillDate.setText(DateUtils.convertGregoryToJalali(billDate));
 		if (!billData.isEmpty()) {
 			String CustomerName = null;
 			for (String values : customerList) {
@@ -373,8 +401,6 @@ public class SalesBillController implements Initializable {
 				}
 			}
 			comboCustomer.setValue(CustomerName);
-			String billDate = billData.get("billDate").toString();
-			txtBillDate.setText(DateUtils.convertGregoryToJalali(billDate));
 			String dueDate = billData.get("dueDate").toString();
 			int days = (int) Commons.calucateDayBtwDates(billDate, dueDate);
 			if (days <= 0)
@@ -400,7 +426,7 @@ public class SalesBillController implements Initializable {
 		}
 
 	}
-	
+
 	private void checkForSaleQuantityinStock(String item, double saleQuantity) {
 		for (MainStockModel model : stockList) {
 			if (model.getProduct().equalsIgnoreCase(item)) {

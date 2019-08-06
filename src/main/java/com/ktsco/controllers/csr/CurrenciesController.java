@@ -105,7 +105,6 @@ public class CurrenciesController implements Initializable {
 			log.debug("Calulate Button Clicked");
 			calculateRate();
 		} else if (event.getSource() == btnReset) {
-			log.debug("Calculate Button clicked Button Clicked");
 			txtValueEntry.clear();
 			txtResult.clear();
 		}else if (event.getSource() == menuEdit) {
@@ -233,6 +232,7 @@ public class CurrenciesController implements Initializable {
 			txtResult.setText("عدد وارد کنید");
 		}
 	}
+	
 	private void setTodayDate() {
 		String todayDate = DateUtils.convertGregoryToJalali(Commons.getTodaysDate());
 		txtDate.setText(todayDate);

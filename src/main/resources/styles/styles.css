@@ -39,6 +39,60 @@
 .topSecond-panel {
 	fx-border-color: black
 }
+
+.copyable-label, .copyable-label:focused {
+    -fx-background-color: transparent ;
+    -fx-background-insets: 0px ;
+}
+
+.customTextField {
+	-fx-background-color : transparent;
+	-fx-border-color :  Transparent Transparent black Transparent;
+}
+
+.table-view{
+	-fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.table-view:focused{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell{
+    -fx-text-fill: black;
+    -fx-alignment: center;
+}
+
+.table-row-cell{
+  -fx-border-color: transparent;
+-fx-table-cell-border-color:transparent;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: -fx-table-cell-border-color, #EFF0F0;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #01CCFE;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+}
 .table-row-cell:empty {
     -fx-background-color: white;
 }
@@ -48,9 +102,5 @@
 }
 .list-cell:empty {
     -fx-background-color: white;
-}
-.copyable-label, .copyable-label:focused {
-    -fx-background-color: transparent ;
-    -fx-background-insets: 0px ;
 }
 

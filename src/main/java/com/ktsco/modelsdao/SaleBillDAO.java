@@ -7,11 +7,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ktsco.controllers.csr.CustomersController;
 import com.ktsco.models.csr.BillDetailModel;
+import com.ktsco.models.csr.SalesSearchModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
@@ -177,7 +180,7 @@ public class SaleBillDAO {
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setInt(1, billID);
-			
+
 			resultSet = preStatement.executeQuery();
 			while (resultSet.next()) {
 				int id = resultSet.getInt("id");
@@ -186,12 +189,13 @@ public class SaleBillDAO {
 				String quantity = String.valueOf(resultSet.getDouble("quantity"));
 				String unitPrice = String.valueOf(resultSet.getDouble("unitprice"));
 				String lineTotal = Commons.calculateLineTotal(quantity, unitPrice);
-				BillDetailModel model = new BillDetailModel(id, lineNumber, product, unit, quantity, unitPrice, lineTotal);
+				BillDetailModel model = new BillDetailModel(id, lineNumber, product, unit, quantity, unitPrice,
+						lineTotal);
 				list.add(model);
-				lineNumber ++;
+				lineNumber++;
 			}
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -209,8 +213,8 @@ public class SaleBillDAO {
 	}
 
 	public static Map<String, Object> retieveSaleBillDate(int billID) {
-		Map <String, Object> data = new HashMap<String, Object>();
-		query =	"SELECT * FROM SALEBILLS WHERE BILL_ID = ? ";
+		Map<String, Object> data = new HashMap<String, Object>();
+		query = "SELECT * FROM SALEBILLS WHERE BILL_ID = ? ";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setInt(1, billID);
@@ -225,8 +229,8 @@ public class SaleBillDAO {
 				String billMemo = resultSet.getString("billmemo");
 				data.put("billMemo", billMemo);
 			}
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -239,19 +243,19 @@ public class SaleBillDAO {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
-		return data; 
+
+		return data;
 	}
-	
-	public static boolean deleteSaleBill (int billID ) {
-		boolean isSuccess = false; 
+
+	public static boolean deleteSaleBill(int billID) {
+		boolean isSuccess = false;
 		query = "Delete from salebills where bill_id = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setInt(1, billID);
 			preStatement.execute();
 			isSuccess = true;
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -264,18 +268,67 @@ public class SaleBillDAO {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
+
 		return isSuccess;
 	}
-	
-	public static boolean deleteSaleDetail (int id) {
-		boolean isSuccess = false; 
+
+	public static boolean deleteSaleDetail(int id) {
+		boolean isSuccess = false;
 		query = "Delete from saleDetail where id = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setInt(1, id);
 			preStatement.execute();
 			isSuccess = true;
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+
+		return isSuccess;
+	}
+
+	public static ObservableList<SalesSearchModel> searchForSalesBill(String code, String company, String startDate,
+			String endDate) {
+		ObservableList<SalesSearchModel> list = FXCollections.observableArrayList();
+		
+		String billID = (null == code || "".equalsIgnoreCase(code)) ? "":code;
+		String customerID = (null == company || "".equalsIgnoreCase(company)) ? "":company;
+		String convertedStartDate = (null == startDate || "".equalsIgnoreCase(startDate)) ? "1900-01-01" : DateUtils.convertJalaliToGregory(startDate);
+		String convertedEndDate = (null == endDate || "".equalsIgnoreCase(endDate)) ? "2900-12-31" : DateUtils.convertJalaliToGregory(endDate);
+		query = "SELECT SB.BILL_ID , C.COMPANY, C.CURRENCY, SB.BILLDATE, SB.DUEDATE , SUM(SD.QUANTITY * SD.UNITPRICE ) AS BILLTOTAL "
+				+ "FROM SALEBILLS SB INNER JOIN CUSTOMERS C ON SB.CUSTOMER_ID = C.CUSTOMER_ID "
+				+ "INNER JOIN SALEDETAIL SD ON SB.BILL_ID = SD.BILL_ID "
+				+ "WHERE SB.BILL_ID LIKE ? AND C.CUSTOMER_ID LIKE ? AND SB.BILLDATE BETWEEN ? AND ? "
+				+ "GROUP BY SB.BILL_ID ORDER BY BILL_ID";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		
+		try {
+			preStatement.setString(1, "%"+billID+"%");
+			preStatement.setString(2, "%"+customerID+"%");
+			preStatement.setString(3, convertedStartDate);
+			preStatement.setString(4, convertedEndDate);
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				int billCode = resultSet.getInt("bill_ID");
+				String billCompany = resultSet.getString("company");
+				String currency = Commons.getCurrencyValue(resultSet.getString("currency"));
+				String billDate = DateUtils.convertGregoryToJalali(resultSet.getString("billDate"));
+				String dueDate = DateUtils.convertGregoryToJalali(resultSet.getString("duedate"));
+				String billTotal = resultSet.getString("billtotal");
+				SalesSearchModel model = new SalesSearchModel(billCode, billCompany, currency, billDate, dueDate, billTotal);
+				list.add(model);
+				
+			}
 		}catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
@@ -289,10 +342,8 @@ public class SaleBillDAO {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
-		return isSuccess;
+
+		return list;
 	}
-	
-	
 
 }

@@ -118,19 +118,19 @@ public class ProductionController implements Initializable {
 	// Opening Search Panel
 	private void openingSearchPanel() {
 		VBox searchPanel = view.setVboxFxml(Commons.getFxmlPanel("productionSearchPanel"));
-		ProductionSearchController.productionSearchStage = view.setSceneAndShowStage(searchPanel, "", false, false);
+		ProductionSearchController.productionSearchStage = view.setSceneAndShowWaitStage(searchPanel, "", false);
 	}
 	
 	//Opening Detail list panel
 	private void openDetailListPanel() {
 		VBox detailList = view.setVboxFxml(Commons.getFxmlPanel("productionDetailList"));
-		ProductionDetailReportController.productionDetailStage = view.setSceneAndShowStage(detailList, "", false, false);
+		ProductionDetailReportController.productionDetailStage = view.setSceneAndShowWaitStage(detailList, "", false);
 	}
 	
 	//Opening Export Production Panel
 	private void openProductionExport() {
 		VBox productionExport = view.setVboxFxml(Commons.getFxmlPanel("productExportPanel"));
-		ProductionExportController.exportPanelStage = view.setSceneAndShowStage(productionExport, "", false, false);
+		ProductionExportController.exportPanelStage = view.setSceneAndShowWaitStage(productionExport, "", false);
 	}
 
 	// Populating Employee List for ComboBox Responsible Person

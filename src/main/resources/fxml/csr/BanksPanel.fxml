@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.csr.BankController">
+	<children>
+		<VBox prefHeight="635.0" prefWidth="1166.0">
+			<children>
+				<HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="20.0">
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+					<children>
+						<Button fx:id="btnAddBank" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="ثبت بانک" />
+					</children>
+				</HBox>
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="موجودی بانک ها">
+                     <font>
+                        <Font name="Tahoma Bold" size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="90.0" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <TableView fx:id="tableBankAccounts" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                    <columns>
+                      <TableColumn fx:id="colCode" prefWidth="125.0" resizable="false" text="کد بانک" />
+                      <TableColumn fx:id="colBankAccount" prefWidth="400.0" resizable="false" text="شماره حساب" />
+                        <TableColumn fx:id="colBankName" prefWidth="300.0" resizable="false" text="نام بانک" />
+                        <TableColumn fx:id="colAccountBalance" prefWidth="323.0" resizable="false" text="موجودی حساب" />
+                    </columns>
+                  </TableView>
+               </children>
+            </HBox>
+			</children>
+		</VBox>
+	</children>
+</Pane>

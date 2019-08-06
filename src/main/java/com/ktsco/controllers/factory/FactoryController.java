@@ -41,7 +41,7 @@ public class FactoryController implements Initializable {
 		factoryBorderPane.setTop(view.setVboxFxml(Commons.getFxmlPanel("topViewFxml")));
 		factoryBorderPane.setRight(setSideMenu(Commons.getFxmlPanel("sideMenuFxml")));
 		
-		factoryStage = view.setSceneAndShowStage(factoryBorderPane, Constants.title, true, false);
+		factoryStage = view.setSceneShowStage(factoryBorderPane, Constants.title, true);
 		
 	}
 	
