@@ -26,7 +26,7 @@ public class CSRController implements Initializable{
 	
 	
 	@FXML
-	private static Button btnEmployeePanel, btnSalesPanel, btnBanksPanel;
+	private static Button btnEmployeePanel, btnSalesPanel, btnBanksPanel, btnReceivablePanel;
 
 
 	@Override
@@ -52,16 +52,20 @@ public class CSRController implements Initializable{
 		btnSalesPanel.setOnAction(event -> allButtonActions(event));
 		btnBanksPanel = Commons.addMenuButton("بانک");
 		btnBanksPanel.setOnAction(event -> allButtonActions(event));
+		btnReceivablePanel = Commons.addMenuButton("دریافتی");
+		btnReceivablePanel.setOnAction(event -> allButtonActions(event));
 		
 		buttonList.add(btnEmployeePanel);
 		buttonList.add(btnBanksPanel);
 		buttonList.add(btnSalesPanel);
+		buttonList.add(btnReceivablePanel);
 		for (int i = 0; i < buttonList.size() ; i ++) {
 			vbox.getChildren().add(buttonList.get(i));
 		}
 		
 		return vbox; 
 	}
+	
 	
 	public static void allButtonActions(ActionEvent event) {
 		if (event.getSource() == btnEmployeePanel) {
@@ -73,6 +77,9 @@ public class CSRController implements Initializable{
 		}else if (event.getSource() == btnBanksPanel) {
 			Commons.reloadTopView(csrBorderScene, btnBanksPanel);
 			setCenterPanel(Commons.getFxmlPanel("banksPanel"));
+		}else if (event.getSource() == btnReceivablePanel) {
+			Commons.reloadTopView(csrBorderScene, btnReceivablePanel);
+			setCenterPanel(Commons.getFxmlPanel("receivablePanel"));
 		}
 	}
 	

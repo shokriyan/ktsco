@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.csr.MainStockModel;
-import com.ktsco.models.factory.ProductionDetailModel;
 import com.ktsco.modelsdao.MainStockDAO;
 import com.ktsco.utils.Commons;
 

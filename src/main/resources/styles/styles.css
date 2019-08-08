@@ -45,7 +45,7 @@
     -fx-background-insets: 0px ;
 }
 
-.customTextField {
+.text-field {
 	-fx-background-color : transparent;
 	-fx-border-color :  Transparent Transparent black Transparent;
 }
@@ -103,4 +103,7 @@
 .list-cell:empty {
     -fx-background-color: white;
 }
-
+.combo-box {
+	-fx-background-color : transparent;
+	-fx-border-color :  Transparent Transparent black Transparent;
+}

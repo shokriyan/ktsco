@@ -1,6 +1,7 @@
 package com.ktsco.controllers.csr;
 
 import com.ktsco.models.csr.BankBalanceModel;
+import com.ktsco.utils.Commons;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,7 +12,7 @@ import javafx.scene.control.TableView;
 public class BankController {
 	
 	@FXML
-	private Button btnAddBank;
+	private Button btnAddAccount;
 	
 	@FXML
 	private TableView<BankBalanceModel> tableBankAccounts;
@@ -23,8 +24,12 @@ public class BankController {
 	
 	@FXML
 	private void allButtonActions(ActionEvent event) {
-		
+		if (event.getSource() == btnAddAccount) {
+			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("accountEntryPanel"));
+		}
 	}
+	
+	
 	
 
 }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
@@ -27,7 +29,7 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="فرم ثبت حساب بانکی">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="فرم ثبت دریافتی فاکتور">
                            <font>
                               <Font name="Tahoma Bold" size="18.0" />
                            </font>
@@ -48,7 +50,7 @@
                         </Text>
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="56.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
                            <children>
-                              <Label text="کد ">
+                              <Label text="شماره فاکتور ">
                                  <padding>
                                     <Insets top="10.0" />
                                  </padding>
@@ -60,7 +62,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
                            <children>
-                              <Label text="شماره حساب">
+                              <Label text="تاریخ دریافت">
                                  <padding>
                                     <Insets top="10.0" />
                                  </padding>
@@ -72,7 +74,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
                            <children>
-                              <Label text="نام بانک" />
+                              <Label text="دریافت کننده" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -80,7 +82,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="96.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
                            <children>
-                              <Label text="تاریخ شروع حساب" />
+                              <Label text="طریقه دریافت" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -88,7 +90,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="146.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
                            <children>
-                              <Label text="موجودی اولیه" />
+                              <Label text="مبلغ دریافتی" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -99,20 +101,29 @@
                         <Insets top="10.0" />
                      </padding>
                   </VBox>
-                  <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
+                  <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="300.0" spacing="20.0" style="-fx-border-color: Transparent black Transparent Transparent;">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="مشخصات حساب بانکی">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="دریافتی جدید">
                            <font>
                               <Font name="Tahoma Bold" size="13.0" />
                            </font>
                         </Text>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="56.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
+                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="56.0" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
                            <children>
-                              <TextField fx:id="txtCode" prefHeight="27.0" prefWidth="235.0" styleClass="customTextField">
+                              <TextField fx:id="txtCode" prefHeight="27.0" prefWidth="229.0" styleClass="customTextField">
                                  <padding>
                                     <Insets top="10.0" />
                                  </padding>
                               </TextField>
+                              <Button fx:id="btnSearchBill" mnemonicParsing="false" onAction="#allButtonActions" prefHeight="25.0" prefWidth="42.0">
+                                 <graphic>
+                                    <ImageView fitHeight="27.0" fitWidth="27.0">
+                                       <image>
+                                          <Image fx:id="btnImage" url="images/magnifier.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -131,24 +142,24 @@
                            </padding>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
-                           <children>
-                              <TextField fx:id="txtBankName" prefHeight="27.0" prefWidth="235.0" styleClass="customTextField" />
-                           </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
+                           <children>
+                              <ComboBox prefWidth="235.0" />
+                           </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="96.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
-                           <children>
-                              <TextField fx:id="txtOpeningDate" prefHeight="27.0" prefWidth="235.0" styleClass="customTextField" />
-                           </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
+                           <children>
+                              <ComboBox prefWidth="235.0" />
+                           </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="146.0" prefHeight="50.0" prefWidth="200.0" spacing="80.0">
                            <children>
-                              <TextField fx:id="txtOpeningBalance" prefHeight="27.0" prefWidth="235.0" styleClass="customTextField" />
+                              <TextField fx:id="txtOpeningBalance" prefHeight="27.0" prefWidth="235.0" styleClass="customTextField" text="فقط عدد به انگلیسی" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -161,14 +172,46 @@
                   </VBox>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="لیست بانک ها" />
-                        <TableView fx:id="tableAccounts" prefHeight="200.0" prefWidth="200.0" styleClass="noBorderTableView" VBox.vgrow="ALWAYS">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="شرح اطلاعات فاکتور">
+                           <font>
+                              <Font name="Tahoma Bold" size="13.0" />
+                           </font>
+                        </Text>
+                        <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="696.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <VBox prefHeight="205.0" prefWidth="143.0" spacing="20.0">
+                                 <children>
+                                    <Label text="تاریخ فاکتور" />
+                                    <Label layoutX="20.0" layoutY="20.0" text="نام مشتری" />
+                                    <Label layoutX="20.0" layoutY="57.0" text="نوع ارز" />
+                                    <Label layoutX="20.0" layoutY="94.0" text="مجموع فاکتور" />
+                                    <Label layoutX="20.0" layoutY="131.0" text="مجموع دریافتی" />
+                                    <Label layoutX="20.0" layoutY="131.0" text="مبلغ باقیمانده" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label fx:id="labelBillDate" />
+                                    <Label fx:id="labelCompany" />
+                                    <Label fx:id="labelCurrency" />
+                                    <Label fx:id="labelBillTotal" />
+                                    <Label fx:id="labelTotalReceived" />
+                                    <Label fx:id="labelRemainAmount" layoutX="20.0" layoutY="131.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <TableView fx:id="tableAccounts" prefHeight="214.0" prefWidth="696.0" styleClass="noBorderTableView" VBox.vgrow="ALWAYS">
                           <columns>
                             <TableColumn fx:id="colCode" prefWidth="75.0" text="کد" />
-                            <TableColumn fx:id="colBankAccount" prefWidth="168.0" text="شماره حساب" />
-                              <TableColumn fx:id="colBankName" prefWidth="162.0" text="نام بانک" />
-                              <TableColumn fx:id="colStartDate" prefWidth="129.0" text="تاریخ شروع" />
-                              <TableColumn fx:id="colOpeningBalance" prefWidth="143.0" text="موجودی اولیه" />
+                            <TableColumn fx:id="colBankAccount" prefWidth="329.0" style="-fx-alignment: left;" text="شماره حساب" />
+                              <TableColumn fx:id="colBankName" minWidth="0.0" prefWidth="274.0" text="نام بانک" />
                           </columns>
                            <contextMenu>
                               <ContextMenu>

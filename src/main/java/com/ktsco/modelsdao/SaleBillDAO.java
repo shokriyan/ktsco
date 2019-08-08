@@ -7,12 +7,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ktsco.controllers.csr.CustomersController;
 import com.ktsco.models.csr.BillDetailModel;
 import com.ktsco.models.csr.SalesSearchModel;
 import com.ktsco.utils.AlertsUtils;

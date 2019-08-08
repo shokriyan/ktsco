@@ -16,7 +16,7 @@
 						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 					</padding>
 					<children>
-						<Button fx:id="btnAddBank" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="ثبت بانک" />
+						<Button fx:id="btnAddAccount" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="ثبت اکانت" />
 					</children>
 				</HBox>
             <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
