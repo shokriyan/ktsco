@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.factory.InvStockDetailModel;
 import com.ktsco.models.factory.InvStockModel;
-import com.ktsco.modelsdao.EmployeDAO;
+import com.ktsco.modelsdao.EmployeeDAO;
 import com.ktsco.modelsdao.InventoryDAO;
 import com.ktsco.modelsdao.InventoryStockDAO;
 import com.ktsco.utils.AlertsUtils;
@@ -128,7 +128,7 @@ public class InvStockController implements Initializable {
 
 	// Populating Combo Items.
 	private void populateComboItems() {
-		List<String> empList = EmployeDAO.getEmployeeName();
+		List<String> empList = EmployeeDAO.getEmployeeName();
 		Commons.populateAllComboBox(comboEmployee, empList);
 	}
 
@@ -215,7 +215,7 @@ public class InvStockController implements Initializable {
 			boolean isDateCorrect = DateUtils.checkEntryDateFormat(txtImportDate.getText());
 			if (isDateCorrect) {
 				String date = DateUtils.convertJalaliToGregory(txtImportDate.getText());
-				int empID = EmployeDAO.getEmployeeID(comboEmployee.getValue());
+				int empID = EmployeeDAO.getEmployeeID(comboEmployee.getValue());
 
 				success = InventoryStockDAO.addImportList(importID, date, empID);
 			}

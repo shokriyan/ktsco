@@ -17,8 +17,8 @@ import com.ktsco.utils.DatabaseUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class EmployeDAO {
-	private static final Logger log = LoggerFactory.getLogger(EmployeDAO.class);
+public class EmployeeDAO {
+	private static final Logger log = LoggerFactory.getLogger(EmployeeDAO.class);
 	private static ResultSet resultSet;
 	private static String query;
 	private static PreparedStatement preStmt;

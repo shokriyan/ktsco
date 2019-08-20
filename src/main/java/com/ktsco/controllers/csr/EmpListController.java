@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.csr.EmpListModel;
-import com.ktsco.modelsdao.EmployeDAO;
+import com.ktsco.modelsdao.EmployeeDAO;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 
@@ -110,7 +110,7 @@ public class EmpListController implements Initializable {
 
 	private void generateEmpID() {
 		log.debug("Generating Employee ID from text box");
-		int employeeID = EmployeDAO.getMaxEmpID();
+		int employeeID = EmployeeDAO.getMaxEmpID();
 		txtEmpID.setText(String.valueOf(employeeID));
 	}
 
@@ -123,7 +123,7 @@ public class EmpListController implements Initializable {
 	}
 
 	private void populateEmpTable() {
-		empList = EmployeDAO.retreiveAllEmpRecord();
+		empList = EmployeeDAO.retreiveAllEmpRecord();
 		generateTableColumns(empList);
 	}
 
@@ -133,9 +133,9 @@ public class EmpListController implements Initializable {
 			int empID = Integer.parseInt(txtEmpID.getText());
 			String empFullName = txtEmpFullName.getText();
 			String empPosition = txtEmpPosition.getText();
-			boolean exist = EmployeDAO.checkEmployeeNameExist(empFullName);
+			boolean exist = EmployeeDAO.checkEmployeeNameExist(empFullName);
 			if (!exist) {
-				boolean success = EmployeDAO.addEmployee(empID, empFullName, empPosition);
+				boolean success = EmployeeDAO.addEmployee(empID, empFullName, empPosition);
 				Commons.processMessageLabel(labelInfoMessage, success);
 			} else {
 				Commons.processMessageLabel(labelInfoMessage, false);
@@ -152,7 +152,7 @@ public class EmpListController implements Initializable {
 			String empPosition = txtEmpPosition.getText();
 			boolean response = AlertsUtils.askForUpdateAlert(empFullName);
 			if (response) {
-				boolean sucess = EmployeDAO.addEmployee(empID, empFullName, empPosition);
+				boolean sucess = EmployeeDAO.addEmployee(empID, empFullName, empPosition);
 				Commons.processMessageLabel(labelInfoMessage, sucess);
 			} else {
 				Commons.processMessageLabel(labelInfoMessage, false);
@@ -170,7 +170,7 @@ public class EmpListController implements Initializable {
 			
 			boolean response = AlertsUtils.askForDeleteAlert(empName);
 			if (response) {
-				boolean success = EmployeDAO.deletEmployee(empID);
+				boolean success = EmployeeDAO.deletEmployee(empID);
 				Commons.processMessageLabel(labelInfoMessage, success);
 			}else{
 				Commons.processMessageLabel(labelInfoMessage, false);
@@ -182,7 +182,7 @@ public class EmpListController implements Initializable {
 	
 	private void SearchEmployee() {
 		String lookupValue = txtEmpFullName.getText();
-		empList = EmployeDAO.searchForEmployee(lookupValue);
+		empList = EmployeeDAO.searchForEmployee(lookupValue);
 		generateTableColumns(empList);
 	}
 

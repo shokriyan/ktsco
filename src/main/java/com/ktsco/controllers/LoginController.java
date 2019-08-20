@@ -45,6 +45,7 @@ public class LoginController implements Initializable {
 		createUnitMeasureList();
 		generateCurrencies();
 		generatePayTerms();
+		generateDepositTypes();
 	}
 
 	/**
@@ -66,6 +67,11 @@ public class LoginController implements Initializable {
 		Constants.currencies.put("EUR", "یورو");
 		Constants.currencies.put("PKR", "کلدار");
 		Constants.currencies.put("TOM", "تومان");
+	}
+	
+	private void generateDepositTypes() {
+		Constants.depositTypeList.add("دریافت بانکی");
+		Constants.depositTypeList.add("دریافت نقدی");
 	}
 	
 	private void generatePayTerms() {

@@ -284,6 +284,26 @@ public class AlertsUtils {
 		Alert alert = warningAlerts(alertTitle, alertMessage);
 		alert.show();
 	}
+
+	public static boolean askForReturn() {
+		boolean response = false; 
+		alertTitle = "Reloading Page";
+		alertMessage = "ذخیره و بازگشت " ;
+		Alert alert = confirmAlerts(alertTitle, alertMessage);
+		Optional<ButtonType> buttonKeys = alert.showAndWait();
+		if (buttonKeys.get() == ButtonType.OK)
+			response = true;
+		else if (buttonKeys.get() == ButtonType.CANCEL)
+			response = false; 
+		return response; 
+	}
+
+	public static void UnableToChangeAlert() {
+		alertTitle = "Error";
+		alertMessage = "امکان اعمال تغییرات و یا حذف نمی باشد";
+		Alert alert = errorAlerts(alertTitle, alertMessage);
+		alert.show();
+	}
 	
 	
 

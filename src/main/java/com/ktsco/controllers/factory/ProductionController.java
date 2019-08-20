@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.ktsco.models.factory.ProductionDetailModel;
-import com.ktsco.modelsdao.EmployeDAO;
+import com.ktsco.modelsdao.EmployeeDAO;
 import com.ktsco.modelsdao.ProductDAO;
 import com.ktsco.modelsdao.ProductionDAO;
 import com.ktsco.utils.AlertsUtils;
@@ -135,7 +135,7 @@ public class ProductionController implements Initializable {
 
 	// Populating Employee List for ComboBox Responsible Person
 	private void populateResponsiblePersonCombo() {
-		List<String> empList = EmployeDAO.getEmployeeName();
+		List<String> empList = EmployeeDAO.getEmployeeName();
 		Commons.populateAllComboBox(comboEmployee, empList);
 		comboEmployee.setValue("");
 	}

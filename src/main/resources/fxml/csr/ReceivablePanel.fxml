@@ -17,6 +17,8 @@
 					</padding>
 					<children>
 						<Button fx:id="btnReceiveForm" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="فرم دریافتی" />
+						<Button fx:id="btnReceiveSearch" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="جستجو" />
+                  <Button fx:id="btnDepositReceived" layoutX="190.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="انتقال دریافتی " />
 					</children>
 				</HBox>
             <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
@@ -39,6 +41,13 @@
                         <TableColumn fx:id="colBillTotal" prefWidth="200.0" resizable="false" text="مجموع فاکتور" />
                         <TableColumn fx:id="colCurrency" prefWidth="153.0" resizable="false" text="نوع ارز" />
                     </columns>
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem fx:id="menuOpenReceivePanel" mnemonicParsing="false" onAction="#allButtonActions" text="باز کردن فرم دریافتی" />
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
                   </TableView>
                </children>
             </HBox>

@@ -1,7 +1,5 @@
 package com.ktsco.utils;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class DateUtils {
 
@@ -44,7 +42,7 @@ public class DateUtils {
 	 * @return String Gregorian Date
 	 */
 	public static String convertJalaliToGregory(String inputDate) {
-		List<String> outputList = new ArrayList<String>();
+		//List<String> outputList = new ArrayList<String>();
 
 		if (gregoryDate != null)
 			gregoryDate = null;
@@ -80,7 +78,7 @@ public class DateUtils {
 	 * @return String Jalali Date
 	 */
 	public static String convertGregoryToJalali(String inputDate) {
-		List<String> outputList = new ArrayList<String>();
+	//	List<String> outputList = new ArrayList<String>();
 
 		if (jalaliDate != null)
 			jalaliDate = null;

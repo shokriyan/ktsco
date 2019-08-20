@@ -50,7 +50,7 @@ public class ProductionDAO {
 
 	public static boolean insertProductionList(int productionID, String inputDate, String employee) {
 		boolean isSuccess = false;
-		int employeeID = EmployeDAO.getEmployeeID(employee);
+		int employeeID = EmployeeDAO.getEmployeeID(employee);
 		String convertedDate = DateUtils.convertJalaliToGregory(inputDate);
 		query = "insert into productionList (production_id, date, employee_id) values (?,?,?)";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
@@ -142,7 +142,7 @@ public class ProductionDAO {
 		}
 		String employeeID = "";
 		if (!"".equals(employeeName)) {
-			employeeID = String.valueOf(EmployeDAO.getEmployeeID(employeeName));
+			employeeID = String.valueOf(EmployeeDAO.getEmployeeID(employeeName));
 		}
 
 		query = "select prodList.production_id, prodList.date, emp.fullname from productionList prodList inner join employee emp "

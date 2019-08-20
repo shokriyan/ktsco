@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 import com.ktsco.models.factory.InvStockModel;
 import com.ktsco.models.factory.InventoryImportModel;
-import com.ktsco.modelsdao.EmployeDAO;
+import com.ktsco.modelsdao.EmployeeDAO;
 import com.ktsco.modelsdao.InventoryStockDAO;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
@@ -109,7 +109,7 @@ public class ImportSearchController implements Initializable {
 	}
 
 	private void populateEmployeeListCombo() {
-		List<String> empList = EmployeDAO.getEmployeeName();
+		List<String> empList = EmployeeDAO.getEmployeeName();
 		Commons.populateAllComboBox(comboEmployee, empList);
 		comboEmployee.setValue("");
 	}
@@ -138,7 +138,7 @@ public class ImportSearchController implements Initializable {
 		String employee = "";
 		employee = comboEmployee.getValue();
 		if (employee != "") {
-			int empID = EmployeDAO.getEmployeeID(employee);
+			int empID = EmployeeDAO.getEmployeeID(employee);
 			employee = String.valueOf(empID);
 		}
 		return employee;

@@ -19,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -27,14 +28,15 @@ import javafx.scene.paint.Color;
 public class ReceivableController implements Initializable {
 
 	@FXML
-	private Button btnReceiveForm;
+	private Button btnReceiveForm, btnReceiveSearch, btnDepositReceived;
 	@FXML
-	private TableView<ReceivableModel> tableAccountReceivable;
+	private TableView<ReceivableModel> tableAccountReceivable ;
 	@FXML
 	private TableColumn<ReceivableModel, Integer> colCode;
 	@FXML
 	private TableColumn<ReceivableModel, String> colCompany, colBillDate, colDueDate, colBillTotal, colCurrency;
-
+	@FXML
+	private MenuItem menuOpenReceivePanel; 
 	ObservableList<ReceivableModel> tableDate = FXCollections.observableArrayList();
 
 	@Override
@@ -47,6 +49,16 @@ public class ReceivableController implements Initializable {
 	private void allButtonActions(ActionEvent event) {
 		if (event.getSource() == btnReceiveForm) {
 			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("receiveBillPanel"));
+		}else if (event.getSource() == menuOpenReceivePanel) {
+			if (!tableAccountReceivable.getSelectionModel().isEmpty()) {
+				ReceivableModel model = tableAccountReceivable.getSelectionModel().getSelectedItem();
+				ReceiveControler.saleBillID = model.getBillID();
+				Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("receiveBillPanel"));
+			}
+		}else if (event.getSource() == btnReceiveSearch) {
+			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("receiveSearchPanel"));
+		}else if (event.getSource() == btnDepositReceived) {
+			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("receivedDepositPanel"));
 		}
 
 	}

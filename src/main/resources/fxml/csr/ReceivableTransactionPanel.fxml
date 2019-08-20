@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.csr.DepositController">
+	<children>
+		<VBox prefHeight="635.0" prefWidth="1166.0">
+			<children>
+				<HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="20.0">
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+					<children>
+                  <Button fx:id="btnNew" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="جدید" />
+                  <Button fx:id="btnSave" layoutX="1039.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="ثبت" />
+                  <Button fx:id="btnSaveReturn" layoutX="190.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="ثبت و خروج" />
+                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnReturn" layoutX="1064.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="بازگشت" />
+					</children>
+				</HBox>
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="انتقال به حسابات بانکی">
+                           <font>
+                              <Font name="Tahoma Bold" size="18.0" />
+                           </font>
+                        </Text>
+                        <Label fx:id="labelInformation" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="80.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <VBox prefHeight="60.0" prefWidth="200.0">
+                     <children>
+                        <Label text="نوع انتقال" />
+                        <ComboBox fx:id="comboDepositType" onAction="#onComboDepositAction" prefHeight="27.0" prefWidth="199.0" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="20.0" layoutY="20.0" prefHeight="60.0" prefWidth="200.0">
+                     <children>
+                        <Label text="واحد ازر" />
+                        <ComboBox fx:id="comboCurrency" onAction="#onComboCurrencyAction" prefHeight="27.0" prefWidth="199.0" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="60.0" prefWidth="250.0">
+                     <children>
+                        <Label text="حساب بانکی" />
+                        <ComboBox fx:id="comboAccountNumber" prefHeight="27.0" prefWidth="236.0" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="60.0" prefWidth="250.0">
+                     <children>
+                        <Label text="شماره رسید بانکی" />
+                        <TextField fx:id="txtVoucherNumber" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="510.0" layoutY="20.0" prefHeight="60.0" prefWidth="250.0">
+                     <children>
+                        <Label text="تاریخ انتقال" />
+                        <TextField fx:id="txtTransactionDate" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="60.0" prefWidth="250.0">
+                     <children>
+                        <Label text="کارمند" />
+                        <ComboBox fx:id="comboEmployee" prefHeight="27.0" prefWidth="284.0" />
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox prefHeight="241.0" prefWidth="1166.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <TableView fx:id="tableDepositDetail" prefHeight="214.0" prefWidth="696.0" styleClass="noBorderTableView" HBox.hgrow="ALWAYS">
+                     <columns>
+                        <TableColumn fx:id="colCheckBox" onEditCommit="#onCheckBoxCheckedAction" prefWidth="103.0" />
+                        <TableColumn fx:id="colReceiveID" prefWidth="250.0" text="کد رسید" />
+                        <TableColumn fx:id="colBillID" minWidth="0.0" prefWidth="250.0" text="شماره فاکتور" />
+                         <TableColumn fx:id="colCurrency" minWidth="0.0" prefWidth="250.0" text="واحد ارز" />
+                        <TableColumn fx:id="colAmountReceived" prefWidth="250.0" text="مبلغ رسید" />
+                     </columns>
+                  </TableView>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="TOP_RIGHT" layoutX="10.0" layoutY="150.0" prefHeight="91.0" prefWidth="1166.0">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <VBox alignment="CENTER_LEFT" prefHeight="71.0" prefWidth="137.0">
+                     <children>
+                        <Label text="مجموع مبلغ انتخاب شده" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="71.0" prefWidth="185.0">
+                     <children>
+                        <Label fx:id="labelTotalSelectedAmount" text="0.00" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+			</children>
+		</VBox>
+	</children>
+</Pane>

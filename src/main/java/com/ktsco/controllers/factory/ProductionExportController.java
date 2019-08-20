@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.ktsco.models.factory.ProductionExportDetailModel;
-import com.ktsco.modelsdao.EmployeDAO;
+import com.ktsco.modelsdao.EmployeeDAO;
 import com.ktsco.modelsdao.ProductDAO;
 import com.ktsco.modelsdao.ProductionExportDAO;
 import com.ktsco.utils.AlertsUtils;
@@ -118,7 +118,7 @@ public class ProductionExportController implements Initializable {
 
 	private void populateComboBoxes() {
 
-		Commons.populateAllComboBox(comboEmployee, EmployeDAO.getEmployeeName());
+		Commons.populateAllComboBox(comboEmployee, EmployeeDAO.getEmployeeName());
 		Commons.populateAllComboBox(comboProducts, ProductDAO.getProductList());
 		comboEmployee.setEditable(false);
 		comboProducts.setEditable(false);
@@ -217,7 +217,7 @@ public class ProductionExportController implements Initializable {
 			if (!"".equalsIgnoreCase(exportID) && !"".equalsIgnoreCase(exportDate) && !"".equalsIgnoreCase(employee)) {
 
 				String convertedDate = DateUtils.convertJalaliToGregory(exportDate);
-				int employeeID = EmployeDAO.getEmployeeID(employee);
+				int employeeID = EmployeeDAO.getEmployeeID(employee);
 
 				if (!tableEntry.getItems().isEmpty()) {
 					boolean response = AlertsUtils.askForSaveItems();

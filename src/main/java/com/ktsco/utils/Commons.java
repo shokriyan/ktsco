@@ -428,5 +428,18 @@ public class Commons {
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clipboard.setContents(stringSelection, null);
 	}
+	
+	public static int getDepositType(String lookupValue) {
+		int size = Constants.depositTypeList.size();
+		int depType = 1; 
+		for (int i = 0; i < size ; i++) {
+			if (Constants.depositTypeList.get(i).equalsIgnoreCase(lookupValue))
+				depType = i; 
+			else 
+				log.debug("can't find a match " + lookupValue);
+		}
+		
+		return depType; 
+	}
 
 }

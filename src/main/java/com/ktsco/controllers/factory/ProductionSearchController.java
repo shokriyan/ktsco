@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 import com.ktsco.models.factory.ProductionDetailModel;
 import com.ktsco.models.factory.ProductionListModel;
-import com.ktsco.modelsdao.EmployeDAO;
+import com.ktsco.modelsdao.EmployeeDAO;
 import com.ktsco.modelsdao.ProductionDAO;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
@@ -121,7 +121,7 @@ public class ProductionSearchController implements Initializable {
 	}
 
 	public void generateEmployeeCombo() {
-		List<String> list = EmployeDAO.getEmployeeName();
+		List<String> list = EmployeeDAO.getEmployeeName();
 		Commons.populateAllComboBox(comboEmployee, list);
 	}
 

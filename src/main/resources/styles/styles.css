@@ -94,7 +94,7 @@
     -fx-background-radius: 1;
 }
 .table-row-cell:empty {
-    -fx-background-color: white;
+    -fx-background-color: transparent;
 }
  
 .table-row-cell:empty .table-cell {
