@@ -45,6 +45,7 @@ public class CurrencyDAO {
 				int idNumber = resultSet.getInt("id");
 				String currency = Commons.getCurrencyValue(resultSet.getString("currency"));
 				String jalaliDate = DateUtils.convertGregoryToJalali(resultSet.getString("entryDate"));
+				@SuppressWarnings("deprecation")
 				BigDecimal bg = resultSet.getBigDecimal("rate", 9);
 				String rate = bg.toPlainString();
 				CurrencyModel model = new CurrencyModel(idNumber, currency, jalaliDate, rate);

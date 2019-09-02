@@ -9,15 +9,13 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.ktsco.models.csr.BillDetailModel;
-import com.ktsco.models.csr.MainStockModel;
 import com.ktsco.modelsdao.CurrencyDAO;
-import com.ktsco.modelsdao.CustomerDAO;
-import com.ktsco.modelsdao.MainStockDAO;
-import com.ktsco.modelsdao.ProductDAO;
+import com.ktsco.modelsdao.ExpenseDAO;
+import com.ktsco.modelsdao.InventoryDAO;
 import com.ktsco.modelsdao.SaleBillDAO;
+import com.ktsco.modelsdao.VendorsDAO;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
-import com.ktsco.utils.Constants;
 import com.ktsco.utils.DateUtils;
 
 import javafx.beans.value.ChangeListener;
@@ -38,17 +36,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 
-public class SalesBillController implements Initializable {
+public class ExpenseBillController implements Initializable {
 
 	private static DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 
 	@FXML
-	private Button btnNew, btnSave, btnSaveClose, btnSearch, btnReturn, btnSearchBill, btnDeleteBill;
+	private Button btnNew, btnSave, btnSaveClose, btnSearch, btnReturn, btnSearchBill, btnDeleteBill, btnVendors;
 	@FXML
 	private TextField txtCode, txtBillDate, txtCurrencyType, txtmemo;
 
 	@FXML
-	private ComboBox<String> comboCustomer, comboPayTerm;
+	private ComboBox<String> comboVendor;
 
 	@FXML
 	private TableView<BillDetailModel> tableBillDetail;
@@ -65,9 +63,8 @@ public class SalesBillController implements Initializable {
 	private MenuItem menuAddRow, menuDeleteRow;
 
 	private ObservableList<BillDetailModel> tableItems = FXCollections.observableArrayList();
-	private ObservableList<MainStockModel> stockList = FXCollections.observableArrayList();
 
-	private List<String> customerList = new ArrayList<String>();
+	private List<String> vendorList = new ArrayList<String>();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -97,8 +94,8 @@ public class SalesBillController implements Initializable {
 
 	@FXML
 	private void onCustomerComboAction(ActionEvent event) {
-		if (null != comboCustomer.getValue() && !"".equalsIgnoreCase(comboCustomer.getValue())) {
-			txtCurrencyType.setText(comboCustomer.getValue().split("-")[2].trim());
+		if (null != comboVendor.getValue() && !"".equalsIgnoreCase(comboVendor.getValue())) {
+			txtCurrencyType.setText(comboVendor.getValue().split("-")[2].trim());
 		} else {
 			txtCurrencyType.setText("");
 		}
@@ -137,7 +134,7 @@ public class SalesBillController implements Initializable {
 			generateOneRow();
 			calucalteBillTotal();
 		} else if (event.getSource() == btnNew) {
-			comboCustomer.setValue("");
+			comboVendor.setValue("");
 			loadPrerequisitions();
 			tableItems.clear();
 			generateOneRow();
@@ -215,32 +212,28 @@ public class SalesBillController implements Initializable {
 			generateOneRow();
 			calucalteBillTotal();
 		} else if (event.getSource() == btnSearch) {
-			SaleSearchController.saleSearchStage = Commons
-					.openPanelsUndecorate(Commons.getFxmlPanel("SalesSearchPanel"));
+			ExpenseSearchController.expenseStage = Commons
+					.openPanelsUndecorate(Commons.getFxmlPanel("ExpenseSearchPanel"));
+		}else if (event.getSource() == btnVendors) {
+			VendorsController.vendorStage = Commons.openPanelsUndecorate(Commons.getFxmlPanel("VendorsPanel"));
+			VendorsController.vendorStage.setOnHidden(e-> populateVendorCombo());
 		}
 
 	}
 
 	private void loadPrerequisitions() {
-		stockList = MainStockDAO.retrieveStockItems();
 		setTodayDate();
-		populateCustomerCombo();
-		populatePayTermCombo();
+		populateVendorCombo();
 		generateBillID();
 		checkCurrencyType();
 	}
 
-	private void populateCustomerCombo() {
-		customerList = CustomerDAO.getCustomersList();
-		Commons.populateAllComboBox(comboCustomer, customerList);
-		comboCustomer.setValue("");
+	private void populateVendorCombo() {
+		vendorList = VendorsDAO.getVendorList();
+		Commons.populateAllComboBox(comboVendor, vendorList);
+		comboVendor.setValue("");
 	}
 
-	private void populatePayTermCombo() {
-		Commons.populateAllComboBox(comboPayTerm, Constants.payTerms);
-		comboPayTerm.setValue(Constants.payTerms.get(2));
-
-	}
 
 	private void setTodayDate() {
 		String todayDate = DateUtils.convertGregoryToJalali(Commons.getTodaysDate());
@@ -248,13 +241,13 @@ public class SalesBillController implements Initializable {
 	}
 
 	private void generateBillID() {
-		int id = SaleBillDAO.getLastBillID();
+		int id = ExpenseDAO.getLastBillID();
 		txtCode.setText(String.valueOf(id));
 	}
 
 	private void generateTableColumns(ObservableList<BillDetailModel> list) {
 		colLineNumber.setCellValueFactory(cellData -> cellData.getValue().getLineNumberProperty().asObject());
-		ObservableList<String> items = ProductDAO.getProductObservableList();
+		ObservableList<String> items = InventoryDAO.getInventoryObservableList();
 		colItems.setCellValueFactory(cellData -> cellData.getValue().getItemsProperty());
 		colItems.setCellFactory(ComboBoxTableCell.forTableColumn(items));
 		colUnit.setCellValueFactory(cellData -> cellData.getValue().getUnitProperty());
@@ -279,7 +272,7 @@ public class SalesBillController implements Initializable {
 		BillDetailModel model = tableBillDetail.getSelectionModel().getSelectedItem();
 		model.setItems(editedCell.getNewValue());
 
-		String unit = ProductDAO.getUnitMeasure(editedCell.getNewValue());
+		String unit = InventoryDAO.getInvUnitMeasure(editedCell.getNewValue());
 		model.setUnit(unit);
 		generateTableColumns(tableItems);
 	}
@@ -288,7 +281,6 @@ public class SalesBillController implements Initializable {
 	private void onQauntityChangeAction(CellEditEvent<BillDetailModel, String> editedCell) {
 		BillDetailModel model = tableBillDetail.getSelectionModel().getSelectedItem();
 		model.setQuantity(editedCell.getNewValue());
-		checkForSaleQuantityinStock(model.getItems(), Double.parseDouble(model.getQuantity()));
 		String linetotal = Commons.calculateLineTotal(editedCell.getNewValue(), model.getUnitPrice().replace(",", ""));
 		model.setLineTotal(linetotal);
 		generateTableColumns(tableItems);
@@ -327,9 +319,8 @@ public class SalesBillController implements Initializable {
 
 		// Empty Customer field
 
-		if (!comboCustomer.getValue().equalsIgnoreCase("")) {
+		if (!comboVendor.getValue().equalsIgnoreCase("")) {
 			if (!txtBillDate.getText().equalsIgnoreCase("")) {
-				if (!comboPayTerm.getValue().equalsIgnoreCase("")) {
 					for (BillDetailModel model : tableItems) {
 						if (!"".equalsIgnoreCase(model.getItems())) {
 							if (!model.getQuantity().equalsIgnoreCase("0")
@@ -343,7 +334,6 @@ public class SalesBillController implements Initializable {
 						}
 					}
 				}
-			}
 		}
 
 		return isSuccess;
@@ -352,14 +342,13 @@ public class SalesBillController implements Initializable {
 	private boolean insertIntoSaleBill() {
 		boolean isSuccess = false;
 		int billID = Integer.parseInt(txtCode.getText());
-		int customerID = Integer.parseInt(comboCustomer.getValue().split("-")[0].trim());
+		int customerID = Integer.parseInt(comboVendor.getValue().split("-")[0].trim());
 
 		String billDate = txtBillDate.getText();
-		int payTerm = Integer.parseInt(comboPayTerm.getValue().split("-")[0].trim());
 		String currencyType = Commons.getCurrencyKey(txtCurrencyType.getText());
 		String billMemo = txtmemo.getText();
 
-		isSuccess = SaleBillDAO.insertIntoSaleBill(billID, customerID, billDate, payTerm, currencyType, billMemo);
+		isSuccess = ExpenseDAO.insertIntoExpnsBill(billID, customerID, billDate, currencyType, billMemo);
 		return isSuccess;
 	}
 
@@ -368,11 +357,11 @@ public class SalesBillController implements Initializable {
 		for (BillDetailModel model : tableItems) {
 			int id = model.getID();
 			int billID = Integer.parseInt(txtCode.getText());
-			String product = model.getItems();
+			String product = model.getItems().split("-")[0].trim();
 			String quantity = model.getQuantity();
 			String unitPrice = model.getUnitPrice();
 
-			isSuccess = SaleBillDAO.insertBillDetail(id, billID, product, quantity, unitPrice);
+			isSuccess = ExpenseDAO.insertBillDetail(id, billID, product, quantity, unitPrice);
 			if (!isSuccess)
 				break;
 		}
@@ -381,36 +370,25 @@ public class SalesBillController implements Initializable {
 
 	private void regenrateDetailTable() {
 		int billID = Integer.parseInt(txtCode.getText());
-		tableItems = SaleBillDAO.retrieveSaleDateAfterSave(billID);
+		tableItems = ExpenseDAO.retrieveSaleDateAfterSave(billID);
 		generateTableColumns(tableItems);
 	}
 
 	private void setBillData() {
 		int billID = Integer.parseInt(txtCode.getText());
-		Map<String, Object> billData = SaleBillDAO.retieveSaleBillDate(billID);
+		Map<String, Object> billData = ExpenseDAO.getBillData(billID);
 		String billDate = billData.get("billDate").toString();
 		txtBillDate.setText(DateUtils.convertGregoryToJalali(billDate));
 		if (!billData.isEmpty()) {
 			String CustomerName = null;
-			for (String values : customerList) {
-				if (values.startsWith(billData.get("customerCode").toString())) {
+			for (String values : vendorList) {
+				if (values.startsWith(billData.get("vendorID").toString())) {
 					CustomerName = values;
 					break;
 				}
 			}
-			comboCustomer.setValue(CustomerName);
-			String dueDate = billData.get("dueDate").toString();
-			int days = (int) Commons.calucateDayBtwDates(billDate, dueDate);
-			if (days <= 0)
-				comboPayTerm.setValue(Constants.payTerms.get(0));
-			else if (days > 2 && days <= 9)
-				comboPayTerm.setValue(Constants.payTerms.get(1));
-			else if (days > 8 && days <= 32)
-				comboPayTerm.setValue(Constants.payTerms.get(2));
-			else
-				comboPayTerm.setValue(Constants.payTerms.get(3));
-
-			txtCurrencyType.setText(comboCustomer.getValue().split("-")[2].trim());
+			comboVendor.setValue(CustomerName);
+			txtCurrencyType.setText(comboVendor.getValue().split("-")[2].trim());
 			txtmemo.setText(billData.get("billMemo").toString());
 		}
 	}
@@ -423,17 +401,6 @@ public class SalesBillController implements Initializable {
 			Commons.processMessageLabel(labelInfoMessage, isSuccess);
 		}
 
-	}
-
-	private void checkForSaleQuantityinStock(String item, double saleQuantity) {
-		for (MainStockModel model : stockList) {
-			if (model.getProduct().equalsIgnoreCase(item)) {
-				double stockQauntity = model.getReminder();
-				if ((stockQauntity - saleQuantity) < 0) {
-					AlertsUtils.warningForStockRemain(item, String.valueOf(stockQauntity));
-				}
-			}
-		}
 	}
 
 }

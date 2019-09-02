@@ -7,6 +7,7 @@ import com.ktsco.models.csr.AccountsModel;
 import com.ktsco.modelsdao.AccountsDAO;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
+import com.ktsco.utils.Constants;
 import com.ktsco.utils.DateUtils;
 
 import javafx.collections.FXCollections;
@@ -15,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -31,13 +33,15 @@ public class AccountController implements Initializable {
 
 	@FXML
 	private TextField txtCode, txtAccountNumber, txtBankName, txtOpeningDate, txtOpeningBalance;
+	@FXML
+	private ComboBox<String> comboCurrency; 
 
 	@FXML
 	private TableView<AccountsModel> tableAccounts;
 	@FXML
 	private TableColumn<AccountsModel, Integer> colCode;
 	@FXML
-	private TableColumn<AccountsModel, String> colBankAccount, colBankName, colStartDate, colOpeningBalance;
+	private TableColumn<AccountsModel, String> colBankAccount, colBankName, colStartDate, colOpeningBalance,colCurrency ;
 
 	@FXML
 	private MenuItem menuEdit, menuDelete;
@@ -72,8 +76,13 @@ public class AccountController implements Initializable {
 	private void reloadPrerequisitions() {
 		populateObservableList();
 		generateTableList(TableData);
+		populateComboBoxCurrency();
 	}
-
+	
+	private void populateComboBoxCurrency() {
+		Commons.populateAllComboBox(comboCurrency, Commons.getListValuesFromMap(Constants.currencies));
+		comboCurrency.setValue("");
+	}
 	private void generateAccountCode() {
 		txtCode.setText(String.valueOf(AccountsDAO.generateAccountID()));
 	}
@@ -84,7 +93,7 @@ public class AccountController implements Initializable {
 		colBankName.setCellValueFactory(cellData -> cellData.getValue().getBankNameProperty());
 		colStartDate.setCellValueFactory(cellData -> cellData.getValue().getOpeningDateProperty());
 		colOpeningBalance.setCellValueFactory(cellData -> cellData.getValue().getOpeningBalanceProperty());
-
+		colCurrency.setCellValueFactory(cellData -> cellData.getValue().currencyProperty());
 		tableAccounts.setItems(list);
 	}
 
@@ -99,6 +108,7 @@ public class AccountController implements Initializable {
 		isPassed = (txtOpeningDate == null || txtOpeningDate.getText().equalsIgnoreCase("")) ? false
 				: DateUtils.checkEntryDateFormat(txtOpeningDate.getText());
 		isPassed = (txtOpeningBalance == null || txtOpeningBalance.getText().equalsIgnoreCase("")) ? false : true;
+		isPassed = (comboCurrency == null || comboCurrency.getValue().equalsIgnoreCase("")) ? false : true;
 
 		return isPassed;
 	}
@@ -109,8 +119,9 @@ public class AccountController implements Initializable {
 			String bankAccount = txtAccountNumber.getText();
 			String bankName = txtBankName.getText();
 			String openingDate = txtOpeningDate.getText();
+			String currency = comboCurrency.getValue();
 			double openingBalance = Double.parseDouble(txtOpeningBalance.getText());
-			boolean isSuccess = AccountsDAO.insertOrUpdateIntoAccountTableAPI(code, bankAccount, bankName, openingDate,
+			boolean isSuccess = AccountsDAO.insertOrUpdateIntoAccountTableAPI(code, bankAccount, bankName,currency, openingDate,
 					openingBalance);
 			Commons.processMessageLabel(labelInformation, isSuccess);
 		} else {
@@ -136,6 +147,7 @@ public class AccountController implements Initializable {
 				txtBankName.clear();
 				txtOpeningBalance.clear();
 				txtOpeningDate.clear();
+				comboCurrency.setValue("");
 			}
 		}
 	}

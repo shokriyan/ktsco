@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.csr.DepositSearchController">
+	<children>
+		<VBox prefHeight="635.0" prefWidth="1166.0">
+			<children>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="80.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Button fx:id="btnSearch" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="جستجو" />
+                  <Button fx:id="btnRefresh" layoutX="1039.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="بارگذاری" />
+                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnReturn" layoutX="1064.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="بازگشت" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+				<HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="20.0">
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+					<children>
+                  <VBox prefHeight="60.0" prefWidth="250.0">
+                     <children>
+                        <Label text="بانک" />
+                        <ComboBox fx:id="comboBanks" prefHeight="27.0" prefWidth="284.0" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="780.0" layoutY="20.0" prefHeight="60.0" prefWidth="250.0">
+                     <children>
+                        <Label text="کارمند" />
+                        <ComboBox fx:id="comboEmployee" prefHeight="27.0" prefWidth="284.0" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="60.0" prefWidth="200.0">
+                     <children>
+                        <Label text="شماره رسید بانکی" />
+                        <TextField fx:id="txtVoucherNo" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="60.0" prefWidth="250.0">
+                     <children>
+                        <Label text="تاریخ شروع" />
+                        <TextField fx:id="txtStartDate" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="60.0" prefWidth="250.0">
+                     <children>
+                        <Label text="تاریخ پایان" />
+                        <TextField fx:id="txtEndDate" />
+                     </children>
+                  </VBox>
+					</children>
+				</HBox>
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="25.0" prefWidth="1166.0" spacing="20.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="جستجو">
+                           <font>
+                              <Font name="Tahoma Bold" size="18.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <TableView fx:id="tableDepositTable" prefHeight="214.0" prefWidth="696.0" styleClass="noBorderTableView" HBox.hgrow="ALWAYS">
+                     <columns>
+                        <TableColumn fx:id="colReceiveID" prefWidth="100.0" text="کد دریافتی" />
+                        <TableColumn fx:id="colBank" prefWidth="300.0" text="بانک" />
+                        <TableColumn fx:id="colEmployee" prefWidth="250.0" text="کارمند" />
+                        <TableColumn fx:id="colVoucherNo" prefWidth="178.0" text="شماره رسید" />
+                        <TableColumn fx:id="colDepositDate" minWidth="0.0" prefWidth="150.0" text="تاریخ انتقال" />
+                        <TableColumn fx:id="colDepositAmount" prefWidth="150.0" text="مبلغ انتقال" />
+                     </columns>
+                  </TableView>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+			</children>
+		</VBox>
+	</children>
+</Pane>

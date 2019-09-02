@@ -13,11 +13,13 @@ public class BankBalanceModel {
 	private SimpleStringProperty bankAccount;
 	private SimpleStringProperty bankName;
 	private SimpleStringProperty accountBalance;
+	private SimpleStringProperty currency;
 
-	public BankBalanceModel(int bankID, String bankAccount, String bankName, Double accountBalance) {
+	public BankBalanceModel(int bankID, String bankAccount, String bankName,String currency, Double accountBalance) {
 		this.bankID = new SimpleIntegerProperty(bankID);
 		this.bankAccount = new SimpleStringProperty(bankAccount);
 		this.bankName = new SimpleStringProperty(bankName);
+		this.currency = new SimpleStringProperty(currency);
 		this.accountBalance = new SimpleStringProperty(String.valueOf(decimalFormat.format(accountBalance)));
 	}
 
@@ -64,4 +66,22 @@ public class BankBalanceModel {
 	public SimpleStringProperty getAccountBalanceProperty() {
 		return this.accountBalance;
 	}
+
+
+	public SimpleStringProperty currencyProperty() {
+		return this.currency;
+	}
+	
+
+
+	public String getCurrency() {
+		return this.currencyProperty().get();
+	}
+	
+
+
+	public void setCurrency(final String currency) {
+		this.currencyProperty().set(currency);
+	}
+	
 }

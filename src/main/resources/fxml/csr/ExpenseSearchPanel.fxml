@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.csr.ExpenseSearchController">
+	<children>
+		<HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" styleClass="top-panel">
+			<children>
+				<VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+					<children>
+						<Text strokeType="OUTSIDE" strokeWidth="0.0" text="جستجو" textAlignment="CENTER">
+							<font>
+								<Font name="Tahoma" size="18.0" />
+							</font>
+						</Text>
+					</children>
+				</VBox>
+				<VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+					<children>
+						<Button fx:id="btnClose" mnemonicParsing="false" onAction="#allButtonAction" text="خروج" />
+					</children>
+				</VBox>
+			</children>
+		</HBox>
+		<VBox prefHeight="69.0" prefWidth="800.0">
+			<children>
+				<HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="800.0" spacing="20.0">
+					<children>
+						<VBox prefHeight="59.0" prefWidth="32.0" HBox.hgrow="ALWAYS">
+							<children>
+								<Label text="شماره فاکتور" />
+								<TextField fx:id="txtBillID" prefHeight="27.0" prefWidth="91.0" />
+							</children>
+						</VBox>
+						<VBox prefHeight="80.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+							<children>
+								<Label text="نام فروشنده" />
+								<ComboBox fx:id="comboVendor" prefHeight="27.0" prefWidth="259.0" VBox.vgrow="ALWAYS" />
+							</children>
+						</VBox>
+						<VBox prefHeight="59.0" prefWidth="71.0" HBox.hgrow="ALWAYS">
+							<children>
+								<Label text="شروع تاریخ" />
+								<TextField fx:id="txtStartDate" prefHeight="27.0" prefWidth="183.0" />
+							</children>
+						</VBox>
+                  <VBox layoutX="468.0" layoutY="20.0" prefHeight="59.0" prefWidth="158.0">
+                     <children>
+                        <Label text="پایان تاریخ " />
+                        <TextField fx:id="txtEndDate" prefHeight="27.0" prefWidth="153.0" />
+                     </children>
+                  </VBox>
+						<VBox alignment="CENTER" layoutX="404.0" layoutY="20.0" prefHeight="80.0" prefWidth="100.0" spacing="5.0">
+							<children>
+								<Button fx:id="btnSearch" mnemonicParsing="false" onAction="#allButtonAction" prefHeight="27.0" prefWidth="90.0" text="جستجو" />
+								<Button fx:id="btnRefresh" mnemonicParsing="false" onAction="#allButtonAction" prefHeight="27.0" prefWidth="90.0" text="بارگذاری مجدد" />
+							</children>
+						</VBox>
+					</children>
+					<padding>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+					</padding>
+				</HBox>
+			</children>
+		</VBox>
+		<HBox alignment="CENTER" prefHeight="50.0" prefWidth="800.0" VBox.vgrow="NEVER">
+			<children>
+				<Label text="لیست فاکتور خرید">
+					<font>
+						<Font name="Tahoma" size="13.0" />
+					</font>
+				</Label>
+			</children>
+			<effect>
+				<Glow />
+			</effect>
+			<VBox.margin>
+				<Insets />
+			</VBox.margin>
+			<padding>
+				<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+			</padding>
+		</HBox>
+		<HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+			<children>
+				<VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+					<children>
+						<TableView fx:id="tableItemDetail" prefHeight="431.0" prefWidth="800.0">
+							<columns>
+								<TableColumn fx:id="colBillID" prefWidth="69.0" resizable="false" text="شماره" visible="false" />
+								<TableColumn fx:id="colBillID" prefWidth="100.0" resizable="false" text="شماره فاکتور" />
+								<TableColumn fx:id="colCustomer" minWidth="131.0" prefWidth="200.0" resizable="false" text="فروشنده" />
+								<TableColumn fx:id="colCurrency" minWidth="87.0" prefWidth="132.0" resizable="false" text="نوع ارز" />
+								<TableColumn fx:id="colBillDate" minWidth="76.0" prefWidth="150.0" resizable="false" text="تاریخ فاکتور" />
+								<TableColumn fx:id="colBillTotal" minWidth="87.0" prefWidth="200.0" resizable="false" text="مجموع فاکتور" />
+							</columns>
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem fx:id="menuCopy" mnemonicParsing="false" onAction="#allButtonAction" text="کپی" />
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
+						</TableView>
+					</children>
+				</VBox>
+			</children>
+		</HBox>
+	</children>
+</VBox>

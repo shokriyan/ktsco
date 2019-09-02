@@ -309,5 +309,28 @@ public class ReceivableDAO {
 		
 		return isDeposit; 
 	}
+	
+	public static void updateReceivedFlag (int receiveID) {
+		query = "update received set received_flag = 1 where RECEIVE_ID = ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setInt(1, receiveID);
+			
+			preStatement.executeUpdate();
+			
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+	}
 
 }

@@ -33,9 +33,10 @@
                   <TableView fx:id="tableBankAccounts" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="colCode" prefWidth="125.0" resizable="false" text="کد بانک" />
-                      <TableColumn fx:id="colBankAccount" prefWidth="400.0" resizable="false" text="شماره حساب" />
-                        <TableColumn fx:id="colBankName" prefWidth="300.0" resizable="false" text="نام بانک" />
-                        <TableColumn fx:id="colAccountBalance" prefWidth="323.0" resizable="false" text="موجودی حساب" />
+                      <TableColumn fx:id="colBankAccount" prefWidth="299.0" resizable="false" text="شماره حساب" />
+                        <TableColumn fx:id="colBankName" prefWidth="219.0" resizable="false" text="نام بانک" />
+                        <TableColumn fx:id="colCurrency" prefWidth="219.0" resizable="false" text="واحد ارز" />
+                        <TableColumn fx:id="colAccountBalance" prefWidth="286.0" resizable="false" text="موجودی حساب" />
                     </columns>
                   </TableView>
                </children>

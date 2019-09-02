@@ -12,7 +12,8 @@ public class ReceiveModel {
 	private SimpleIntegerProperty billID; 
 	private SimpleStringProperty receiveDate; 
 	private SimpleStringProperty employee; 
-	private SimpleStringProperty depositType; 
+	private SimpleStringProperty depositType;
+	private SimpleStringProperty bankAccount; 
 	private SimpleStringProperty receiveAmount;
 	
 	public ReceiveModel (int receiveID, String receiveDate, double receiveAmount ) {
@@ -29,6 +30,7 @@ public class ReceiveModel {
 		this.depositType = new SimpleStringProperty(depositType);
 		this.receiveAmount = new SimpleStringProperty(String.valueOf(decimalFormat.format(receiveAmount)));
 	}
+	
 
 	public final SimpleIntegerProperty receiveIDProperty() {
 		return this.receiveID;
@@ -118,6 +120,21 @@ public class ReceiveModel {
 	public final void setReceiveAmount(double receiveAmount) {
 		this.receiveAmount = new SimpleStringProperty(String.valueOf(decimalFormat.format(receiveAmount)));
 	}
+
+	public final SimpleStringProperty bankAccountProperty() {
+		return this.bankAccount;
+	}
+	
+
+	public final String getBankAccount() {
+		return this.bankAccountProperty().get();
+	}
+	
+
+	public final void setBankAccount(final String bankAccount) {
+		this.bankAccountProperty().set(bankAccount);
+	}
+	
 	
 	
 	

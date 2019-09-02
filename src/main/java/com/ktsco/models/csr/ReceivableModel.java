@@ -25,6 +25,15 @@ public class ReceivableModel {
 		this.currency = new SimpleStringProperty (currency);
 		
 	}
+	
+	public ReceivableModel (int billID, String company, String billDate, double billTotal, String currency) {
+		this.billID = new SimpleIntegerProperty(billID);
+		this.company = new SimpleStringProperty (company);
+		this.billdate = new SimpleStringProperty (billDate);
+		this.billTotal = new SimpleStringProperty(String.valueOf(decimalFormat.format(billTotal)));
+		this.currency = new SimpleStringProperty (currency);
+		
+	}
 
 	public SimpleIntegerProperty getBillIDProperty() {
 		return billID;

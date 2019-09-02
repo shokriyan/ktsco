@@ -28,7 +28,7 @@ import javafx.scene.paint.Color;
 public class ReceivableController implements Initializable {
 
 	@FXML
-	private Button btnReceiveForm, btnReceiveSearch, btnDepositReceived;
+	private Button btnReceiveForm, btnReceiveSearch, btnDepositReceived, btnDepositSearch;
 	@FXML
 	private TableView<ReceivableModel> tableAccountReceivable ;
 	@FXML
@@ -59,6 +59,8 @@ public class ReceivableController implements Initializable {
 			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("receiveSearchPanel"));
 		}else if (event.getSource() == btnDepositReceived) {
 			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("receivedDepositPanel"));
+		}else if (event.getSource() == btnDepositSearch) {
+			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("DepositSearchPanel"));
 		}
 
 	}

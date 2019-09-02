@@ -24,6 +24,14 @@ public class SalesSearchModel {
 		this.dueDate = new SimpleStringProperty(dueDate);
 		this.billTotal = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(billTotal)));
 	}
+	
+	public SalesSearchModel (int billID, String company, String currency, String billDate, String billTotal) {
+		this.billID = new SimpleIntegerProperty(billID);
+		this.company = new SimpleStringProperty(company);
+		this.currency = new SimpleStringProperty(currency);
+		this.billDate = new SimpleStringProperty(billDate);
+		this.billTotal = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(billTotal)));
+	}
 	//Getters
 	
 	public int getBillID() {

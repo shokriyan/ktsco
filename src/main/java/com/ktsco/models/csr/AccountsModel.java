@@ -13,11 +13,13 @@ public class AccountsModel {
 	private SimpleStringProperty bankName; 
 	private SimpleStringProperty openingDate; 
 	private SimpleStringProperty openingBalance; 
+	private SimpleStringProperty currency;
 	
-	public AccountsModel (int code, String bankAccount, String bankName, String openingDate, Double openingBalance) {
+	public AccountsModel (int code, String bankAccount, String bankName, String currency ,String openingDate, Double openingBalance) {
 		this.code = new SimpleIntegerProperty(code);
 		this.bankAccount = new SimpleStringProperty(bankAccount);
 		this.bankName = new SimpleStringProperty (bankName);
+		this.currency = new SimpleStringProperty (currency);
 		this.openingDate = new SimpleStringProperty (openingDate);
 		this.openingBalance = new SimpleStringProperty(String.valueOf(decimalFormat.format(openingBalance)));
 	}
@@ -74,5 +76,20 @@ public class AccountsModel {
 	public SimpleStringProperty getOpeningBalanceProperty() {
 		return this.openingBalance;
 	}
+
+	public SimpleStringProperty currencyProperty() {
+		return this.currency;
+	}
+	
+
+	public String getCurrency() {
+		return this.currencyProperty().get();
+	}
+	
+
+	public void setCurrency(final String currency) {
+		this.currencyProperty().set(currency);
+	}
+	
 
 }

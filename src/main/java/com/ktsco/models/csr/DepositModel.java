@@ -79,6 +79,4 @@ public class DepositModel {
 		this.select = select;
 	}
 	
-	
-
 }

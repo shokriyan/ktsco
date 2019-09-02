@@ -259,6 +259,35 @@ public class InventoryDAO {
 
 		return list;
 	}
+	
+
+	/**
+	 * Retrieve All inventroy Items to use in Combo Boxes
+	 * 
+	 * @return List of String
+	 */
+	public static ObservableList<String> getInventoryObservableList() {
+		ObservableList<String> list = FXCollections.observableArrayList();
+		String query = "select inv_name , category from inventory inner join category on inventory.category_id = category.category_id order by inv_id;";
+		ResultSet result = DatabaseUtils.dbSelectExuteQuery(query);
+		log.info("Exectuing query {}", query);
+		try {
+			while (result.next()) {
+				list.add(result.getString(1) + " - " + result.getString(2));
+			}
+		} catch (SQLException e) {
+			log.error("Error Executing query {}", query + "with error massage {}", e.getMessage());
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				result.close();
+			} catch (SQLException e) {
+				log.error(e.getMessage());
+			}
+		}
+
+		return list;
+	}
 
 	/**
 	 * Retrieve the value of Inventroy Id for Inventroy name
@@ -318,6 +347,32 @@ public class InventoryDAO {
 	
 	public static String getInventoryUnit (String lookUpValue) {
 		int invID = getInvId(lookUpValue);
+		String invUnit = null;
+		String query = "Select inv_um from inventory where inv_id = ?";
+		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
+		ResultSet resultSet = null;
+		try {
+			preStmt.setInt(1, invID);
+			resultSet = preStmt.executeQuery();
+			while (resultSet.next()) {
+				invUnit = resultSet.getString(1);
+			}
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				preStmt.close();
+				resultSet.close();
+			}catch (SQLException e) {
+				log.error(e.getMessage());
+			}
+		}
+		return invUnit;
+	}
+	
+	public static String getInvUnitMeasure (String lookUpValue) {
+		int invID = getInvId(lookUpValue.split("-")[0].trim());
 		String invUnit = null;
 		String query = "Select inv_um from inventory where inv_id = ?";
 		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
