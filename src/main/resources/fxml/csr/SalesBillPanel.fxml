@@ -26,7 +26,7 @@
 						<Button fx:id="btnReturn" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="120.0" text="بازگشت " />
 					</children>
 				</HBox>
-				<HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
+				<HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" styleClass="subtitleStyle">
 					<children>
 						<VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" styleClass="subtitleStyle" HBox.hgrow="ALWAYS">
 							<children>

@@ -24,11 +24,11 @@
 						</Text>
 						<TextField fx:id="txtUsername" promptText="نام کاربری">
                      <font>
-                        <Font name="Arial" size="13.0" />
+                        <Font name="Tahoma" size="13.0" />
                      </font></TextField>
                   <PasswordField fx:id="txtPassword" promptText="رمز ورود">
                      <font>
-                        <Font name="Arial" size="13.0" />
+                        <Font name="Tahoma" size="13.0" />
                      </font></PasswordField>
 						<ComboBox fx:id="cmbAccess" onAction="#onComboChange" prefWidth="300.0" promptText="نوغ دسترسی" />
 						<Button fx:id="btnSubmit" mnemonicParsing="false" onAction="#onButtonClick" prefWidth="300.0" text="تایید">

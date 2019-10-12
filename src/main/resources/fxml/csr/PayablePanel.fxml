@@ -20,7 +20,7 @@
 						<Button fx:id="btnReceiveSearch" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="جستجو" />
 					</children>
 				</HBox>
-            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" styleClass="subtitleStyle">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="لیست فاکتور های پرداخت نشده">
                      <font>
