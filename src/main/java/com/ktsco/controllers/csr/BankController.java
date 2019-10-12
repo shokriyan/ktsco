@@ -40,7 +40,7 @@ public class BankController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		populateTableData();
-		tableBankAccounts.setVisible(false);
+		tableBankAccounts.setVisible(true);
 	}
 	
 	private void generateTableDate(ObservableList<BankBalanceModel> list ) {

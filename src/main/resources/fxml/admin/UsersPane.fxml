@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity"
-	nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0"
-	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="com.ktsco.controllers.admin.UsersController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.admin.UsersController">
 	<children>
 		<VBox prefHeight="635.0" prefWidth="1166.0">
 			<children>
@@ -19,35 +17,90 @@
 						<Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
 					</padding>
 					<children>
-						<Button fx:id="btnAddNewUser" mnemonicParsing="false"
-							onAction="#allButtonsAction" prefHeight="27.0" prefWidth="150.0"
-							text="ثبت کاربر جدید" />
-						<Button fx:id="btnEditUser" layoutX="40.0" layoutY="40.0"
-							mnemonicParsing="false" onAction="#allButtonsAction"
-							prefHeight="27.0" prefWidth="150.0" text="ایجاد تغییرات" />
-						<Button fx:id="btnDeleteUser" layoutX="40.0" layoutY="40.0"
-							mnemonicParsing="false" onAction="#allButtonsAction"
-							prefHeight="27.0" prefWidth="150.0" text="حذف کاربر" />
-						<Region prefHeight="200.0" prefWidth="200.0"
-							HBox.hgrow="ALWAYS" />
-						<Button fx:id="btnReload" layoutX="340.0" layoutY="40.0"
-							mnemonicParsing="false" onAction="#allButtonsAction"
-							prefHeight="27.0" prefWidth="150.0" text="بارگذاری مجدد" />
+						<Button fx:id="btnSave" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="150.0" text="ثبت" />
+						<Button fx:id="btnChangeAccess" layoutX="40.0" layoutY="40.0" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="150.0" text="ثبت تغییرات" />
+                  <Button fx:id="btnDelete" layoutX="240.0" layoutY="40.0" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="150.0" text="حذف" />
+						<Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+						<Button fx:id="btnReload" layoutX="340.0" layoutY="40.0" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="150.0" text="بارگذاری مجدد" />
 					</children>
 				</HBox>
-				<TableView fx:id="userTable" prefHeight="535.0"
-					prefWidth="200.0">
-					<columns>
-						<TableColumn fx:id="tcUserID" minWidth="250.0"
-							prefWidth="59.0" resizable="false" text="شماره کاربری" />
-						<TableColumn fx:id="tcUsername" minWidth="250.0"
-							prefWidth="304.0" resizable="false" text="نام کاربری" />
-						<TableColumn fx:id="tcPassword" minWidth="250.0"
-							prefWidth="304.0" resizable="false" text="رمز ورود" />
-						<TableColumn fx:id="tcAccess" minWidth="250.0"
-							prefWidth="304.0" resizable="false" text="سطح دسترسی" />
-					</columns>
-				</TableView>
+            <VBox alignment="TOP_CENTER" prefHeight="88.0" prefWidth="1166.0" spacing="20.0" styleClass="subtitleStyle">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="کنترل کاربران">
+                     <font>
+                        <Font name="Tahoma Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Label fx:id="labelInformation" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </VBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="120.0" spacing="30.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="15.0" />
+                     </padding>
+                     <children>
+                        <Label text="نام کامل" />
+                        <Label layoutX="20.0" layoutY="25.0" text="نام کاربری" />
+                        <Label layoutX="20.0" layoutY="67.0" text="رمز ورود" />
+                        <Label layoutX="20.0" layoutY="109.0" text="دسترسی ادمین" />
+                        <Label layoutX="20.0" layoutY="151.0" text="دسترسی اداری" />
+                        <Label layoutX="20.0" layoutY="193.0" text="دسترسی کارخانه" />
+                        <Label layoutX="20.0" layoutY="235.0" text="دسترسی مدیریت" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <TextField fx:id="txtFullName" />
+                        <TextField fx:id="txtUsername" layoutX="20.0" layoutY="20.0" />
+                        <TextField fx:id="txtPassword" layoutX="20.0" layoutY="67.0" />
+                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
+                           <children>
+                              <CheckBox fx:id="chboxAdmin" mnemonicParsing="false" />
+                              <CheckBox fx:id="chboxCsr" mnemonicParsing="false" />
+                              <CheckBox fx:id="chboxFactory" mnemonicParsing="false" />
+                              <CheckBox fx:id="chboxMgmt" mnemonicParsing="false" />
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <VBox layoutX="130.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <TableView fx:id="tableUserDetail" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                          <columns>
+                            <TableColumn fx:id="colCode" prefWidth="75.0" text="کد" />
+                            <TableColumn fx:id="colFullName" prefWidth="150.0" text="نام کامل" />
+                              <TableColumn fx:id="colUsername" prefWidth="150.0" text="نام کاربری" />
+                              <TableColumn fx:id="colPassword" prefWidth="150.0" text="رمز ورود" />
+                              <TableColumn fx:id="colAdmin" prefWidth="75.0" text="ادمین" />
+                              <TableColumn fx:id="colFactory" prefWidth="75.0" text="کارخانه" />
+                              <TableColumn fx:id="colCsr" prefWidth="75.0" text="اداری" />
+                              <TableColumn fx:id="colMgmnt" prefWidth="75.0" text="مدیریت" />
+                          </columns>
+                           <contextMenu>
+                              <ContextMenu>
+                                <items>
+                                  <MenuItem fx:id="menuEdit" onAction="#allButtonsAction" mnemonicParsing="false" text="اعمال تغییرات" />
+                                </items>
+                              </ContextMenu>
+                           </contextMenu>
+                        </TableView>
+                     </children></VBox>
+               </children>
+            </HBox>
 			</children>
 		</VBox>
 	</children>

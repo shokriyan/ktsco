@@ -38,7 +38,7 @@ public class TopViewController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		String loggedUser = Constants.getLoggedUser();
-		lblWelcomeMsg.setText("Welcome:  " + loggedUser);
+		lblWelcomeMsg.setText("خوش آمدید:  " + loggedUser);
 		textPanelName.setText(Constants.getPanelName());
 		txtCompanyName.setText(Constants.companyName);
 		lblPanelName.setText(Constants.getDisplayPanelName());

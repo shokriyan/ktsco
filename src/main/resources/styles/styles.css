@@ -107,3 +107,8 @@
 	-fx-background-color : transparent;
 	-fx-border-color :  Transparent Transparent black Transparent;
 }
+
+.subtitleStyle{
+	-fx-border-color: transparent transparent blue transparent;
+	-fx-border-width: 3px
+}

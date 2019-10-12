@@ -245,6 +245,7 @@ public class ReceiveControler implements Initializable {
 		isPassed = (isPassed == false || "".equalsIgnoreCase(comboDepositType.getValue())) ? false : true;
 		isPassed = (isPassed == false || "".equalsIgnoreCase(txtReceiveAmount.getText())) ? false : true;
 		return isPassed;
+		
 	}
 
 	private void SaveReceiveRecords() {

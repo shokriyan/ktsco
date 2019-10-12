@@ -1,6 +1,10 @@
 package com.ktsco.utils;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -49,7 +53,7 @@ public class DatabaseUtils {
 	}
 	
 	/**
-	 * this method will take only queries with paramenet 
+	 * this method will take only queries with parameters 
 	 * <br> and return a PreparedStatement
 	 * 
 	 * @param query
@@ -101,5 +105,54 @@ public class DatabaseUtils {
 		return resultSet;
 
 	}
+	
+	public static boolean ddlQueryExecution(String query) {
+		boolean result = false; 
+		Connection conn = connection();
+		Statement stmt = null;
+		try {
+			if (conn != null) {
+				stmt = conn.createStatement();
+				stmt.execute(query);
+			}else {
+				log.error("Connection received as null check connection");
+				stmt = null; 
+			}
+		} catch (SQLException e) {
+			log.error("Error in creating the statment check the connection {}" + e.getMessage());
+			stmt = null;
+
+		}
+		
+		return result ; 
+	}
+	
+	
+	public static List<Map<String, Object>> convertResultSetToMap(ResultSet resultSet){
+		List<Map<String, Object>> list = null; 
+		Map<String, Object> rowMap = null; 
+		try {
+			ResultSetMetaData rsmd = resultSet.getMetaData();
+			int  numOfCols = rsmd.getColumnCount();
+			list = new ArrayList<Map<String,Object>>();
+			
+			while (resultSet.next()) {
+				rowMap = new HashMap<String, Object>();
+				for (int i = 1; i<=numOfCols; i++) {
+					rowMap.put(rsmd.getColumnName(i), resultSet.getObject(i));
+				}
+				list.add(rowMap);
+				
+			}
+			
+			log.info("Records converted to List");
+			return list;
+		}catch (SQLException e) {
+			log.error("Fail to convert result to map " + e.getMessage());
+			return null; 
+		}
+	}
+	
+	
 
 }

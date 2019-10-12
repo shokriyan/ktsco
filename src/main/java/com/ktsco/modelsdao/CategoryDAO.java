@@ -5,10 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ktsco.models.admin.MainCatModel;
 import com.ktsco.models.factory.CategoryModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.DatabaseUtils;
@@ -23,15 +25,16 @@ public class CategoryDAO {
 
 	public static ObservableList<CategoryModel> selectAllItems() {
 		ObservableList<CategoryModel> listObservable = FXCollections.observableArrayList();
-		String query = "Select * from category";
+		String query = "Select category_id, category, (select concat(id , ' - ' , name )from maincategory where id = c.maincategory_id) as mainCategory from category c";
 		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 
 		try {
+
 			while (resultSet.next()) {
 				int categoryID = resultSet.getInt("category_id");
 				String category = resultSet.getString("category");
-
-				catModel = new CategoryModel(categoryID, category);
+				String mainCatItem = resultSet.getString("maincategory");
+				catModel = new CategoryModel(categoryID, mainCatItem, category);
 				listObservable.add(catModel);
 			}
 
@@ -53,7 +56,7 @@ public class CategoryDAO {
 
 	public static ObservableList<CategoryModel> retrieveSearchItems(String searchContex) {
 		ObservableList<CategoryModel> listObservable = FXCollections.observableArrayList();
-		String query = "Select * from category where category like ?";
+		String query = "Select category_id, category, (select concat(id , ' - ' , name )from maincategory where id = c.maincategory_id) as mainCategory from category c where category like ?";
 
 		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
 		ResultSet resultSet = null;
@@ -64,8 +67,8 @@ public class CategoryDAO {
 			while (resultSet.next()) {
 				int categoryID = resultSet.getInt("category_id");
 				String category = resultSet.getString("category");
-
-				catModel = new CategoryModel(categoryID, category);
+				String mainCatItem = resultSet.getString("maincategory");
+				catModel = new CategoryModel(categoryID, mainCatItem, category);
 				listObservable.add(catModel);
 			}
 
@@ -87,12 +90,13 @@ public class CategoryDAO {
 
 	}
 
-	public static void addCategory(String category) {
+	public static void addCategory(String category, int mainCat) {
 
-		String query = "Insert into category (category) values (?)";
+		String query = "Insert into category (category, maincategory_id) values (?, ?)";
 		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStmt.setString(1, category);
+			preStmt.setInt(2, mainCat);
 			preStmt.execute();
 		} catch (SQLException e) {
 			log.error("Error while executing query {}", query);
@@ -125,12 +129,13 @@ public class CategoryDAO {
 		}
 	}
 
-	public static void modifyCategory(int categoryId, String newValue) {
-		String query = "Update category set category = ? where category_id = ?";
+	public static void modifyCategory(int categoryId, String newValue, int mainCatID) {
+		String query = "Update category set category = ? , maincategory_id = ? where category_id = ?";
 		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStmt.setString(1, newValue);
-			preStmt.setInt(2, categoryId);
+			preStmt.setInt(2, mainCatID);
+			preStmt.setInt(3, categoryId);
 			preStmt.executeUpdate();
 		} catch (SQLException e) {
 			log.error("Error while executing query {}", query);
@@ -239,17 +244,95 @@ public class CategoryDAO {
 		} catch (SQLException e) {
 			log.error("Error in executing query {}", query + " with error massage {}", e.getMessage());
 			AlertsUtils.databaseErrorAlert();
-		}finally {
+		} finally {
 			try {
 				preStmt.close();
 				resultSet.close();
-			}catch (SQLException e) {
+			} catch (SQLException e) {
 				log.error(e.getMessage());
 			}
 		}
 		return catName;
 	}
-	
-	
+
+	public static ObservableList<MainCatModel> getMainCatItems() {
+		ObservableList<MainCatModel> list = FXCollections.observableArrayList();
+
+		String query = "select * from mainCategory order by id";
+		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+		List<Map<String, Object>> mapData = DatabaseUtils.convertResultSetToMap(resultSet);
+		for (Map<String, Object> map : mapData) {
+			int code = Integer.parseInt(map.get("id").toString());
+			String desc = map.get("name").toString();
+			MainCatModel model = new MainCatModel(code, desc);
+			list.add(model);
+		}
+
+		return list;
+
+	}
+
+	public static boolean insertMainCatData(int code, String desc) {
+		boolean isSuccess = false;
+		String query = "Insert into mainCategory (id, name) values (? , ?)";
+		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setInt(1, code);
+			preStmt.setString(2, desc);
+
+			preStmt.execute();
+			isSuccess = true;
+		} catch (SQLException e) {
+			log.error("Error in executing query " + query + " with error massage " + e.getMessage());
+			isSuccess = false;
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				preStmt.close();
+			} catch (SQLException e) {
+				log.error(e.getMessage());
+			}
+		}
+
+		return isSuccess;
+	}
+
+	public static boolean deleceMainCatItems(int code) {
+		boolean isSuccess = false;
+		String query = "delete from mainCategory where id = ?";
+		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setInt(1, code);
+			preStmt.execute();
+			isSuccess = true;
+		} catch (SQLException e) {
+			log.error("Error in executing query " + query + " with error massage " + e.getMessage());
+			isSuccess = false;
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				preStmt.close();
+			} catch (SQLException e) {
+				log.error(e.getMessage());
+			}
+		}
+		return isSuccess;
+	}
+
+	public static List<String> comboMainCatItems() {
+		List<String> list = new ArrayList<String>();
+
+		String query = "select * from mainCategory order by id";
+		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+		List<Map<String, Object>> mapData = DatabaseUtils.convertResultSetToMap(resultSet);
+		for (Map<String, Object> map : mapData) {
+			int code = Integer.parseInt(map.get("id").toString());
+			String desc = map.get("name").toString();
+			list.add(code + " - " + desc);
+		}
+
+		return list;
+
+	}
 
 }

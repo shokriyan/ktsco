@@ -3,15 +3,10 @@ package com.ktsco.controllers.admin;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.ktsco.models.admin.UsersModels;
 import com.ktsco.modelsdao.UsersDAO;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
-import com.ktsco.utils.Constants;
-import com.ktsco.utils.ViewClass;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,108 +14,203 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javafx.scene.control.TextField;
 
 public class UsersController implements Initializable {
 
-	public static final Logger log = LoggerFactory.getLogger(UsersController.class);
-
-	static ViewClass view = new ViewClass();
-
-	VBox usersScene;
-	public static Stage usersStage = new Stage();
+	@FXML
+	private Button btnSave, btnChangeAccess, btnReload, btnDelete;
 
 	@FXML
-	private Button btnAddNewUser;
-	@FXML
-	private Button btnEditUser;
-	@FXML
-	private Button btnDeleteUser;
-	@FXML
-	private Button btnReload;
+	private Label labelInformation;
 
 	@FXML
-	private TableView<UsersModels> userTable;
+	private TextField txtFullName, txtUsername, txtPassword;
 	@FXML
-	private TableColumn<UsersModels, Integer> tcUserID;
-	@FXML
-	private TableColumn<UsersModels, String> tcUsername, tcPassword, tcAccess;
+	private CheckBox chboxAdmin, chboxCsr, chboxFactory, chboxMgmt;
 
-	private ObservableList<UsersModels> usersObservable;
+	@FXML
+	private TableView<UsersModels> tableUserDetail;
+
+	@FXML
+	private TableColumn<UsersModels, Integer> colCode;
+
+	@FXML
+	private TableColumn<UsersModels, String> colFullName, colUsername, colPassword;
+
+	@FXML
+	private TableColumn<UsersModels, String> colAdmin, colFactory, colCsr, colMgmnt;
+	@FXML
+	private MenuItem menuEdit;
+
+	private ObservableList<UsersModels> usersData = FXCollections.observableArrayList();
+	int selectedUsedID = 0;
+	String fullname = null;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		log.info("Initialzing the list of Users");
-		populateUserList();
-
+		btnChangeAccess.setDisable(true);
+		populateTableData();
 	}
 
 	@FXML
-	public void allButtonsAction(ActionEvent event) {
-		if (event.getSource() == btnReload) {
-			log.info("Reloading the users list after click on reload button");
-			populateUserList();
-		} else if (event.getSource() == btnAddNewUser) {
-			Constants.buttonText = btnAddNewUser.getText();
-			usersScene = view.setVboxFxml(Commons.getFxmlPanel("createNewUserFxml"));
-			usersStage = view.setSceneAndShowWaitStage(usersScene, "", false);
-			usersStage.setOnHidden(event1 -> populateUserList());
-		} else if (event.getSource() == btnEditUser) {
-			Constants.buttonText = btnEditUser.getText();
-			usersScene = view.setVboxFxml(Commons.getFxmlPanel("editUsersFxml"));
-			usersStage = view.setSceneAndShowWaitStage(usersScene, "", false);
-			usersStage.setOnHidden(event1 -> populateUserList());
-		} else if (event.getSource() == btnDeleteUser) {
-			String userName = getSelectedUsername();
-			boolean response = AlertsUtils.askForDeleteAlert(userName);
-			if (response) {
-				deleteSelectedUser();
+	private void allButtonsAction(ActionEvent event) {
+		if (event.getSource() == btnSave) {
+			String username = txtUsername.getText();
+			saveUser(username);
+			populateTableData();
+		} else if (event.getSource() == btnReload) {
+			populateTableData();
+			clearFields();
+		} else if (event.getSource() == btnDelete) {
+			deleteUser();
+			populateTableData();
+		} else if (event.getSource() == menuEdit) {
+			populateFieldForEdit();
+		} else if (event.getSource() == btnChangeAccess) {
+			updateUser();
+			populateTableData();
+		}
+	}
+
+	private boolean checkForEmptyFields() {
+		boolean isPass = false;
+		if (Commons.isTextFieldHasValue(txtUsername)) {
+			if (Commons.isTextFieldHasValue(txtPassword))
+				isPass = true;
+		}
+		return isPass;
+
+	}
+
+	public void clearFields() {
+		txtFullName.clear();
+		txtPassword.clear();
+		txtUsername.clear();
+		chboxAdmin.setSelected(false);
+		chboxCsr.setSelected(false);
+		chboxFactory.setSelected(false);
+		chboxMgmt.setSelected(false);
+		btnChangeAccess.setDisable(true);
+		btnSave.setDisable(false);
+		btnDelete.setDisable(false);
+		txtUsername.setDisable(false);
+		selectedUsedID = 0;
+	}
+
+	private void createUpdateUser() {
+		String fullName = txtFullName.getText();
+		String username = txtUsername.getText();
+		String password = txtPassword.getText();
+		int adminAccess = Commons.getCheckBoxValue(chboxAdmin);
+		int csrAccess = Commons.getCheckBoxValue(chboxCsr);
+		int factoryAccess = Commons.getCheckBoxValue(chboxFactory);
+		int mgmntAccess = Commons.getCheckBoxValue(chboxMgmt);
+		boolean isSuccess = UsersDAO.insertUserDate(selectedUsedID, fullName, username, password, adminAccess,
+				csrAccess, factoryAccess, mgmntAccess);
+		Commons.processMessageLabel(labelInformation, isSuccess);
+		if (isSuccess)
+			clearFields();
+
+	}
+
+	private void saveUser(String username) {
+		if (checkForEmptyFields()) {
+			if (AlertsUtils.askForSaveItems()) {
+				if (!isUserExist(username)) {
+					createUpdateUser();
+				} else {
+					Commons.processMessageLabel(labelInformation, false);
+					AlertsUtils.repeatItemAlerts(username);
+				}
 			}
-				
-		}
-
-	}
-
-	public void populateUserList() {
-		usersObservable = FXCollections.observableArrayList();
-		usersObservable = UsersDAO.selectAllRows();
-
-		tcUserID.setCellValueFactory(cellData -> cellData.getValue().userIdProperty().asObject());
-		tcUsername.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
-		tcPassword.setCellValueFactory(cellData -> cellData.getValue().passwordProperty());
-		tcAccess.setCellValueFactory(cellData -> cellData.getValue().accessTypeProperty());
-
-		userTable.setItems(usersObservable);
-
-	}
-	
-	private void deleteSelectedUser() {
-		
-		int userId = getSelectedUserid(); 
-		UsersDAO.deleteSelectedUser(userId);
-		populateUserList();
-		
-	}
-	
-	
-	private int getSelectedUserid() {
-		if (!userTable.getSelectionModel().isEmpty()) {
-			UsersModels userModel = userTable.getSelectionModel().getSelectedItem();
-			return userModel.getUserID();
-		}else {
-			return 0; 
+		} else {
+			AlertsUtils.emptyFieldAlert();
 		}
 	}
-	
-	private String getSelectedUsername() {
-		if (!userTable.getSelectionModel().isEmpty()) {
-			UsersModels userModel = userTable.getSelectionModel().getSelectedItem();
-			return userModel.getUsername();
-		}else 
-			return null;
+
+	private void generateTableColumns(ObservableList<UsersModels> list) {
+		colCode.setCellValueFactory(cellData -> cellData.getValue().userIdProperty().asObject());
+		colFullName.setCellValueFactory(cellData -> cellData.getValue().fullnameProperty());
+		colUsername.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
+		colPassword.setCellValueFactory(cellData -> cellData.getValue().passwordProperty());
+		colAdmin.setCellValueFactory(cellDate -> cellDate.getValue().adminAccessProperty());
+		colCsr.setCellValueFactory(cellData -> cellData.getValue().csrAccessProperty());
+		colFactory.setCellValueFactory(cellData -> cellData.getValue().factoryAccessProperty());
+		colMgmnt.setCellValueFactory(cellData -> cellData.getValue().mgmntAccessProperty());
+		tableUserDetail.setItems(list);
+	}
+
+	private void populateTableData() {
+		usersData = UsersDAO.getUsersList();
+		generateTableColumns(usersData);
+	}
+
+	private boolean isUserExist(String username) {
+		boolean isExist = false;
+		for (UsersModels model : usersData) {
+			if (model.getUsername().equals(username)) {
+				isExist = true;
+				break;
+			}
+
+		}
+		return isExist;
+	}
+
+	private void deleteUser() {
+		if (!tableUserDetail.getSelectionModel().isEmpty()) {
+			UsersModels model = tableUserDetail.getSelectionModel().getSelectedItem();
+			int userID = model.getUserId();
+			String fullName = model.getFullname();
+			if (AlertsUtils.askForDeleteAlert(fullName)) {
+				boolean isSucess = UsersDAO.deleteUser(userID);
+				Commons.processMessageLabel(labelInformation, isSucess);
+			} else {
+				Commons.processMessageLabel(labelInformation, false);
+			}
+		}
+	}
+
+	private void fillFormWhileSelected(int userID) {
+		usersData.forEach(model -> {
+			if (model.getUserId() == userID) {
+				txtFullName.setText(model.getFullname());
+				txtUsername.setText(model.getUsername());
+				txtPassword.setText(model.getPassword());
+				chboxAdmin.setSelected(Commons.changeSymboleToBoolean(model.getAdminAccess()));
+				chboxCsr.setSelected(Commons.changeSymboleToBoolean(model.getCsrAccess()));
+				chboxFactory.setSelected(Commons.changeSymboleToBoolean(model.getFactoryAccess()));
+				chboxMgmt.setSelected(Commons.changeSymboleToBoolean(model.getMgmntAccess()));
+			}
+		});
+	}
+
+	private void populateFieldForEdit() {
+		btnDelete.setDisable(true);
+		btnSave.setDisable(true);
+		txtUsername.setDisable(true);
+		btnChangeAccess.setDisable(false);
+		if (!tableUserDetail.getSelectionModel().isEmpty()) {
+			selectedUsedID = tableUserDetail.getSelectionModel().getSelectedItem().getUserId();
+			fullname = tableUserDetail.getSelectionModel().getSelectedItem().getFullname();
+			fillFormWhileSelected(selectedUsedID);
+		}
+	}
+
+	private void updateUser() {
+		if (checkForEmptyFields()) {
+			if (AlertsUtils.askForUpdateAlert(fullname)) {
+				createUpdateUser();
+			}
+		} else {
+			AlertsUtils.emptyFieldAlert();
+		}
 	}
 
 }

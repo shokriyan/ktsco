@@ -26,7 +26,8 @@ public class CSRController implements Initializable{
 	
 	
 	@FXML
-	private static Button btnEmployeePanel, btnSalesPanel, btnBanksPanel, btnReceivablePanel, btnExpenseEntry, btnPayablePanel;
+	private static Button btnEmployeePanel, btnSalesPanel, btnBanksPanel, btnReceivablePanel, btnExpenseEntry, 
+	btnPayablePanel, btnCurrency;
 
 
 	@Override
@@ -58,9 +59,13 @@ public class CSRController implements Initializable{
 		btnExpenseEntry.setOnAction(event -> allButtonActions(event));
 		btnPayablePanel = Commons.addMenuButton("پرداخت");
 		btnPayablePanel.setOnAction(event -> allButtonActions(event));
+		btnCurrency = Commons.addMenuButton("نرخ ارز");
+		btnCurrency.setOnAction(event -> allButtonActions(event));
+		
 		
 		buttonList.add(btnEmployeePanel);
 		buttonList.add(btnBanksPanel);
+		buttonList.add(btnCurrency);
 		buttonList.add(btnSalesPanel);
 		buttonList.add(btnReceivablePanel);
 		buttonList.add(btnExpenseEntry);
@@ -92,6 +97,8 @@ public class CSRController implements Initializable{
 		}else if (event.getSource() == btnPayablePanel) {
 			Commons.reloadTopView(csrBorderScene, btnPayablePanel);
 			setCenterPanel(Commons.getFxmlPanel("PayablePanel"));
+		}else if (event.getSource() == btnCurrency) {
+			CurrenciesController.currencyStage = Commons.openPanelsUndecorate(Commons.getFxmlPanel("CurrenciesPanel"));
 		}
 	}
 	

@@ -34,6 +34,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -172,6 +173,12 @@ public class Commons {
 			}
 		}
 
+	}
+	
+	public static void setErrorMessage(Label label) {
+		label.setStyle("-fx-text-fill : Red");
+		label.setText("تلاش ناموفق");
+		label.setVisible(true);
 	}
 
 	/**
@@ -440,6 +447,43 @@ public class Commons {
 		}
 		
 		return depType; 
+	}
+	
+	public static boolean isTextFieldHasValue(TextField textField) {
+		boolean hasValue = false; 
+		if (textField != null) {
+			if (!textField.getText().equalsIgnoreCase(""))
+				hasValue = true;
+			else 
+				hasValue = false;
+		}
+		
+		return hasValue;
+	}
+	
+	public static boolean isPassEmptyVerification(boolean isPass , TextField textField) {
+		isPass = (isPass || isTextFieldHasValue(textField)) ? true : false;
+		return isPass;
+	}
+	
+	public static String accessSymployes(int access) {
+		String symbole = null; 
+		if (access == 0) 
+			symbole = "✗";
+		else if (access == 1)
+			symbole = "✓";
+		else
+			symbole = null;
+		return symbole; 
+	}
+	
+	public static boolean changeSymboleToBoolean(String symbole) {
+		return (symbole.equals("✗")) ? false : true;
+	}
+	
+	public static boolean getAccessVerification (Object object) {
+		int tinyint = Integer.parseInt(object.toString());
+		return (tinyint == 0) ? false : true; 
 	}
 
 }

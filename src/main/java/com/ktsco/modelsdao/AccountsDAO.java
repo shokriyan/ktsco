@@ -234,7 +234,7 @@ public class AccountsDAO {
 
 	public static ObservableList<BankBalanceModel> getBankBalance() {
 		ObservableList<BankBalanceModel> list = FXCollections.observableArrayList();
-		query = "select a.account_id,a.bank_Accnt,a.bank_name,a.currency,a.opening_balance, brtv.totalAmount from accounts a\n"
+		query = "select a.account_id,a.bank_Accnt,a.bank_name,a.currency,a.opening_balance, brtv.accountBalance from accounts a\n"
 				+ "left outer join bankReceiveTotalView brtv on a.account_id = brtv.banks_bank_id";
 
 		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
@@ -245,7 +245,7 @@ public class AccountsDAO {
 				String bankName = resultSet.getString("bank_name");
 				String currency = Commons.getCurrencyValue(resultSet.getString("currency"));
 				double openingAmount = resultSet.getDouble("opening_balance");
-				double depositedAmount = resultSet.getDouble("totalAmount");
+				double depositedAmount = resultSet.getDouble("accountBalance");
 				double accountBalance = openingAmount + depositedAmount;
 
 				BankBalanceModel model = new BankBalanceModel(accountID, account, bankName, currency, accountBalance);
@@ -265,6 +265,7 @@ public class AccountsDAO {
 		}
 		return list;
 	}
+	
 
 	public static List<String> getBankAccounts() {
 		List<String> accountList = new ArrayList<String>();

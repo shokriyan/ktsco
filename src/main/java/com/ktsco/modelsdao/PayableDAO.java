@@ -230,5 +230,54 @@ public class PayableDAO {
 			}
 		}
 	}
+	
+	public static ObservableList<PaybillModel> searchPayments(String billID, String startDate, String endDate, String employee){
+		ObservableList<PaybillModel> list = FXCollections.observableArrayList();
+		billID = (!"".equalsIgnoreCase(billID)) ? billID : "";
+		String gstartDate = (!"".equalsIgnoreCase(startDate)) ? DateUtils.convertJalaliToGregory(startDate) : "1900-01-01";
+		String gendDate = (!"".equalsIgnoreCase(endDate)) ?DateUtils.convertJalaliToGregory(endDate): "2900-12-31"; 
+		String empID = (!"".equalsIgnoreCase(employee))? String.valueOf(EmployeeDAO.getEmployeeID(employee)):"";
+		
+		query = "select p.pay_id, p.expns_id, p.paydate, p.amount, e.fullname,concat(a.bank_name ,' - ' ,a.bank_Accnt) as bankAccount from paybills p\n" + 
+				"inner join employee e on e.employee_id = p.employee\n" + 
+				"inner join accounts a on a.account_id = p.account_id\n" + 
+				"where p.expns_id like ? AND p.paydate between ? and ? AND p.employee like ? ";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setString(1, "%"+billID+"%");
+			preStatement.setString(2, gstartDate);
+			preStatement.setString(3, gendDate);
+			preStatement.setString(4, "%"+empID+"%");
+			
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				int payID = resultSet.getInt("pay_id");
+				int expnsID = resultSet.getInt("expns_id");
+				String payDate = DateUtils.convertGregoryToJalali(resultSet.getString("paydate"));
+				String employeeName = resultSet.getString("fullname");
+				double amount = resultSet.getDouble("amount");
+				String bankAccount = resultSet.getString("bankAccount");
+				
+				PaybillModel model = new PaybillModel(payID, expnsID, payDate, employeeName, bankAccount, amount);
+				list.add(model);
+			}
+			
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+				
+		
+		return list; 
+	}
 
 }

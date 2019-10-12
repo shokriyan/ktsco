@@ -7,9 +7,11 @@ public class CategoryModel {
 
 	private SimpleIntegerProperty catId;
 	private SimpleStringProperty categoryName;
+	private SimpleStringProperty mainCat; 
 
-	public CategoryModel(int id, String categoryName) {
+	public CategoryModel(int id, String mainCategory , String categoryName) {
 		this.catId = new SimpleIntegerProperty(id);
+		this.mainCat = new SimpleStringProperty(mainCategory);
 		this.categoryName = new SimpleStringProperty(categoryName);
 	}
 
@@ -39,5 +41,20 @@ public class CategoryModel {
 	public SimpleStringProperty categoryNameProperty() {
 		return categoryName;
 	}
+
+	public SimpleStringProperty mainCatProperty() {
+		return this.mainCat;
+	}
+	
+
+	public String getMainCat() {
+		return this.mainCatProperty().get();
+	}
+	
+
+	public void setMainCat(final String mainCat) {
+		this.mainCatProperty().set(mainCat);
+	}
+	
 
 }

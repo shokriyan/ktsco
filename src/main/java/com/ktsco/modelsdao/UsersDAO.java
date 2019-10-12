@@ -1,200 +1,139 @@
 package com.ktsco.modelsdao;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.admin.UsersModels;
 import com.ktsco.utils.AlertsUtils;
-import com.ktsco.utils.Constants;
+import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
 
 public class UsersDAO {
 	private static final Logger log = LoggerFactory.getLogger(UsersDAO.class);
 
-	private static UsersModels users;
+	private static String query;
+	private static ResultSet resultSet;
+	private static PreparedStatement preStatement;
 
-	/**
-	 * This method will retrieve all data from database and <br>
-	 * and return it as Observable List of UsersModel
-	 * 
-	 * @return ObservableList<UsersModels>
-	 */
-	public static ObservableList<UsersModels> selectAllRows() {
-
-		ObservableList<UsersModels> list = FXCollections.observableArrayList();
-		String query = "select * from users";
-		log.info("Executing SQl query {}" + query);
-		ResultSet result = DatabaseUtils.dbSelectExuteQuery(query);
+	public static boolean insertUserDate(int userID, String fullname, String username, String password, int adminAccess,
+			int csrAccess, int factoryAccess, int mgmntAccess) {
+		boolean isSuccess = false;
+		// user_ID,fullname,username,password,admin_access,csr_access,factory_access,mgmt_access
+		query = "insert into users (user_ID, fullname,username,password,admin_access,csr_access,factory_access,mgmt_access) "
+				+ "values (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE fullname = ?, password = ? , admin_access = ? "
+				+ ", csr_access = ? , factory_access = ? , mgmt_access = ? ";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
-			while (result.next()) {
-				int userID = result.getInt("user_ID");
-				String username = result.getString("username");
-				String password = result.getString("password");
-				String accesskey = result.getString("access");
-				String accessType = Constants.accessValue.get(accesskey);
-				users = new UsersModels(userID, username, password, accessType);
-				list.add(users);
-			}
+			preStatement.setInt(1, userID);
+			preStatement.setString(2, fullname);
+			preStatement.setString(3, username);
+			preStatement.setString(4, password);
+			preStatement.setInt(5, adminAccess);
+			preStatement.setInt(6, csrAccess);
+			preStatement.setInt(7, factoryAccess);
+			preStatement.setInt(8, mgmntAccess);
+			preStatement.setString(9, fullname);
+			preStatement.setString(10, password);
+			preStatement.setInt(11, adminAccess);
+			preStatement.setInt(12, csrAccess);
+			preStatement.setInt(13, factoryAccess);
+			preStatement.setInt(14, mgmntAccess);
+			preStatement.execute();
+			isSuccess = true;
 
 		} catch (SQLException e) {
-			log.error("Error while looping on results of Query " + e.getMessage());
-			log.info("list can be null at this point" + list);
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
 		}
 
+		return isSuccess;
+	}
+
+	public static ObservableList<UsersModels> getUsersList() {
+		ObservableList<UsersModels> list = FXCollections.observableArrayList();
+		// user_ID,fullname,username,password,admin_access,csr_access,factory_access,mgmt_access
+		query = "Select * from users";
+		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+
+		List<Map<String, Object>> dataMap = DatabaseUtils.convertResultSetToMap(resultSet);
+		for (Map<String, Object> map : dataMap) {
+			int code = Integer.parseInt(map.get("user_ID").toString());
+			String fullname = map.get("fullname").toString();
+			String username = map.get("username").toString();
+			String password = map.get("password").toString();
+			String admin = Commons.accessSymployes(Integer.parseInt(map.get("admin_access").toString()));
+			String csr = Commons.accessSymployes(Integer.parseInt(map.get("csr_access").toString()));
+			String mgmnt = Commons.accessSymployes(Integer.parseInt(map.get("mgmt_access").toString()));
+			String factory = Commons.accessSymployes(Integer.parseInt(map.get("factory_access").toString()));
+
+			UsersModels model = new UsersModels(code, fullname, username, password, admin, csr, factory, mgmnt);
+			list.add(model);
+		}
 		return list;
 	}
 
-	/**
-	 * This method is used for executing query to <br>
-	 * to Insert users info to Users table of database
-	 * 
-	 * @param username
-	 * @param password
-	 * @param accessType
-	 */
-	public static void createNewUser(String username, String password, String accessType) {
-		String query = "Insert into users (username, password, access) values (?,?,?)";
-		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
-		log.info("Initializing PreparedStatment for {}" + query);
-
+	public static boolean deleteUser(int userID) {
+		boolean isSuccess = false;
+		query = "delete from users where user_ID = ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
-			log.info("Set the parameters for {}" + username);
-			preStmt.setString(1, username);
-			log.info("Set the parameters for {}" + password);
-			preStmt.setString(2, password);
-			log.info("Set the parameters for {}" + accessType);
-			preStmt.setString(3, accessType);
-			log.info("Execute Query");
-			preStmt.executeUpdate();
+			preStatement.setInt(1, userID);
+			preStatement.execute();
+			isSuccess = true;
 		} catch (SQLException e) {
-			log.error("Execution failed with error massage {}" + e.getMessage());
-
-		}
-
-	}
-
-	/**
-	 * This method with Populate Usersname in ComboBox <br>
-	 * drop down
-	 * 
-	 * @param comboUsername
-	 */
-
-	public static void populateUsersList(ComboBox<String> comboUsername) {
-		String query = "Select username from users order by user_ID ASC";
-		ObservableList<String> comboList = FXCollections.observableArrayList();
-		log.info("Executing query " + query);
-		ResultSet result = DatabaseUtils.dbSelectExuteQuery(query);
-		try {
-			while (result.next()) {
-				log.info("adding value of result to ComboList " + comboList);
-				String value = result.getString(1);
-				comboList.add(value);
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
-		} catch (SQLException e) {
-			log.error("Execution failed with error massage {}" + e.getMessage());
-			AlertsUtils.databaseErrorAlert();
 		}
-
-		comboUsername.setItems(comboList);
+		return isSuccess;
 	}
 
-	/**
-	 * this method will return the userid of selected value in combobox
-	 * 
-	 * @param comboUser
-	 * @return
-	 */
-	public static Integer getUserIDFromComboValue(ComboBox<String> comboUser) {
-		int userID = 0;
-
-		String selectedUser = comboUser.getValue();
-
-		String query = "Select user_ID from users where username = ?";
+	public static Map<String, Object> getUserInfoByUsername(String username) {
+		Map<String, Object> userDetail = new HashMap<String, Object>();
+		query = "select * from users where username = '" + username + "'";
+		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 		try {
-			PreparedStatement prestmt = DatabaseUtils.dbPreparedStatment(query);
-			prestmt.setString(1, selectedUser);
-			ResultSet result = prestmt.executeQuery();
-			while (result.next()) {
-				userID = result.getInt(1);
+			if (resultSet.isBeforeFirst())
+				userDetail = DatabaseUtils.convertResultSetToMap(resultSet).get(0);
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
-		} catch (SQLException e) {
-			log.error("Execution failed with error massage {}" + e.getMessage());
-			AlertsUtils.databaseErrorAlert();
 		}
-
-		return userID;
+		return userDetail;
 	}
 
-	/**
-	 * This method will result result set of edit panel
-	 * 
-	 * @param userid
-	 * @return
-	 */
-	public static ResultSet getPasswordAndAccessByUserID(int userid) {
-		ResultSet result = null;
-		String query = "Select password, access from users where user_ID = ?";
-		try {
-			PreparedStatement prestmt = DatabaseUtils.dbPreparedStatment(query);
-			prestmt.setInt(1, userid);
-			result = prestmt.executeQuery();
-
-		} catch (SQLException e) {
-			log.error("Execution failed with error massage {}" + e.getMessage());
-			AlertsUtils.databaseErrorAlert();
-		}
-		return result;
-
-	}
-
-	/**
-	 * This method is used for executing query to <br>
-	 * to Updates users info to Users table of database
-	 * 
-	 * @param userid
-	 * @param password
-	 * @param access
-	 */
-	public static void updatePasswordAccess(int userid, String password, String access) {
-		String query = "UPDATE users SET password = ? , access = ? WHERE user_ID = ?";
-
-		PreparedStatement prestmt = DatabaseUtils.dbPreparedStatment(query);
-		try {
-			prestmt.setString(1, password);
-			prestmt.setString(2, access);
-			prestmt.setInt(3, userid);
-			prestmt.executeUpdate();
-		} catch (SQLException e) {
-			log.error("Execution failed with error massage {}" + e.getMessage());
-			AlertsUtils.databaseErrorAlert();
-		}
-	}
-	
-	/**
-	 * This method is used for executing query to <br>
-	 * to Delete users info to Users table of database
-	 * 
-	 * @param userid
-	 */
-
-	public static void deleteSelectedUser(int userid) {
-		String query = "Delete from users where user_ID = ?";
-		PreparedStatement prestmt = DatabaseUtils.dbPreparedStatment(query);
-		try {
-			prestmt.setInt(1, userid);
-			prestmt.executeUpdate();
-		} catch (SQLException e) {
-			log.error("Execution failed with error massage {}" + e.getMessage());
-			AlertsUtils.databaseErrorAlert();
-		}
-	}
-	
 }

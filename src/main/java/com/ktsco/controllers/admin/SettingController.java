@@ -7,15 +7,23 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ktsco.models.admin.MainCatModel;
+import com.ktsco.modelsdao.CategoryDAO;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -24,10 +32,10 @@ public class SettingController implements Initializable {
 	@FXML
 	private Tab tabSqlServer;
 	@FXML
-	private Tab databaseSettingTab;
+	private Tab databaseSettingTab, mainCategory;
 
 	@FXML
-	private Button btnStartStop;
+	private Button btnStartStop, btnSave;
 	@FXML
 	private Button btnStatus, btnUpdate, btnRefresh;
 	@FXML
@@ -35,16 +43,38 @@ public class SettingController implements Initializable {
 	@FXML
 	private TextField txtServerAddress, txtServerName, txtServerPort, txtDBName, txtUsername, txtPassword, txtTImeZone;
 
+	@FXML
+	private TextField txtCode, txtItemsDesc;
+	@FXML
+	private Label labelInformation;
+
+	@FXML
+	private TableView<MainCatModel> tableDetail;
+	@FXML
+	private TableColumn<MainCatModel, Integer> colCod;
+	@FXML
+	private TableColumn<MainCatModel, String> colDesc;
+	
+	@FXML
+	private MenuItem menuDelete; 
+
 	private String responseValue = null;
+	private ObservableList<MainCatModel> tableDataList = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		mainCategory.setOnSelectionChanged(event -> {
+			if (event.getSource() == mainCategory) {
+				populateMainCatTable();
+			}
+		});
 		txtServerAddress.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
 		txtServerAddress.setText("/usr/local/Cellar/mysql/8.0.16/support-files/");
 		responseValue = terminalCommandExecute("status");
 		txtAreaResults.setText(responseValue);
 		setButtonTextbasedOnStatus(responseValue);
 		setTextWithProperties();
+		populateMainCatTable();
 
 	}
 
@@ -93,6 +123,12 @@ public class SettingController implements Initializable {
 			boolean response = AlertsUtils.askForSaveItems();
 			if (response)
 				updateDatabaseConfiguration();
+		} else if (event.getSource() == btnSave) {
+			saveMainCatItem();
+			populateMainCatTable();
+		}else if (event.getSource() == menuDelete) {
+			deleteManCatItem();
+			//populateMainCatTable();
 		}
 
 	}
@@ -165,6 +201,61 @@ public class SettingController implements Initializable {
 
 		AlertsUtils.SuccessfullyDoneAlrt();
 
+	}
+
+	private void generateMainCatTable(ObservableList<MainCatModel> list) {
+		colCod.setCellValueFactory(cellData -> cellData.getValue().codeProperty().asObject());
+		colDesc.setCellValueFactory(cellData -> cellData.getValue().descProperty());
+		tableDetail.setItems(list);
+	}
+
+	private void populateMainCatTable() {
+		tableDataList = CategoryDAO.getMainCatItems();
+		generateMainCatTable(tableDataList);
+	}
+
+	private boolean checkCodeExist(int code) {
+		boolean exist = false;
+		for (MainCatModel model : tableDataList) {
+			if (code == model.getCode())
+				exist = true;
+		}
+		return exist;
+	}
+
+	private boolean textFieldNullCheck() {
+		boolean isPassed = true;
+		isPassed = (isPassed == false || "".equalsIgnoreCase(txtCode.getText())) ? false : true;
+		isPassed = (isPassed == false || "".equalsIgnoreCase(txtItemsDesc.getText())) ? false : true;
+		return isPassed;
+
+	}
+
+	private void saveMainCatItem() {
+		if (textFieldNullCheck()) {
+			int code = Integer.parseInt(txtCode.getText());
+			String desc = txtItemsDesc.getText();
+			if (!checkCodeExist(code)) {
+				boolean isSuccess = CategoryDAO.insertMainCatData(code, desc);
+				Commons.processMessageLabel(labelInformation, isSuccess);
+			}else {
+				AlertsUtils.repeatItemAlerts(code + " " + desc);
+			}
+		} else {
+			AlertsUtils.emptyFieldAlert();
+		}
+	}
+	
+	private void deleteManCatItem() {
+		if (!tableDetail.getSelectionModel().isEmpty()) {
+			MainCatModel model = tableDetail.getSelectionModel().getSelectedItem();
+			int code = model.getCode();
+			String desc = model.getDesc(); 
+			
+			if (AlertsUtils.askForDeleteAlert(code + " " + desc)) {
+				CategoryDAO.deleceMainCatItems(code);
+			}
+		}
 	}
 
 }

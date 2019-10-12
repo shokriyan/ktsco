@@ -22,6 +22,7 @@
 						<Button fx:id="btnDeleteBill" layoutX="190.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="حذف فاکتور" />
                   <Button fx:id="btnVendors" layoutX="360.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="فروشنده" />
 						<Button fx:id="btnSearch" layoutX="190.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="جستجو" />
+						<Button fx:id="btnItemList" layoutX="190.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="لیست اقلام" />
 						<Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
 					</children>
 				</HBox>

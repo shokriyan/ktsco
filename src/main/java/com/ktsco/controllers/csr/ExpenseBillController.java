@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import com.ktsco.controllers.factory.InventoryController;
 import com.ktsco.models.csr.BillDetailModel;
 import com.ktsco.modelsdao.CurrencyDAO;
 import com.ktsco.modelsdao.ExpenseDAO;
 import com.ktsco.modelsdao.InventoryDAO;
-import com.ktsco.modelsdao.SaleBillDAO;
 import com.ktsco.modelsdao.VendorsDAO;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
@@ -41,7 +41,7 @@ public class ExpenseBillController implements Initializable {
 	private static DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 
 	@FXML
-	private Button btnNew, btnSave, btnSaveClose, btnSearch, btnReturn, btnSearchBill, btnDeleteBill, btnVendors;
+	private Button btnNew, btnSave, btnSaveClose, btnSearch, btnReturn, btnSearchBill, btnDeleteBill, btnVendors, btnItemList;
 	@FXML
 	private TextField txtCode, txtBillDate, txtCurrencyType, txtmemo;
 
@@ -65,7 +65,7 @@ public class ExpenseBillController implements Initializable {
 	private ObservableList<BillDetailModel> tableItems = FXCollections.observableArrayList();
 
 	private List<String> vendorList = new ArrayList<String>();
-
+	private ObservableList<String> items = FXCollections.observableArrayList();
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		loadPrerequisitions();
@@ -191,7 +191,7 @@ public class ExpenseBillController implements Initializable {
 					} else {
 						boolean response = AlertsUtils.askForDeleteAlert(model.getItems());
 						if (response) {
-							boolean isSuccess = SaleBillDAO.deleteSaleDetail(id);
+							boolean isSuccess = ExpenseDAO.deleteBillDetail(id);
 							regenrateDetailTable();
 							Commons.processMessageLabel(labelInfoMessage, isSuccess);
 
@@ -217,6 +217,9 @@ public class ExpenseBillController implements Initializable {
 		}else if (event.getSource() == btnVendors) {
 			VendorsController.vendorStage = Commons.openPanelsUndecorate(Commons.getFxmlPanel("VendorsPanel"));
 			VendorsController.vendorStage.setOnHidden(e-> populateVendorCombo());
+		}else if (event.getSource() == btnItemList) {
+			InventoryController.invStage = Commons.openPanelsUndecorate(Commons.getFxmlPanel("inventoryListPanelFxml"));
+			InventoryController.invStage.setOnHidden(e -> populateItemsList());
 		}
 
 	}
@@ -244,10 +247,12 @@ public class ExpenseBillController implements Initializable {
 		int id = ExpenseDAO.getLastBillID();
 		txtCode.setText(String.valueOf(id));
 	}
-
+	private void populateItemsList() {
+		items = InventoryDAO.getInventoryObservableList();
+	}
 	private void generateTableColumns(ObservableList<BillDetailModel> list) {
 		colLineNumber.setCellValueFactory(cellData -> cellData.getValue().getLineNumberProperty().asObject());
-		ObservableList<String> items = InventoryDAO.getInventoryObservableList();
+		populateItemsList();
 		colItems.setCellValueFactory(cellData -> cellData.getValue().getItemsProperty());
 		colItems.setCellFactory(ComboBoxTableCell.forTableColumn(items));
 		colUnit.setCellValueFactory(cellData -> cellData.getValue().getUnitProperty());
@@ -397,7 +402,7 @@ public class ExpenseBillController implements Initializable {
 		int billID = Integer.parseInt(txtCode.getText());
 		boolean response = AlertsUtils.askForDeleteAlert("فاکتور شماره" + "\n" + billID);
 		if (response) {
-			boolean isSuccess = SaleBillDAO.deleteSaleBill(billID);
+			boolean isSuccess = ExpenseDAO.deleteSaleBill(billID);
 			Commons.processMessageLabel(labelInfoMessage, isSuccess);
 		}
 

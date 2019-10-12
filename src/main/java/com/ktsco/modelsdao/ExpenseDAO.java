@@ -195,6 +195,32 @@ public class ExpenseDAO {
 		return isSuccess;
 	}
 	
+
+	public static boolean deleteBillDetail(int id) {
+		boolean isSuccess = false;
+		query = "Delete from expenseDetail where id = ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setInt(1, id);
+			preStatement.execute();
+			isSuccess = true;
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+
+		return isSuccess;
+	}
+	
 	public static ObservableList<BillDetailModel> retrieveSaleDateAfterSave(int billID) {
 		ObservableList<BillDetailModel> list = FXCollections.observableArrayList();
 		int lineNumber = 1;

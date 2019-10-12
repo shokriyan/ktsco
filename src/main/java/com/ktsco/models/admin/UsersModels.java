@@ -5,107 +5,164 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class UsersModels {
 	private SimpleIntegerProperty userId; 
+	private SimpleStringProperty fullname;
 	private SimpleStringProperty username; 
 	private SimpleStringProperty password; 
-	private SimpleStringProperty accessType; 
+	private SimpleStringProperty adminAccess, csrAccess, factoryAccess, mgmntAccess; 
 	
-	public UsersModels (int userId, String username, String password, String accessPanel) {
+	
+	public UsersModels (int userId,String fullname,  String username, String password, String admin, String csr, String factory, String mgmnt) {
 		this.userId = new SimpleIntegerProperty(userId);
+		this.fullname = new SimpleStringProperty(fullname);
 		this.username = new SimpleStringProperty(username); 
 		this.password = new SimpleStringProperty(password);
-		this.accessType = new SimpleStringProperty(accessPanel);
+		this.adminAccess = new SimpleStringProperty(admin);
+		this.csrAccess = new SimpleStringProperty(csr);
+		this.mgmntAccess = new SimpleStringProperty(mgmnt);
+		this.factoryAccess = new SimpleStringProperty(factory);
 	}
-	
-	/**
-	 * return the value of User ID
-	 * @return Integer
-	 */
-	public int getUserID() {
-		return userId.get();
-	}
-	/**
-	 * return the property of User ID
-	 * 
-	 * @return SimpleIntegerProperty
-	 */
+
+
 	public SimpleIntegerProperty userIdProperty() {
-		return userId; 
-	}
-	/**
-	 * To set the value of User ID
-	 * @param userId
-	 */
-	public void setUserId(int userId) {
-		this.userId.set(userId);
+		return this.userId;
 	}
 	
-	/**
-	 * return the value of Username
-	 * @return String
-	 */
-	public String getUsername() {
-		return username.get();
+
+
+	public int getUserId() {
+		return this.userIdProperty().get();
 	}
-	/**
-	 * return the property of Username
-	 * 
-	 * @return SimpleStringProperty
-	 */
+	
+
+
+	public void setUserId(final int userId) {
+		this.userIdProperty().set(userId);
+	}
+	
+
+
 	public SimpleStringProperty usernameProperty() {
-		return username; 
-	}
-	/**
-	 * To set the value of Username
-	 * @param username
-	 */
-	public void setUsername(String username) {
-		this.username.set(username);
+		return this.username;
 	}
 	
-	
-	/**
-	 * return the value of password
-	 * @return String
-	 */
-	public String getPassword() {
-		return password.get();
+
+
+	public String getUsername() {
+		return this.usernameProperty().get();
 	}
-	/**
-	 * return the property of Password
-	 * 
-	 * @return SimpleStringProperty
-	 */
+	
+
+
+	public void setUsername(final String username) {
+		this.usernameProperty().set(username);
+	}
+	
+
+
 	public SimpleStringProperty passwordProperty() {
-		return password; 
-	}
-	/**
-	 * To set the value of password
-	 * @param password
-	 */
-	public void setPassword(String password) {
-		this.password.set(password);
+		return this.password;
 	}
 	
-	/**
-	 * return the value of Access type
-	 * @return String
-	 */
-	public String getAccessType() {
-		return accessType.get();
+
+
+	public String getPassword() {
+		return this.passwordProperty().get();
 	}
-	/**
-	 * return the property of Access Type
-	 * 
-	 * @return SimpleStringProperty
-	 */
-	public SimpleStringProperty accessTypeProperty() {
-		return accessType; 
+	
+
+
+	public void setPassword(final String password) {
+		this.passwordProperty().set(password);
 	}
-	/**
-	 * To set the value of Access Type
-	 * @param accessType
-	 */
-	public void setAccessType(String accessType) {
-		this.accessType.set(accessType);
+	
+
+
+	public SimpleStringProperty adminAccessProperty() {
+		return this.adminAccess;
 	}
+	
+
+
+	public String getAdminAccess() {
+		return this.adminAccessProperty().get();
+	}
+	
+
+
+	public void setAdminAccess(final String adminAccess) {
+		this.adminAccessProperty().set(adminAccess);
+	}
+	
+
+
+	public SimpleStringProperty csrAccessProperty() {
+		return this.csrAccess;
+	}
+	
+
+
+	public String getCsrAccess() {
+		return this.csrAccessProperty().get();
+	}
+	
+
+
+	public void setCsrAccess(final String csrAccess) {
+		this.csrAccessProperty().set(csrAccess);
+	}
+	
+
+
+	public SimpleStringProperty factoryAccessProperty() {
+		return this.factoryAccess;
+	}
+	
+
+
+	public String getFactoryAccess() {
+		return this.factoryAccessProperty().get();
+	}
+	
+
+
+	public void setFactoryAccess(final String factoryAccess) {
+		this.factoryAccessProperty().set(factoryAccess);
+	}
+	
+
+
+	public SimpleStringProperty mgmntAccessProperty() {
+		return this.mgmntAccess;
+	}
+	
+
+
+	public String getMgmntAccess() {
+		return this.mgmntAccessProperty().get();
+	}
+	
+
+
+	public void setMgmntAccess(final String mgmntAccess) {
+		this.mgmntAccessProperty().set(mgmntAccess);
+	}
+
+
+	public SimpleStringProperty fullnameProperty() {
+		return this.fullname;
+	}
+	
+
+
+	public String getFullname() {
+		return this.fullnameProperty().get();
+	}
+	
+
+
+	public void setFullname(final String fullname) {
+		this.fullnameProperty().set(fullname);
+	}
+	
+	
 }

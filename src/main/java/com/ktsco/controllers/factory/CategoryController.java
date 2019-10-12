@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import com.ktsco.models.factory.CategoryModel;
 import com.ktsco.modelsdao.CategoryDAO;
 import com.ktsco.utils.AlertsUtils;
+import com.ktsco.utils.Commons;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -30,13 +32,15 @@ public class CategoryController implements Initializable {
 
 	@FXML
 	private TextField txtCategory;
+	@FXML
+	private ComboBox<String> comboMainCat;
 
 	@FXML
 	private TableView<CategoryModel> tableCategory;
 	@FXML
 	private TableColumn<CategoryModel, Integer> colNo;
 	@FXML
-	private TableColumn<CategoryModel, String> colCategory;
+	private TableColumn<CategoryModel, String> colCategory, colMainCat;
 
 	public static Stage categoryStage = new Stage();
 	private ObservableList<CategoryModel> catList = FXCollections.observableArrayList();
@@ -44,6 +48,7 @@ public class CategoryController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		populateCategoryTable();
+		populateMainCatCombo();
 	}
 
 	@FXML
@@ -51,8 +56,10 @@ public class CategoryController implements Initializable {
 		if (!tableCategory.getSelectionModel().isEmpty()) {
 			CategoryModel catModel = tableCategory.getSelectionModel().getSelectedItem();
 			String category = catModel.getCategoryName();
+			String mainCat = catModel.getMainCat();
 			if (category != null) {
 				txtCategory.setText(category);
+				comboMainCat.setValue(mainCat);
 			}
 		}
 
@@ -62,19 +69,21 @@ public class CategoryController implements Initializable {
 	public void allButtonAction(ActionEvent event) {
 		if (event.getSource() == btnClose) {
 			if (categoryStage.isShowing())
-				categoryStage.getOnHidden().handle(new WindowEvent(categoryStage,WindowEvent.WINDOW_HIDDEN));;
-				categoryStage.close();
+				categoryStage.getOnHidden().handle(new WindowEvent(categoryStage, WindowEvent.WINDOW_HIDDEN));
+			;
+			categoryStage.close();
 		} else if (event.getSource() == btnAdd) {
-			String value = txtCategory.getText();
-			addCategoryItem(value);
+			addCategoryItem();
 			txtCategory.clear();
+			comboMainCat.setValue("");
 		} else if (event.getSource() == btnDelete) {
 			String value = txtCategory.getText();
 			deleteCategoryItem(value);
 			txtCategory.clear();
 		} else if (event.getSource() == btnModify) {
 			String value = txtCategory.getText();
-			modifyCategoryItem(value);
+			String mainCat = comboMainCat.getValue();
+			modifyCategoryItem(value, mainCat);
 			txtCategory.clear();
 		} else if (event.getSource() == btnSearch) {
 			String value = txtCategory.getText();
@@ -86,6 +95,11 @@ public class CategoryController implements Initializable {
 		}
 	}
 
+	private void populateMainCatCombo() {
+		Commons.populateAllComboBox(comboMainCat, CategoryDAO.comboMainCatItems());
+		comboMainCat.setValue("");
+	}
+
 	private void populateCategoryTable() {
 		catList = CategoryDAO.selectAllItems();
 		setCategoryTable(catList);
@@ -94,16 +108,18 @@ public class CategoryController implements Initializable {
 	private void setCategoryTable(ObservableList<CategoryModel> list) {
 		colNo.setCellValueFactory(cellData -> cellData.getValue().catIDProperty().asObject());
 		colCategory.setCellValueFactory(cellData -> cellData.getValue().categoryNameProperty());
-
+		colMainCat.setCellValueFactory(cellData -> cellData.getValue().mainCatProperty());
 		tableCategory.setItems(list);
 
 	}
 
-	public void addCategoryItem(String value) {
+	public void addCategoryItem() {
+		String value = txtCategory.getText();
+		int mainCat = Integer.parseInt(comboMainCat.getValue().split("-")[0].trim());
 		if (!value.isEmpty()) {
 			boolean exist = CategoryDAO.checkExistance(value);
 			if (!exist) {
-				CategoryDAO.addCategory(value);
+				CategoryDAO.addCategory(value, mainCat);
 				populateCategoryTable();
 			} else {
 				AlertsUtils.repeatItemAlerts(value);
@@ -142,24 +158,20 @@ public class CategoryController implements Initializable {
 		}
 	}
 
-	public void modifyCategoryItem(String value) {
+	public void modifyCategoryItem(String value, String mainCat) {
 		if (!value.isEmpty()) {
 			int categoryId = 0;
 			if (!tableCategory.getSelectionModel().isEmpty()) {
 				CategoryModel catModel = tableCategory.getSelectionModel().getSelectedItem();
 				categoryId = catModel.getCatId();
 			}
-			boolean exist = CategoryDAO.checkExistance(value);
-			if (!exist) {
-				if (categoryId != 0) {
-					CategoryDAO.modifyCategory(categoryId, value);
-					populateCategoryTable();
-				}
-			} else {
-				AlertsUtils.repeatItemAlerts(value);
+			if (categoryId != 0) {
+				int mainCatID = Integer.parseInt(mainCat.split("-")[0].trim());
+				CategoryDAO.modifyCategory(categoryId, value, mainCatID);
+				populateCategoryTable();
 			}
 		} else {
-			AlertsUtils.emptyFieldAlert();
+			AlertsUtils.repeatItemAlerts(value);
 		}
 	}
 

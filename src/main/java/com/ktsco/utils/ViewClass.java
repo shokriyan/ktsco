@@ -62,7 +62,7 @@ public class ViewClass {
 		stage.setResizable(false);
 		stage.setTitle(title);
 		if (!decorate) {
-			log.info("Not Decorating wht Stage");
+			log.info("Not Decorating with Stage");
 			stage.initStyle(StageStyle.UNDECORATED);
 		}
 		stage.setAlwaysOnTop(false);

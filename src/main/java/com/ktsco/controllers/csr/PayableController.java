@@ -48,7 +48,7 @@ public class PayableController implements Initializable {
 				Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("PaybillPanel"));
 			}
 		}else if (event.getSource() == btnReceiveSearch) {
-			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("PayablePanel"));
+			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("paymentSearchPanel"));
 		}
 
 	}
@@ -74,5 +74,7 @@ public class PayableController implements Initializable {
 		tableDate = PayableDAO.retrievePayableList();
 		generateTable(tableDate);
 	}
+	
+	
 
 }

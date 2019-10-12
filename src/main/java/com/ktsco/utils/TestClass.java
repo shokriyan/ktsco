@@ -1,22 +1,24 @@
 package com.ktsco.utils;
 
+import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-
-import com.ktsco.modelsdao.ReceivableDAO;
 
 public class TestClass {
 
 	static NumberFormat formatter = new DecimalFormat("#0.00");
 
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		
-		System.out.println("Inter a name");
-			 
-			System.out.println(scanner.nextLine());
+		String query = "Select * from accounts";
+		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+		List<Map<String, Object>> list = DatabaseUtils.convertResultSetToMap(resultSet);
+		System.out.println(list);
+		for (Map<String, Object> map : list) {
+			System.out.println(map);
+		}
+
 	}
 
 }

@@ -133,6 +133,76 @@
                   </AnchorPane>
               </content>
             </Tab>
+            <Tab fx:id="mainCategory" text="دسته بندی پایه">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="دسته بندی پایه حساب داری ">
+                                       <font>
+                                          <Font name="Tahoma Bold" size="18.0" />
+                                       </font>
+                                    </Text>
+                                    <Label fx:id="labelInformation" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <VBox prefHeight="502.0" prefWidth="384.0" spacing="10.0">
+                                 <children>
+                                    <Label text="کد دسته بندی" />
+                                    <TextField fx:id="txtCode" />
+                                    <Region prefHeight="41.0" prefWidth="344.0" />
+                                    <Label layoutX="30.0" layoutY="30.0" text="نام و مشخصات" />
+                                    <TextField fx:id="txtItemsDesc" layoutX="30.0" layoutY="57.0" />
+                                    <Region prefHeight="41.0" prefWidth="344.0" />
+                                    <Button fx:id="btnSave" mnemonicParsing="false" onAction="#allButtonAction" prefHeight="27.0" prefWidth="199.0" text="ثبت و جدید" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="52.0" prefWidth="782.0">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="لیست">
+                                             <font>
+                                                <Font name="Tahoma Bold" size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <TableView fx:id="tableDetail" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                            <columns>
+                                              <TableColumn fx:id="colCod" prefWidth="300.0" text="کد " />
+                                              <TableColumn fx:id="colDesc" minWidth="0.0" prefWidth="464.0" text="توضیحات" />
+                                            </columns>
+                                             <contextMenu>
+                                                <ContextMenu>
+                                                  <items>
+                                                    <MenuItem fx:id="menuDelete" mnemonicParsing="false" onAction="#allButtonAction" text="حذف" />
+                                                  </items>
+                                                </ContextMenu>
+                                             </contextMenu>
+                                          </TableView>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
 			</tabs>
 		</TabPane>
 	</children>
