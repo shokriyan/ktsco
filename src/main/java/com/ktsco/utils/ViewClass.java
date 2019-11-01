@@ -125,7 +125,7 @@ public class ViewClass {
 	 * @return VBox
 	 */
 	public VBox setVboxFxml(String fxml) {
-		log.info("Setting FXML for HBOX");
+		log.info("Setting FXML for VBOX");
 		VBox vbox = new VBox();
 
 		FXMLLoader loader = new FXMLLoader();

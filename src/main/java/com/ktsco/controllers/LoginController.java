@@ -10,6 +10,7 @@ import com.ktsco.MainApp;
 import com.ktsco.controllers.admin.AdminController;
 import com.ktsco.controllers.csr.CSRController;
 import com.ktsco.controllers.factory.FactoryController;
+import com.ktsco.controllers.mgmnt.MgmntController;
 import com.ktsco.modelsdao.UsersDAO;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.Constants;
@@ -195,8 +196,14 @@ public class LoginController implements Initializable {
 	}
 
 	private void openMgmtPanel() {
-		// TODO Auto-generated method stub
-
+		if (MainApp.loginStage.isShowing()) {
+			clearFields();
+			Constants.setPanelName("پنل بخش مدیریت");
+			MainApp.loginStage.hide();
+			MgmntController.initialMgmntPanel();
+		} else {
+			log.debug("Login Window is Not Showing at this point");
+		}
 	}
 
 	private void openCSRPanel() {

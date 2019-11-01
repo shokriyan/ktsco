@@ -10,6 +10,7 @@ import com.ktsco.MainApp;
 import com.ktsco.controllers.admin.AdminController;
 import com.ktsco.controllers.csr.CSRController;
 import com.ktsco.controllers.factory.FactoryController;
+import com.ktsco.controllers.mgmnt.MgmntController;
 import com.ktsco.utils.Constants;
 
 import javafx.event.ActionEvent;
@@ -64,7 +65,11 @@ public class TopViewController implements Initializable {
 				CSRController.csrStage.close();
 				MainApp.loginStage.show();
 
-			} else {
+			} else if (MgmntController.mgmntStage != null && MgmntController.mgmntStage.isShowing()) {
+				Constants.setDisplayPanelName(null);
+				MgmntController.mgmntStage.close();
+				MainApp.loginStage.show();
+			}else {
 				log.info("Admin Panel is not Showing at this time");
 			}
 		}

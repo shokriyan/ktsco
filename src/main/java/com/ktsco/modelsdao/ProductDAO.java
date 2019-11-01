@@ -461,4 +461,50 @@ public class ProductDAO {
 		return list; 
 	}
 	
+	public static List<String> getProductListWithID(){
+		List<String> list = new ArrayList<String>();
+		query = "select concat(prod_id, ' - ', prod_name) as products from products where factory_prod = 1";
+		try {
+			resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+			while (resultSet.next()) {
+				list.add(resultSet.getString(1));
+			}
+		}catch(SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				resultSet.close();
+			}catch(SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		
+		return list; 
+	}
+	public static String getUnitMeasure (int productCode) {
+		String unit = null; 
+		query = "Select prod_um from products where prod_id = ?"; 
+		preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setInt(1, productCode);
+			resultSet = preStmt.executeQuery();
+			while (resultSet.next()) {
+				unit = resultSet.getString(1);
+			}
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				preStmt.close();
+				resultSet.close();
+			}catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		return unit;
+	}
+	
 }

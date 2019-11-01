@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.factory.InventoryModel;
+import com.ktsco.models.mgmt.ProductCostModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
@@ -259,8 +260,6 @@ public class InventoryDAO {
 
 		return list;
 	}
-	
-	
 
 	/**
 	 * Retrieve All inventroy Items to use in Combo Boxes
@@ -345,8 +344,8 @@ public class InventoryDAO {
 		}
 		return invName;
 	}
-	
-	public static String getInventoryUnit (String lookUpValue) {
+
+	public static String getInventoryUnit(String lookUpValue) {
 		int invID = getInvId(lookUpValue);
 		String invUnit = null;
 		String query = "Select inv_um from inventory where inv_id = ?";
@@ -358,21 +357,21 @@ public class InventoryDAO {
 			while (resultSet.next()) {
 				invUnit = resultSet.getString(1);
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
-		}finally {
+		} finally {
 			try {
 				preStmt.close();
 				resultSet.close();
-			}catch (SQLException e) {
+			} catch (SQLException e) {
 				log.error(e.getMessage());
 			}
 		}
 		return invUnit;
 	}
-	
-	public static String getInvUnitMeasure (String lookUpValue) {
+
+	public static String getInvUnitMeasure(String lookUpValue) {
 		int invID = getInvId(lookUpValue.split("-")[0].trim());
 		String invUnit = null;
 		String query = "Select inv_um from inventory where inv_id = ?";
@@ -384,18 +383,40 @@ public class InventoryDAO {
 			while (resultSet.next()) {
 				invUnit = resultSet.getString(1);
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
-		}finally {
+		} finally {
 			try {
 				preStmt.close();
 				resultSet.close();
-			}catch (SQLException e) {
+			} catch (SQLException e) {
 				log.error(e.getMessage());
 			}
 		}
 		return invUnit;
+	}
+
+	public static ObservableList<ProductCostModel> getProductDetailList(int productCode) {
+		ObservableList<ProductCostModel> list = FXCollections.observableArrayList();
+		String query = "select (pd.id) as id, (inv.inv_name) as item, (inv.inv_um) as unit, (pd.req_qty) as quantity, "
+				+ "(select (select rate from currencies c where c.currency = eb.currency and c.entryDate = eb.expns_date)* ed.unitprice "
+				+ "as usdunitprice from expenseDetail ed\n" + "inner join expensebill eb on eb.expns_id = ed.expns_id "
+				+ "where inv_id = inv.inv_id\n" + "order by eb.expns_date\n" + "LIMIT 1) as unitprice "
+				+ " from productDetail pd inner join inventory inv on inv.inv_id = pd.inv_id\n" 
+				+ "where pd.prod_id =  " + productCode;
+		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+		DatabaseUtils.convertResultSetToMap(resultSet).forEach(maps -> {
+			int id = (int) maps.get("id"); 
+			String items = maps.get("inv_name").toString(); 
+			String unit = maps.get("inv_um").toString();
+			String quantity = maps.get("req_qty").toString();
+			String unitPrice = maps.get("unitprice").toString();
+			ProductCostModel model = new ProductCostModel(id, items, unit, quantity, unitPrice);
+			list.add(model);
+		});;
+
+		return list;
 	}
 
 }
