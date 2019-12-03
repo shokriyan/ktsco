@@ -9,6 +9,7 @@ import java.util.Map;
 public class TestClass {
 
 	static NumberFormat formatter = new DecimalFormat("#0.00");
+	
 
 	public static void main(String[] args) {
 		String query = "Select * from accounts";
@@ -19,7 +20,9 @@ public class TestClass {
 			System.out.println(map);
 		}
 		
+		
+		
 	}
-	
-
 }
+
+

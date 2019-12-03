@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import com.ktsco.models.mgmt.ProductCostModel;
 import com.ktsco.modelsdao.InventoryDAO;
 import com.ktsco.modelsdao.ProductDAO;
+import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 
 import javafx.collections.FXCollections;
@@ -27,7 +28,7 @@ public class ProductsCostReportController implements Initializable {
 	@FXML
 	private ComboBox<String> comboProductList;
 	@FXML
-	private Button btnSearch, btnCalculate;
+	private Button btnSearch, btnCalculate, btnSave;
 	@FXML
 	private TextField txtWastePerc, txtExpensePerc, txtOverheadPerc;
 
@@ -42,7 +43,8 @@ public class ProductsCostReportController implements Initializable {
 	private Label labelProdUnit, labelWaste, labelOtherExpense, labelOfficeOverhead, labelTotalCost;
 	@FXML
 	private HBox detailPanel;
-
+	double totalCost; 
+	int code; 
 	ObservableList<ProductCostModel> dataList = FXCollections.observableArrayList();
 	private static DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 	@Override
@@ -61,6 +63,8 @@ public class ProductsCostReportController implements Initializable {
 			}
 		}else if (event.getSource() == btnCalculate) {
 			calucateProductCost();
+		}else if (event.getSource() == btnSave) {
+			savePriceHistory();
 		}
 	}
 
@@ -103,6 +107,8 @@ public class ProductsCostReportController implements Initializable {
 	private void SearchForProducts() {
 		if (!comboProductList.getValue().equalsIgnoreCase("")) {
 			int code = Integer.parseInt(comboProductList.getValue().split("-")[0].trim());
+			this.code = code; 
+			
 			populateTableData(code);
 			labelProdUnit.setText(ProductDAO.getUnitMeasure(code));
 		}
@@ -129,11 +135,19 @@ public class ProductsCostReportController implements Initializable {
 		labelOtherExpense.setText(decimalFormat.format(expense));
 		labelOfficeOverhead.setText(decimalFormat.format(overHead));
 		labelTotalCost.setText(decimalFormat.format(totalCost));
+		this.totalCost = totalCost; 
 	}
 	
 	private double calculatePercentage(TextField textField) {
 		double percentage = Double.parseDouble(textField.getText());
 		return calculateCostSubtotal() * (percentage/100);
+	}
+	
+	private void savePriceHistory() {
+		if (this.totalCost != 0 && this.code != 0) {
+			ProductDAO.saveProdHistory(this.code, this.totalCost);
+			AlertsUtils.SuccessfullyDoneAlrt();
+		}
 	}
 
 }

@@ -66,10 +66,14 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </VBox>
-                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="212.0" prefWidth="199.0">
+                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="212.0" prefWidth="199.0" spacing="20.0">
                            <children>
                               <Button fx:id="btnCalculate" mnemonicParsing="false" onAction="#allButtonActions" prefHeight="27.0" prefWidth="133.0" text="محاسبه" />
+                              <Button fx:id="btnSave" layoutX="43.0" layoutY="103.0" mnemonicParsing="false" onAction="#allButtonActions" prefHeight="27.0" prefWidth="133.0" text="ثبت قیمت" />
                            </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
                         </VBox>
                         <VBox layoutX="322.0" layoutY="10.0" prefHeight="212.0" prefWidth="259.0" HBox.hgrow="ALWAYS">
                            <children>

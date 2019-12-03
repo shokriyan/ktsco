@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -402,7 +403,7 @@ public class InventoryDAO {
 		String query = "select (pd.id) as id, (inv.inv_name) as item, (inv.inv_um) as unit, (pd.req_qty) as quantity, "
 				+ "(select (select rate from currencies c where c.currency = eb.currency and c.entryDate = eb.expns_date)* ed.unitprice "
 				+ "as usdunitprice from expenseDetail ed\n" + "inner join expensebill eb on eb.expns_id = ed.expns_id "
-				+ "where inv_id = inv.inv_id\n" + "order by eb.expns_date\n" + "LIMIT 1) as unitprice "
+				+ "where inv_id = inv.inv_id\n" + "order by eb.expns_date desc\n" + "LIMIT 1) as unitprice "
 				+ " from productDetail pd inner join inventory inv on inv.inv_id = pd.inv_id\n" 
 				+ "where pd.prod_id =  " + productCode;
 		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
@@ -417,6 +418,16 @@ public class InventoryDAO {
 		});;
 
 		return list;
+	}
+	
+	public static List<Map<String,Object>> getInventoryReport() {
+		String query = "select inv.inv_id , i.inv_name, i.inv_um, (select totalImport from rawmaterialimport where inv_id = inv.inv_id) as importedRawMaterail , sum(inv.lineTotal) as UsedRawMaterial, (select (select rate from currencies c where c.currency = eb.currency and c.entryDate = eb.expns_date)* ed.unitprice\n" + 
+				"as usdunitprice from expenseDetail ed inner join expensebill eb on eb.expns_id = ed.expns_id\n" + 
+				"where inv_id = inv.inv_id order by eb.expns_date desc LIMIT 1) as unitPrice \n" + 
+				"from productionrawmaterial inv inner join inventory i on i.inv_id = inv.inv_id\n" + 
+				"group by inv_id;";
+		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+		return DatabaseUtils.convertResultSetToMap(resultSet);
 	}
 
 }

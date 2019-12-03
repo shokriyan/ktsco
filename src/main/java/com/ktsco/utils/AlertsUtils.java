@@ -255,6 +255,13 @@ public class AlertsUtils {
 		Alert alert = errorAlerts(alertTitle, alertMessage);
 		alert.show();
 	}
+	
+	public static void dateEntryWarning(String enteredDate) {
+		alertTitle = "Wrong Date Entry";
+		alertMessage = "اشتباه در تاریخ" + "\n" + enteredDate;
+		Alert alert = warningAlerts(alertTitle, alertMessage);
+		alert.show();
+	}
 
 	public static void SuccessfullyDoneAlrt() {
 		

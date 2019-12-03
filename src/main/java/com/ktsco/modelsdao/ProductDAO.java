@@ -17,6 +17,7 @@ import com.ktsco.models.factory.ProductModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
+import com.ktsco.utils.DateUtils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -505,6 +506,43 @@ public class ProductDAO {
 			}
 		}
 		return unit;
+	}
+	
+	public static List<Map<String, Object>> retrieveProductsSalesReport(String productCode, String startDate, String endDate){
+		startDate = (!startDate.equalsIgnoreCase("")) ? DateUtils.convertJalaliToGregory(startDate) : "1900-01-01"; 
+		endDate = (!endDate.equalsIgnoreCase("")) ? DateUtils.convertJalaliToGregory(endDate) : "2900-12-31"; 
+		query = "select p.prod_id as productID , p.prod_name as productName, p.prod_um as unit, \n" + 
+				"sum(sd.quantity) as quantity, Sum((sd.unitprice * (select rate from currencies c where c.currency = \n" + 
+				"(select currencyType from salebills sb\n" + 
+				"where sb.bill_id = sd.bill_id) and \n" + 
+				"c.entryDate = (select billdate from salebills sb\n" + 
+				"where sb.bill_id = sd.bill_id)) ) * sd.quantity) as usdTotal  from products p \n" + 
+				"inner join saledetail sd on sd.product_id = p.prod_id\n" + 
+				"inner join salebills sb on sb.bill_id = sd.bill_id\n" + 
+				"where prod_id like '%"+productCode+"%' and sb.billdate between '"+startDate+"' and '"+endDate+"'\n" + 
+				"group by p.prod_id";
+		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+		return DatabaseUtils.convertResultSetToMap(resultSet);
+	}
+	
+	public static void saveProdHistory(int code, double price) {
+		query = "insert into prod_prc_hst (prod_id,price) values (?,?)";
+		preStmt = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStmt.setInt(1, code);
+			preStmt.setDouble(2, price);
+			preStmt.execute(); 
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				preStmt.close();
+				resultSet.close();
+			}catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
 	}
 	
 }

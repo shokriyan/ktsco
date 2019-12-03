@@ -149,7 +149,7 @@ public class DatabaseUtils {
 			return list;
 		}catch (SQLException e) {
 			log.error("Fail to convert result to map " + e.getMessage());
-			return null; 
+			return list; 
 		}
 	}
 	

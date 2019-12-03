@@ -22,7 +22,7 @@ public class MgmntController implements Initializable{
 	public static Stage mgmntStage; 
 	public static ViewClass views = new ViewClass(); 
 	
-	private static Button production; 
+	private static Button production, rawMaterial; 
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -41,8 +41,13 @@ public class MgmntController implements Initializable{
 		VBox vbox = views.setVboxFxml(fxml);
 		List<Button> buttonList = new ArrayList<Button>(); 
 		production = Commons.addMenuButton("گرازش محصولات");
+		rawMaterial = Commons.addMenuButton("گزارش مواد اولیه");
+		
 		production.setOnAction(event -> allButtonActions(event));
+		rawMaterial.setOnAction(event -> allButtonActions(event));
+		
 		buttonList.add(production);
+		buttonList.add(rawMaterial);
 		
 		for (int i = 0; i < buttonList.size() ; i ++) {
 			vbox.getChildren().add(buttonList.get(i));
@@ -55,6 +60,9 @@ public class MgmntController implements Initializable{
 		if (event.getSource() == production) {
 			Commons.reloadTopView(mgmntBorderScene, production);
 			setCenterPanel(Commons.getFxmlPanel("ProductsReportsPanel"));
+		}else if (event.getSource() == rawMaterial) {
+			Commons.reloadTopView(mgmntBorderScene, rawMaterial);
+			setCenterPanel(Commons.getFxmlPanel("RawMaterailReportPanel"));
 		}
 	}
 	

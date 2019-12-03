@@ -13,31 +13,28 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
-public class ProductsEstRprtController implements Initializable {
+public class RawMaterialRptController implements Initializable{
 	private ViewClass views = new ViewClass();
 	@FXML
-	private Button btnProductPriceEstReport, btnProductSellReports;
+	private Button btnCurrentInvReport; 
 	@FXML
-	private Text textPageSubtitle;
+	private Text textPageSubtitle; 
 	@FXML
-	private HBox hboxReportResults;
+	private HBox hboxReportResults; 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		hboxReportResults.getChildren().clear();
 	}
-
+	
 	@FXML
 	private void allButtonActions(ActionEvent event) {
-		if (event.getSource() == btnProductPriceEstReport) {
-			textPageSubtitle.setText("محاسبه قیمت کالا");
-			setReportBox("ProductsCostEstimation");
-		}else if (event.getSource() == btnProductSellReports) {
-			textPageSubtitle.setText("گزارش فروش محصولات");
-			setReportBox("ProductsSellsReports");
+		if (event.getSource() == btnCurrentInvReport) {
+			textPageSubtitle.setText("گزارش ارزش موجودی انبار");
+			setReportBox("CurrentRawMaterial");
 		}
 	}
-
+	
 	private void setReportBox(String fxml) {
 		hboxReportResults.getChildren().clear();
 		hboxReportResults.getChildren().add(views.setVboxFxml(Commons.getFxmlPanel(fxml)));
