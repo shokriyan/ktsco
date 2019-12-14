@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity"
+	nodeOrientation="RIGHT_TO_LEFT" prefHeight="546.0" prefWidth="1166.0"
+	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.ktsco.controllers.mgmnt.CentralStockReportController">
+	<children>
+		<HBox alignment="CENTER_LEFT" prefHeight="43.0"
+			prefWidth="1166.0" spacing="20.0">
+			<children>
+				<Label text="انتخاب محصول" />
+				<ComboBox fx:id="comboProducts" prefHeight="27.0"
+					prefWidth="409.0" />
+				<Button fx:id="btnSearch" mnemonicParsing="false"
+					onAction="#allButtonsAction" prefHeight="27.0" prefWidth="122.0"
+					text="جستجو" />
+				<Button fx:id="btnReset" layoutX="934.0" layoutY="20.0"
+					mnemonicParsing="false" onAction="#allButtonsAction"
+					prefHeight="27.0" prefWidth="122.0" text="باگذاری مجدد" />
+			</children>
+			<VBox.margin>
+				<Insets />
+			</VBox.margin>
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+		</HBox>
+		<HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+			<children>
+				<VBox prefHeight="411.0" prefWidth="853.0" HBox.hgrow="ALWAYS">
+					<children>
+						<TableView fx:id="tableDetailList" prefHeight="416.0"
+							prefWidth="1166.0" VBox.vgrow="ALWAYS">
+							<columns>
+								<TableColumn fx:id="colNo" prefWidth="50.0"
+									text="شماره" />
+								<TableColumn fx:id="colItems" prefWidth="200.0"
+									text="نوع جنس" />
+								<TableColumn fx:id="colUnit" prefWidth="150.0"
+									text="واحد شمارش" />
+								<TableColumn fx:id="colImport" prefWidth="150.0"
+									text="ورودی" />
+								<TableColumn fx:id="colExport" prefWidth="150.0"
+									text="خروجی" />
+								<TableColumn fx:id="colRemained" prefWidth="150.0"
+									text="باقی مانده" />
+								<TableColumn fx:id="colPrice" prefWidth="150.0"
+									text="قیمت به دلار" />
+								<TableColumn fx:id="colLineTotal" prefWidth="148.0"
+									text="مجموع" />
+							</columns>
+						</TableView>
+						<HBox alignment="CENTER_RIGHT" prefHeight="50.0"
+							prefWidth="1166.0" spacing="30.0">
+							<children>
+								<Label text="مجموغ گزارش">
+									<font>
+										<Font name="Tahoma Bold" size="18.0" />
+									</font>
+								</Label>
+								<Region prefHeight="18.0" prefWidth="77.0" />
+								<Label fx:id="labelTotal" text="Label">
+									<font>
+										<Font name="Tahoma Bold" size="18.0" />
+									</font>
+								</Label>
+								<Region layoutX="1019.0" layoutY="30.0" prefHeight="18.0"
+									prefWidth="77.0" />
+							</children>
+							<padding>
+								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+							</padding>
+						</HBox>
+					</children>
+				</VBox>
+			</children>
+		</HBox>
+	</children>
+</VBox>

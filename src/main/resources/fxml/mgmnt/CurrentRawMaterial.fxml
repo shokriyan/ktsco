@@ -13,10 +13,6 @@
          <children>
             <Label text="انتخاب جنس" />
             <ComboBox fx:id="comboItem" prefHeight="27.0" prefWidth="278.0" />
-            <Label layoutX="20.0" layoutY="23.0" text="تاریخ شروع" />
-            <TextField fx:id="txtStartDate" prefHeight="27.0" prefWidth="138.0" />
-            <Label layoutX="472.0" layoutY="25.0" text="تاریخ پایان" />
-            <TextField fx:id="txtEndDate" layoutX="546.0" layoutY="20.0" prefHeight="27.0" prefWidth="141.0" />
             <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="122.0" text="جستجو" />
             <Button fx:id="btnReset" layoutX="934.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="122.0" text="باگذاری مجدد" />
          </children>

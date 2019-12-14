@@ -32,8 +32,8 @@ public class ProductDAO {
 	private static ObservableList<ProdDetailModel> prodDetailList;
 	private static ProdDetailModel prodDetailModel;
 	private static ResultSetMetaData resultSetMetaData;
-	
-	public static int getProductID (String productName) {
+
+	public static int getProductID(String productName) {
 		int prodID = 0;
 		query = "select prod_id from products where prod_name = ?";
 		preStmt = DatabaseUtils.dbPreparedStatment(query);
@@ -43,18 +43,18 @@ public class ProductDAO {
 			while (resultSet.next()) {
 				prodID = resultSet.getInt(1);
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
-		}finally {
+		} finally {
 			try {
 				preStmt.close();
 				resultSet.close();
-			}catch (SQLException e) {
+			} catch (SQLException e) {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
+
 		return prodID;
 	}
 
@@ -63,7 +63,7 @@ public class ProductDAO {
 	 * 
 	 * @return Observable List
 	 */
-	
+
 	public static ObservableList<ProductModel> selectAll() {
 		list = FXCollections.observableArrayList();
 
@@ -285,10 +285,10 @@ public class ProductDAO {
 				int invId = resultSet.getInt("inv_id");
 				String invName = InventoryDAO.getInvName(invId);
 				String invUnit = InventoryDAO.getInventoryUnit(invName);
-				
+
 				double reqQty = resultSet.getDouble("req_qty");
 
-				prodDetailModel = new ProdDetailModel(id, invName,invUnit, reqQty);
+				prodDetailModel = new ProdDetailModel(id, invName, invUnit, reqQty);
 				prodDetailList.add(prodDetailModel);
 			}
 		} catch (SQLException e) {
@@ -365,7 +365,7 @@ public class ProductDAO {
 	}
 
 	public static boolean updateProduct(int catId, String prodName, String prodUm, int prodid) {
-		boolean success = false; 
+		boolean success = false;
 		query = "Update products set category_id = ? , prod_name = ? , prod_um = ? where prod_id = ?";
 		preStmt = DatabaseUtils.dbPreparedStatment(query);
 		try {
@@ -379,20 +379,19 @@ public class ProductDAO {
 		} catch (SQLException e) {
 			log.error("Error in Executing queyr " + query + " " + e.getMessage());
 			AlertsUtils.databaseErrorAlert();
-			success = false; 
-		}finally {
+			success = false;
+		} finally {
 			try {
 				preStmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		return success; 
+
+		return success;
 	}
 
-	
-	public static List<String> getProductList(){
+	public static List<String> getProductList() {
 		List<String> list = new ArrayList<String>();
 		query = "select prod_name from products where factory_prod = 1 ";
 		try {
@@ -400,24 +399,23 @@ public class ProductDAO {
 			while (resultSet.next()) {
 				list.add(resultSet.getString(1));
 			}
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
-		}finally {
+		} finally {
 			try {
 				resultSet.close();
-			}catch(SQLException e) {
+			} catch (SQLException e) {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
-		
-		return list; 
+
+		return list;
 	}
-	
-	public static String getUnitMeasure (String products) {
-		String unit = null; 
-		query = "Select prod_um from products where prod_name = ?"; 
+
+	public static String getUnitMeasure(String products) {
+		String unit = null;
+		query = "Select prod_um from products where prod_name = ?";
 		preStmt = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStmt.setString(1, products);
@@ -425,21 +423,21 @@ public class ProductDAO {
 			while (resultSet.next()) {
 				unit = resultSet.getString(1);
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
-		}finally {
+		} finally {
 			try {
 				preStmt.close();
 				resultSet.close();
-			}catch (SQLException e) {
+			} catch (SQLException e) {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
 		return unit;
 	}
-	
-	public static ObservableList<String> getProductObservableList(){
+
+	public static ObservableList<String> getProductObservableList() {
 		ObservableList<String> list = FXCollections.observableArrayList();
 		query = "select prod_name from products";
 		try {
@@ -447,22 +445,21 @@ public class ProductDAO {
 			while (resultSet.next()) {
 				list.add(resultSet.getString(1));
 			}
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
-		}finally {
+		} finally {
 			try {
 				resultSet.close();
-			}catch(SQLException e) {
+			} catch (SQLException e) {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
-		
-		return list; 
+
+		return list;
 	}
-	
-	public static List<String> getProductListWithID(){
+
+	public static List<String> getProductListWithID() {
 		List<String> list = new ArrayList<String>();
 		query = "select concat(prod_id, ' - ', prod_name) as products from products where factory_prod = 1";
 		try {
@@ -470,23 +467,23 @@ public class ProductDAO {
 			while (resultSet.next()) {
 				list.add(resultSet.getString(1));
 			}
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
-		}finally {
+		} finally {
 			try {
 				resultSet.close();
-			}catch(SQLException e) {
+			} catch (SQLException e) {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
-		
-		return list; 
+
+		return list;
 	}
-	public static String getUnitMeasure (int productCode) {
-		String unit = null; 
-		query = "Select prod_um from products where prod_id = ?"; 
+
+	public static String getUnitMeasure(int productCode) {
+		String unit = null;
+		query = "Select prod_um from products where prod_id = ?";
 		preStmt = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStmt.setInt(1, productCode);
@@ -494,55 +491,66 @@ public class ProductDAO {
 			while (resultSet.next()) {
 				unit = resultSet.getString(1);
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
-		}finally {
+		} finally {
 			try {
 				preStmt.close();
 				resultSet.close();
-			}catch (SQLException e) {
+			} catch (SQLException e) {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
 		return unit;
 	}
-	
-	public static List<Map<String, Object>> retrieveProductsSalesReport(String productCode, String startDate, String endDate){
-		startDate = (!startDate.equalsIgnoreCase("")) ? DateUtils.convertJalaliToGregory(startDate) : "1900-01-01"; 
-		endDate = (!endDate.equalsIgnoreCase("")) ? DateUtils.convertJalaliToGregory(endDate) : "2900-12-31"; 
-		query = "select p.prod_id as productID , p.prod_name as productName, p.prod_um as unit, \n" + 
-				"sum(sd.quantity) as quantity, Sum((sd.unitprice * (select rate from currencies c where c.currency = \n" + 
-				"(select currencyType from salebills sb\n" + 
-				"where sb.bill_id = sd.bill_id) and \n" + 
-				"c.entryDate = (select billdate from salebills sb\n" + 
-				"where sb.bill_id = sd.bill_id)) ) * sd.quantity) as usdTotal  from products p \n" + 
-				"inner join saledetail sd on sd.product_id = p.prod_id\n" + 
-				"inner join salebills sb on sb.bill_id = sd.bill_id\n" + 
-				"where prod_id like '%"+productCode+"%' and sb.billdate between '"+startDate+"' and '"+endDate+"'\n" + 
-				"group by p.prod_id";
+
+	public static List<Map<String, Object>> retrieveProductsSalesReport(String productCode, String startDate,
+			String endDate) {
+		startDate = (!startDate.equalsIgnoreCase("")) ? DateUtils.convertJalaliToGregory(startDate) : "1900-01-01";
+		endDate = (!endDate.equalsIgnoreCase("")) ? DateUtils.convertJalaliToGregory(endDate) : "2900-12-31";
+		query = "select p.prod_id as productID , p.prod_name as productName, p.prod_um as unit, \n"
+				+ "sum(sd.quantity) as quantity, Sum((sd.unitprice * (select rate from currencies c where c.currency = \n"
+				+ "(select currencyType from salebills sb\n" + "where sb.bill_id = sd.bill_id) and \n"
+				+ "c.entryDate = (select billdate from salebills sb\n"
+				+ "where sb.bill_id = sd.bill_id)) ) * sd.quantity) as usdTotal  from products p \n"
+				+ "inner join saledetail sd on sd.product_id = p.prod_id\n"
+				+ "inner join salebills sb on sb.bill_id = sd.bill_id\n" + "where prod_id like '%" + productCode
+				+ "%' and sb.billdate between '" + startDate + "' and '" + endDate + "'\n" + "group by p.prod_id";
 		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 		return DatabaseUtils.convertResultSetToMap(resultSet);
 	}
-	
+
 	public static void saveProdHistory(int code, double price) {
 		query = "insert into prod_prc_hst (prod_id,price) values (?,?)";
 		preStmt = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStmt.setInt(1, code);
 			preStmt.setDouble(2, price);
-			preStmt.execute(); 
-		}catch (SQLException e) {
+			preStmt.execute();
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
-		}finally {
+		} finally {
 			try {
 				preStmt.close();
 				resultSet.close();
-			}catch (SQLException e) {
+			} catch (SQLException e) {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
 	}
-	
+
+	public static List<Map<String, Object>> prodPriceHistoryData(String code, String days) {
+		query = "select p.prod_id, p.prod_name, p.prod_um, pph.price from products p\n"
+				+ "inner join prod_prc_hst pph on p.prod_id = pph.prod_id\n" + "where p.prod_id like '%" + code + "%'";
+		if (!days.equalsIgnoreCase("")) {
+			query = query + " and pph.dttm_create between CURRENT_DATE - INTERVAL " + days + " DAY AND NOW() ";
+		}
+
+		query = query + " order by pph.dttm_create desc";
+		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+		return DatabaseUtils.convertResultSetToMap(resultSet);
+	}
+
 }

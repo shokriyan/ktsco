@@ -404,28 +404,29 @@ public class InventoryDAO {
 				+ "(select (select rate from currencies c where c.currency = eb.currency and c.entryDate = eb.expns_date)* ed.unitprice "
 				+ "as usdunitprice from expenseDetail ed\n" + "inner join expensebill eb on eb.expns_id = ed.expns_id "
 				+ "where inv_id = inv.inv_id\n" + "order by eb.expns_date desc\n" + "LIMIT 1) as unitprice "
-				+ " from productDetail pd inner join inventory inv on inv.inv_id = pd.inv_id\n" 
-				+ "where pd.prod_id =  " + productCode;
+				+ " from productDetail pd inner join inventory inv on inv.inv_id = pd.inv_id\n" + "where pd.prod_id =  "
+				+ productCode;
 		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 		DatabaseUtils.convertResultSetToMap(resultSet).forEach(maps -> {
-			int id = (int) maps.get("id"); 
-			String items = maps.get("inv_name").toString(); 
+			int id = (int) maps.get("id");
+			String items = maps.get("inv_name").toString();
 			String unit = maps.get("inv_um").toString();
 			String quantity = maps.get("req_qty").toString();
 			String unitPrice = maps.get("unitprice").toString();
 			ProductCostModel model = new ProductCostModel(id, items, unit, quantity, unitPrice);
 			list.add(model);
-		});;
+		});
+		;
 
 		return list;
 	}
-	
-	public static List<Map<String,Object>> getInventoryReport() {
-		String query = "select inv.inv_id , i.inv_name, i.inv_um, (select totalImport from rawmaterialimport where inv_id = inv.inv_id) as importedRawMaterail , sum(inv.lineTotal) as UsedRawMaterial, (select (select rate from currencies c where c.currency = eb.currency and c.entryDate = eb.expns_date)* ed.unitprice\n" + 
-				"as usdunitprice from expenseDetail ed inner join expensebill eb on eb.expns_id = ed.expns_id\n" + 
-				"where inv_id = inv.inv_id order by eb.expns_date desc LIMIT 1) as unitPrice \n" + 
-				"from productionrawmaterial inv inner join inventory i on i.inv_id = inv.inv_id\n" + 
-				"group by inv_id;";
+
+	public static List<Map<String, Object>> getInventoryReport(String code) {
+		String query = "select inv.inv_id , i.inv_name, i.inv_um, (select totalImport from rawmaterialimport where inv_id = inv.inv_id) as importedRawMaterail , sum(inv.lineTotal) as UsedRawMaterial, (select (select rate from currencies c where c.currency = eb.currency and c.entryDate = eb.expns_date)* ed.unitprice\n"
+				+ "as usdunitprice from expenseDetail ed inner join expensebill eb on eb.expns_id = ed.expns_id\n"
+				+ "where inv_id = inv.inv_id order by eb.expns_date desc LIMIT 1) as unitPrice \n"
+				+ "from productionrawmaterial inv inner join inventory i on i.inv_id = inv.inv_id\n"
+				+ "where inv.inv_id like '%"+code+"%' group by inv_id;";
 		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 		return DatabaseUtils.convertResultSetToMap(resultSet);
 	}

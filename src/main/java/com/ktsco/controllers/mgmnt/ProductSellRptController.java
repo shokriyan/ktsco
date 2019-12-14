@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import com.ktsco.models.mgmt.ProductSellRptModel;
+import com.ktsco.models.mgmt.ProductRptModel;
 import com.ktsco.modelsdao.ProductDAO;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
@@ -36,11 +36,11 @@ public class ProductSellRptController implements Initializable {
 	@FXML
 	private Button btnSearch, btnReset;
 	@FXML
-	private TableView<ProductSellRptModel> tableDetailList;
+	private TableView<ProductRptModel> tableDetailList;
 	@FXML
-	private TableColumn<ProductSellRptModel, Integer> colNo;
+	private TableColumn<ProductRptModel, Integer> colNo;
 	@FXML
-	private TableColumn<ProductSellRptModel, String> colItems, colUnit, colQuantity, colPrice;
+	private TableColumn<ProductRptModel, String> colItems, colUnit, colQuantity, colPrice;
 
 	@FXML
 	private Label  labelTotalCost;
@@ -48,7 +48,7 @@ public class ProductSellRptController implements Initializable {
 	private HBox detailPanel;
 	private static DecimalFormat decimalFormat; 
 	
-	ObservableList<ProductSellRptModel> dataList = FXCollections.observableArrayList();
+	ObservableList<ProductRptModel> dataList = FXCollections.observableArrayList();
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -86,7 +86,7 @@ public class ProductSellRptController implements Initializable {
 	}
 
 
-	private void generateColumns(ObservableList<ProductSellRptModel> list) {
+	private void generateColumns(ObservableList<ProductRptModel> list) {
 		colNo.setCellValueFactory(cell -> cell.getValue().idProperty().asObject());
 		colItems.setCellValueFactory(cell -> cell.getValue().itemsProperty());
 		colUnit.setCellValueFactory(cell -> cell.getValue().unitProperty());
@@ -105,7 +105,7 @@ public class ProductSellRptController implements Initializable {
 			String unit = maps.get("prod_um").toString();
 			String quantity = maps.get("quantity").toString();
 			String totalSells = maps.get("usdTotal").toString();
-			ProductSellRptModel model = new ProductSellRptModel(id, item, unit, quantity, totalSells);
+			ProductRptModel model = new ProductRptModel(id, item, unit, quantity, totalSells);
 			dataList.add(model);	
 		});
 		
@@ -117,7 +117,7 @@ public class ProductSellRptController implements Initializable {
 		decimalFormat = new DecimalFormat("$ ###,###.##");
 		if (!dataList.isEmpty()) {
 			double totalPrice = 0; 
-			for (ProductSellRptModel models : dataList) {
+			for (ProductRptModel models : dataList) {
 				totalPrice += Double.parseDouble(models.getTotalPrice().replace(",", ""));
 				labelTotalCost.setText(decimalFormat.format(totalPrice));
 			}

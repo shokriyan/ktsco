@@ -3,9 +3,10 @@ package com.ktsco.modelsdao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.ktsco.models.csr.MainStockModel;
 import com.ktsco.utils.AlertsUtils;
@@ -16,7 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class MainStockDAO {
-	private static Logger log = LoggerFactory.getLogger(SaleBillDAO.class);
+	private static Logger log = Logger.getLogger(SaleBillDAO.class);
 	private static String query;
 	private static ResultSet resultSet;
 	private static PreparedStatement preStatement;
@@ -55,6 +56,27 @@ public class MainStockDAO {
 		}
 
 		return list;
+	}
+
+	public static List<Map<String, Object>> getCenteralStockReport(String code) {
+		query = "SELECT P.PROD_ID, P.PROD_NAME, P.PROD_UM, PV.EXPORTTOTAL, SV.TOTALSALES \n"
+				+ ", (select price from prod_prc_hst where prod_id = p.prod_id order by dttm_create desc limit 1) as unitPrice "
+				+ "FROM PRODUCTS P " + "LEFT OUTER JOIN productionexporttotalview PV ON P.PROD_ID = PV.PROD_ID "
+				+ "LEFT OUTER JOIN  SALESTOTALQUANTITY SV ON SV.PRODUCT_ID = P.PROD_ID where p.prod_id like '%"+code+"%'";
+		
+		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+		return DatabaseUtils.convertResultSetToMap(resultSet);
+	}
+	
+	public static List<Map<String, Object>> getFactoryStockReport(String code) {
+		query = "SELECT P.PROD_ID, P.PROD_NAME, P.PROD_UM,ptv.productionTotal , PV.EXPORTTOTAL\n" + 
+				", (select price from prod_prc_hst where prod_id = p.prod_id order by dttm_create desc limit 1) as unitPrice\n" + 
+				"FROM PRODUCTS P \n" + 
+				"LEFT OUTER JOIN productionexporttotalview PV ON P.PROD_ID = PV.PROD_ID \n" + 
+				"LEFT OUTER JOIN  productiontotalview ptv ON ptv.prod_id = P.PROD_ID "+" where p.prod_id like '%"+code+"%'";
+		
+		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+		return DatabaseUtils.convertResultSetToMap(resultSet);
 	}
 
 }

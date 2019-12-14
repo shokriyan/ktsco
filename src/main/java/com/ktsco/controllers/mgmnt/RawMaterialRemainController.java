@@ -21,7 +21,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
@@ -29,8 +28,7 @@ public class RawMaterialRemainController implements Initializable {
 
 	@FXML
 	private ComboBox<String> comboItem;
-	@FXML
-	private TextField txtStartDate, txtEndDate;
+
 	@FXML
 	private Button btnSearch, btnReset;
 	@FXML
@@ -62,12 +60,17 @@ public class RawMaterialRemainController implements Initializable {
 
 	@FXML
 	private void allButtonsAction(ActionEvent event) {
-
+		if (event.getSource() == btnSearch) {
+			searchItems();
+		}else if (event.getSource() == btnReset) {
+			comboItem.setValue("");
+			searchItems();
+		}
 	}
 
 	private void prerequisitions() {
 		populateItemsCombos();
-		populateTableData();
+		populateTableData("");
 		calculateTotalValue();
 
 	}
@@ -104,8 +107,8 @@ public class RawMaterialRemainController implements Initializable {
 		});
 	}
 
-	private void populateTableData() {
-		List<Map<String, Object>> dataList = InventoryDAO.getInventoryReport();
+	private void populateTableData(String itemCode) {
+		List<Map<String, Object>> dataList = InventoryDAO.getInventoryReport(itemCode);
 		for (Map<String, Object> map : dataList) {
 			int code = Integer.parseInt(map.get("inv_id").toString());
 			String items = map.get("inv_name").toString();
@@ -120,6 +123,7 @@ public class RawMaterialRemainController implements Initializable {
 			tableData.add(model);
 		}
 		generateTableCol(tableData);
+		calculateTotalValue();
 	}
 
 	private void populateItemsCombos() {
@@ -140,6 +144,19 @@ public class RawMaterialRemainController implements Initializable {
 		} else {
 			labelTotal.setText(String.valueOf(formatPrice.format(totalValue)));
 		}
+	}
+	
+	private void searchItems () {
+		tableData.clear();
+		String comboValue = comboItem.getValue(); 
+		if (comboValue.equalsIgnoreCase("")) {
+			populateTableData("");
+		}else {
+			String code = String.valueOf(InventoryDAO.getInvId(comboValue));
+			populateTableData(code);
+		}
+		
+		
 	}
 
 }

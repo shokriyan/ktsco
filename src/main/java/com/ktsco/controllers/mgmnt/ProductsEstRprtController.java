@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
 public class ProductsEstRprtController implements Initializable {
 	private ViewClass views = new ViewClass();
 	@FXML
-	private Button btnProductPriceEstReport, btnProductSellReports;
+	private Button btnProductPriceEstReport, btnProductSellReports, btnProductPrcHistory;
 	@FXML
 	private Text textPageSubtitle;
 	@FXML
@@ -30,11 +30,14 @@ public class ProductsEstRprtController implements Initializable {
 	@FXML
 	private void allButtonActions(ActionEvent event) {
 		if (event.getSource() == btnProductPriceEstReport) {
-			textPageSubtitle.setText("محاسبه قیمت کالا");
+			textPageSubtitle.setText(btnProductPriceEstReport.getText());
 			setReportBox("ProductsCostEstimation");
 		}else if (event.getSource() == btnProductSellReports) {
-			textPageSubtitle.setText("گزارش فروش محصولات");
+			textPageSubtitle.setText(btnProductSellReports.getText());
 			setReportBox("ProductsSellsReports");
+		}else if (event.getSource() == btnProductPrcHistory) {
+			textPageSubtitle.setText(btnProductPrcHistory.getText());
+			setReportBox("ProductsPriceHistory");
 		}
 	}
 

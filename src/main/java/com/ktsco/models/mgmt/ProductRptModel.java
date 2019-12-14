@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class ProductSellRptModel {
+public class ProductRptModel {
 	private static DecimalFormat decimalFormat = new DecimalFormat("###,###.##");
 	
 	private SimpleIntegerProperty id;
@@ -14,11 +14,18 @@ public class ProductSellRptModel {
 	private SimpleStringProperty quantity; 
 	private SimpleStringProperty totalPrice; 
 	
-	public ProductSellRptModel (int id, String items, String unit, String quantity, String totalPrice) {
+	public ProductRptModel (int id, String items, String unit, String quantity, String totalPrice) {
 		this.id = new SimpleIntegerProperty(id);
 		this.items = new SimpleStringProperty(items);
 		this.unit = new SimpleStringProperty(unit);
 		this.quantity = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(quantity)));
+		this.totalPrice = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(totalPrice)));
+	}
+	
+	public ProductRptModel (int id, String items, String unit, String totalPrice) {
+		this.id = new SimpleIntegerProperty(id);
+		this.items = new SimpleStringProperty(items);
+		this.unit = new SimpleStringProperty(unit);
 		this.totalPrice = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(totalPrice)));
 	}
 
