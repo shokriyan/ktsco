@@ -18,6 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class CurrencyDAO {
+	
 
 	private static Logger log = LoggerFactory.getLogger(CurrencyDAO.class);
 	private static String query;

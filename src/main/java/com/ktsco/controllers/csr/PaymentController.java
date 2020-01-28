@@ -195,7 +195,7 @@ public class PaymentController implements Initializable {
 	private void generateBillSummary(int billID) {
 		Map<String, Object> billData = PayableDAO.reteivedBillDetail(billID);
 		if (!billData.isEmpty() && billData != null) {
-			labelBillDate.setText(billData.get("expns_id").toString());
+			labelBillDate.setText(billData.get("expns_date").toString());
 			labelCompany.setText(billData.get("company").toString());
 			labelCurrency.setText(billData.get("currency").toString());
 			double billTotal = Double.parseDouble(billData.get("billtotal").toString());

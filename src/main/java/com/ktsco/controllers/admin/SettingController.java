@@ -172,6 +172,7 @@ public class SettingController implements Initializable {
 		return String.valueOf(sb);
 
 	}
+	
 
 	private void setTextWithProperties() {
 		String serverName = Commons.getConfigurationPropertyValue("serverName");

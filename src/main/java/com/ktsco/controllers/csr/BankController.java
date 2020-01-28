@@ -18,7 +18,7 @@ import javafx.scene.control.TableView;
 public class BankController implements Initializable{
 	
 	@FXML
-	private Button btnAddAccount;
+	private Button btnAddAccount, btnBnkTrans;
 	
 	@FXML
 	private TableView<BankBalanceModel> tableBankAccounts;
@@ -32,6 +32,8 @@ public class BankController implements Initializable{
 	private void allButtonActions(ActionEvent event) {
 		if (event.getSource() == btnAddAccount) {
 			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("accountEntryPanel"));
+		}else if (event.getSource() == btnBnkTrans) {
+			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("BankTransactionPanel"));
 		}
 	}
 	

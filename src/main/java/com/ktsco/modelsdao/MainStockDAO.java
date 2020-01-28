@@ -57,10 +57,11 @@ public class MainStockDAO {
 
 		return list;
 	}
+	
 
 	public static List<Map<String, Object>> getCenteralStockReport(String code) {
-		query = "SELECT P.PROD_ID, P.PROD_NAME, P.PROD_UM, PV.EXPORTTOTAL, SV.TOTALSALES \n"
-				+ ", (select price from prod_prc_hst where prod_id = p.prod_id order by dttm_create desc limit 1) as unitPrice "
+		query = "SELECT P.PROD_ID, P.PROD_NAME, P.PROD_UM, IFNULL(PV.EXPORTTOTAL,0) as exportTotal, IFNULL(SV.TOTALSALES,0) as totalSales \n"
+				+ ", IFNULL((select price from prod_prc_hst where prod_id = p.prod_id order by dttm_create desc limit 1),0) as unitPrice "
 				+ "FROM PRODUCTS P " + "LEFT OUTER JOIN productionexporttotalview PV ON P.PROD_ID = PV.PROD_ID "
 				+ "LEFT OUTER JOIN  SALESTOTALQUANTITY SV ON SV.PRODUCT_ID = P.PROD_ID where p.prod_id like '%"+code+"%'";
 		

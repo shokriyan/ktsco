@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.controlsfx.control.textfield.TextFields;
+
 import com.ktsco.models.mgmt.ProductsRepoModel;
 import com.ktsco.modelsdao.MainStockDAO;
 import com.ktsco.modelsdao.ProductDAO;
@@ -46,6 +48,7 @@ public class CentralStockReportController implements Initializable {
 	NumberFormat formatQuantity = NumberFormat.getNumberInstance();
 	NumberFormat formatPrice = NumberFormat.getCurrencyInstance();
 	public double totalAmount = 0;
+	
 
 	@FXML
 	private Label labelTotal;
@@ -65,6 +68,8 @@ public class CentralStockReportController implements Initializable {
 		populateComboProduct();
 		labelTotal.setText(formatPrice.format(totalAmount));
 		searchForProducts();
+		comboProducts.setEditable(true);
+		TextFields.bindAutoCompletion(comboProducts.getEditor(), comboProducts.getItems());
 	}
 
 	public void populateComboProduct() {
@@ -99,7 +104,7 @@ public class CentralStockReportController implements Initializable {
 			String item = (String) map.get("prod_name");
 			String unit = (String) map.get("prod_um");
 			BigDecimal imported = (BigDecimal) map.get("exportTotal");
-			BigDecimal exported = (BigDecimal) map.get("TOTALSALES");
+			BigDecimal exported = (BigDecimal) map.get("totalSales");
 			double remained = imported.doubleValue() - exported.doubleValue();
 			BigDecimal unitPrice = (BigDecimal) map.get("unitPrice");
 			double lineTotal = remained * unitPrice.doubleValue();

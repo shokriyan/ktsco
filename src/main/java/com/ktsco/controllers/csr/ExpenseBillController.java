@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.controlsfx.control.textfield.TextFields;
+
 import com.ktsco.controllers.factory.InventoryController;
 import com.ktsco.models.csr.BillDetailModel;
 import com.ktsco.modelsdao.CurrencyDAO;
@@ -37,6 +39,7 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 
 public class ExpenseBillController implements Initializable {
+	
 
 	private static DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 
@@ -70,7 +73,8 @@ public class ExpenseBillController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		loadPrerequisitions();
 		generateOneRow();
-
+		comboVendor.setEditable(true);
+		TextFields.bindAutoCompletion(comboVendor.getEditor(), comboVendor.getItems());
 		txtBillDate.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {

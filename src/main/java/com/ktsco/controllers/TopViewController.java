@@ -46,6 +46,7 @@ public class TopViewController implements Initializable {
 
 	}
 
+	
 	@FXML
 	public void allButtonAction(ActionEvent event) {
 		if (event.getSource() == btnSignOut) {

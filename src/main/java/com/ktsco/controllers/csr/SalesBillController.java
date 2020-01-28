@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.controlsfx.control.textfield.TextFields;
+
 import com.ktsco.models.csr.BillDetailModel;
 import com.ktsco.models.csr.MainStockModel;
 import com.ktsco.modelsdao.CurrencyDAO;
@@ -73,6 +75,8 @@ public class SalesBillController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		loadPrerequisitions();
 		generateOneRow();
+		comboCustomer.setEditable(true);
+		TextFields.bindAutoCompletion(comboCustomer.getEditor(), comboCustomer.getItems());
 
 		txtBillDate.textProperty().addListener(new ChangeListener<String>() {
 			@Override

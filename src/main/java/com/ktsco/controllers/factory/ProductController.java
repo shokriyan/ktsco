@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.controlsfx.control.textfield.TextFields;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,6 +88,9 @@ public class ProductController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		loadPrerequisition();
+		comboInvItem.setValue("");
+		comboInvItem.setEditable(true);
+		TextFields.bindAutoCompletion(comboInvItem.getEditor(), comboInvItem.getItems());
 
 	}
 

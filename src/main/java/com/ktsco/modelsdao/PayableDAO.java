@@ -114,6 +114,7 @@ public class PayableDAO {
 				+ "left outer join expnspaytotal ept on ebt.expns_id = ept.expns_id "
 				+ "where ebt.expns_id = ? ";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		
 		try {
 			preStatement.setInt(1, code);
 			resultSet = preStatement.executeQuery();

@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.controlsfx.control.textfield.TextFields;
+
 import com.ktsco.models.factory.DetailReportModel;
 import com.ktsco.modelsdao.InventoryDAO;
 import com.ktsco.modelsdao.InventoryStockDAO;
@@ -70,6 +72,8 @@ public class ImportDetailReportController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		loadPrerequisitions();
 		populateTableRecords();
+		comboItem.setEditable(true);
+		TextFields.bindAutoCompletion(comboItem.getEditor(), comboItem.getItems());
 	}
 	
 	private void loadPrerequisitions() {

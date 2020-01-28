@@ -17,6 +17,7 @@
 					</padding>
 					<children>
 						<Button fx:id="btnAddAccount" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="ثبت اکانت" />
+                  <Button fx:id="btnBnkTrans" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="انتقال پول" />
 					</children>
 				</HBox>
             <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">

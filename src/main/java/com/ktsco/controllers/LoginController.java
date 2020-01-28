@@ -138,6 +138,7 @@ public class LoginController implements Initializable {
 		txtUsername.clear();
 		txtPassword.clear();
 	}
+	
 	private void loginByUserName(String username, String password, String requestedPanel) {
 		if (checkEmptyField()) {
 			if (isUserAdmin(username)) {

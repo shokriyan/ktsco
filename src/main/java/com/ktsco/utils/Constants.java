@@ -28,6 +28,7 @@ public class Constants {
 	private static String loggedUser; 
 	private static String panelName; 
 	private static String displayPanelName; 
+	
 	public static String getDisplayPanelName() {
 		return displayPanelName;
 	}

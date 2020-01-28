@@ -126,7 +126,6 @@ public class Commons {
 	}
 
 	public static void populateAllComboBox(ComboBox<String> combo, List<String> items) {
-
 		ObservableList<String> list = FXCollections.observableArrayList();
 		list.add("");
 

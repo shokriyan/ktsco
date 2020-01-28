@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.controlsfx.control.textfield.TextFields;
+
 import com.ktsco.models.factory.ProductionDetailModel;
 import com.ktsco.modelsdao.EmployeeDAO;
 import com.ktsco.modelsdao.ProductDAO;
@@ -60,6 +62,10 @@ public class ProductionController implements Initializable {
 		// TODO Auto-generated method stub
 		loadPrerequisitions();
 		comboProducts.setValue("");
+		comboEmployee.setEditable(true);
+		comboProducts.setEditable(true);
+		TextFields.bindAutoCompletion(comboEmployee.getEditor(), comboEmployee.getItems());
+		TextFields.bindAutoCompletion(comboProducts.getEditor(), comboProducts.getItems());
 	}
 
 	private void loadPrerequisitions() {

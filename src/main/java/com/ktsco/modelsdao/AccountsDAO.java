@@ -31,6 +31,7 @@ public class AccountsDAO {
 		query = "Select * from accounts";
 		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 		try {
+			
 			while (resultSet.next()) {
 				int code = resultSet.getInt("account_id");
 				String bankAccount = resultSet.getString("bank_Accnt");

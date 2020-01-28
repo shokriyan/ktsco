@@ -24,6 +24,8 @@ public class AdminController implements Initializable {
 	public static BorderPane adminScene;
 	static ViewClass view = new ViewClass();
 	static TopViewController topView = new TopViewController();
+	
+	
 
 	@FXML
 	private static Button btnUsers;

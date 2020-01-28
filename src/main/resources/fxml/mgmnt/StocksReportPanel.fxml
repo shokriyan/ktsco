@@ -18,6 +18,7 @@
 					<children>
 						<Button fx:id="btnCentralStock" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="موجودی انبار مرکزی" />
                   <Button fx:id="btnFactoryStock" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="موجودی انبار کارخانه" />
+                  <Button fx:id="btnText" layoutX="190.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="تست" />
 					</children>
 				</HBox>
             <HBox alignment="CENTER" prefHeight="27.0" prefWidth="1166.0" spacing="20.0" styleClass="subtitleStyle">

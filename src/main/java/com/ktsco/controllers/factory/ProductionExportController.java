@@ -3,6 +3,8 @@ package com.ktsco.controllers.factory;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.controlsfx.control.textfield.TextFields;
+
 import com.ktsco.models.factory.ProductionExportDetailModel;
 import com.ktsco.modelsdao.EmployeeDAO;
 import com.ktsco.modelsdao.ProductDAO;
@@ -67,7 +69,10 @@ public class ProductionExportController implements Initializable {
 		populateComboBoxes();
 		comboProducts.setValue("");
 		comboEmployee.setValue("");
-
+		comboEmployee.setEditable(true);
+		comboProducts.setEditable(true);
+		TextFields.bindAutoCompletion(comboEmployee.getEditor(), comboEmployee.getItems());
+		TextFields.bindAutoCompletion(comboProducts.getEditor(), comboProducts.getItems());
 	}
 
 	@FXML

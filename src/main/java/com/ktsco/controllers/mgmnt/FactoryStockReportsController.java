@@ -111,6 +111,7 @@ public class FactoryStockReportsController implements Initializable {
 
 		generateTableColumns(tableData);
 	}
+	
 
 	public void searchForProducts() {
 		String comboValue = comboProducts.getValue();
