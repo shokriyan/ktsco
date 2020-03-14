@@ -1,10 +1,7 @@
 package com.ktsco.controllers.mgmnt;
 
-import java.math.BigDecimal;
 import java.net.URL;
 import java.text.NumberFormat;
-import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.ktsco.models.mgmt.ProductsRepoModel;
@@ -93,22 +90,7 @@ public class FactoryStockReportsController implements Initializable {
 
 	public void populateTableData(String code) {
 		tableData.clear();
-		List<Map<String, Object>> dbResult = MainStockDAO.getFactoryStockReport(code);
-		dbResult.forEach(map -> {
-			int id = (int) map.get("prod_id");
-			String item = (String) map.get("prod_name");
-			String unit = (String) map.get("prod_um");
-			BigDecimal produced = (BigDecimal) map.get("productionTotal");
-			BigDecimal exported = (BigDecimal) map.get("exportTotal");
-			double remained = produced.doubleValue() - exported.doubleValue();
-			BigDecimal unitPrice = (BigDecimal) map.get("unitPrice");
-			double lineTotal = remained * unitPrice.doubleValue();
-
-			ProductsRepoModel model = new ProductsRepoModel(id, item, unit, produced.doubleValue(),
-					exported.doubleValue(), remained, unitPrice.doubleValue(), lineTotal);
-			tableData.add(model);
-		});
-
+		tableData = MainStockDAO.getFactoryStockReport(code);
 		generateTableColumns(tableData);
 	}
 	

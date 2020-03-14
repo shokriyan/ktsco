@@ -18,6 +18,7 @@ public class DatabaseUtils {
 
 	private static final Logger log = LoggerFactory.getLogger(DatabaseUtils.class);
 	
+
 	private static DataSource getMySqlDataSource() throws SQLException {
 		MysqlDataSource dataSource = new MysqlDataSource();
 		dataSource.setServerName(Commons.getConfigurationPropertyValue("serverName"));
@@ -29,6 +30,8 @@ public class DatabaseUtils {
 		return dataSource;
 	}
 
+	private static Connection connection;
+
 	/**
 	 * this method will create the connection for database and return the Connection
 	 * for other methods.
@@ -36,50 +39,64 @@ public class DatabaseUtils {
 	 * @param sqlUrl
 	 * @return
 	 */
-	public static Connection connection() {
+	public static void OpenConnection() {
+
 		
-		Connection conn;
 		try {
-			conn = getMySqlDataSource().getConnection();
-			
+			log.info("Opening Database Connection");
+			connection = getMySqlDataSource().getConnection();
+
 		} catch (SQLException e) {
 			log.error("Error in creating connection with error massage {} " + e.getMessage());
 			log.info("returning null value");
 			AlertsUtils.databaseErrorAlert();
-			return null;
+			connection = null;
 		}
-		return conn;
 
 	}
-	
+
+	public static void closeConnection() {
+		if (connection != null) {
+			try {
+				log.info("Closing Database Connection");
+				connection.close();
+			} catch (SQLException e) {
+				log.error("Error in Closing connection with error massage {} " + e.getMessage());
+			}
+		}
+	}
+
 	/**
-	 * this method will take only queries with parameters 
-	 * <br> and return a PreparedStatement
+	 * this method will take only queries with parameters <br>
+	 * and return a PreparedStatement
 	 * 
 	 * @param query
 	 * @return PreparedStatement
 	 */
-	
+
 	public static PreparedStatement dbPreparedStatment(String query) {
-		Connection conn = connection();
-		PreparedStatement preStmt = null; 
+		Connection conn = connection;
+		PreparedStatement preStmt = null;
 		try {
-			if(conn != null) {
-				log.debug("Initializing Prepared query for {}", query);
+			if (conn != null) {
+				
 				preStmt = conn.prepareStatement(query);
+				
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error("Error in creating connection with error massage {} ", e.getMessage());
-			log.debug("returning null value");
+			log.info("returning null value");
 			AlertsUtils.databaseErrorAlert();
 			return null;
 		}
 		return preStmt;
 	}
+	
 
 	/**
-	 * This method with queries without parameter and return 
-	 * <br> a ResultSet
+	 * This method with queries without parameter and return <br>
+	 * a ResultSet
+	 * 
 	 * @param query
 	 * @return ResultSet
 	 */
@@ -87,15 +104,15 @@ public class DatabaseUtils {
 
 		ResultSet resultSet = null;
 
-		Connection conn = connection();
+		Connection conn = connection;
 		Statement stmt = null;
 		try {
 			if (conn != null) {
 				stmt = conn.createStatement();
 				resultSet = stmt.executeQuery(query);
-			}else {
+			} else {
 				log.error("Connection received as null check connection");
-				stmt = null; 
+				stmt = null;
 			}
 		} catch (SQLException e) {
 			log.error("Error in creating the statment check the connection {}" + e.getMessage());
@@ -105,54 +122,52 @@ public class DatabaseUtils {
 		return resultSet;
 
 	}
-	
+
 	public static boolean ddlQueryExecution(String query) {
-		boolean result = false; 
-		Connection conn = connection();
+		boolean result = false;
+		Connection conn = connection;
 		Statement stmt = null;
 		try {
 			if (conn != null) {
 				stmt = conn.createStatement();
 				stmt.execute(query);
-			}else {
+			} else {
 				log.error("Connection received as null check connection");
-				stmt = null; 
+				stmt = null;
 			}
 		} catch (SQLException e) {
 			log.error("Error in creating the statment check the connection {}" + e.getMessage());
 			stmt = null;
 
 		}
-		
-		return result ; 
+
+		return result;
 	}
-	
-	
-	public static List<Map<String, Object>> convertResultSetToMap(ResultSet resultSet){
-		List<Map<String, Object>> list = null; 
-		Map<String, Object> rowMap = null; 
+
+	public static List<Map<String, Object>> convertResultSetToMap(ResultSet resultSet) {
+		List<Map<String, Object>> list = null;
+		Map<String, Object> rowMap = null;
 		try {
 			ResultSetMetaData rsmd = resultSet.getMetaData();
-			int  numOfCols = rsmd.getColumnCount();
-			list = new ArrayList<Map<String,Object>>();
-			
+			int numOfCols = rsmd.getColumnCount();
+			list = new ArrayList<Map<String, Object>>();
+
 			while (resultSet.next()) {
+				
 				rowMap = new HashMap<String, Object>();
-				for (int i = 1; i<=numOfCols; i++) {
+				for (int i = 1; i <= numOfCols; i++) {
 					rowMap.put(rsmd.getColumnName(i), resultSet.getObject(i));
 				}
 				list.add(rowMap);
-				
+
 			}
-			
-			log.info("Records converted to List");
+
+			log.info("Records converted to List" + list);
 			return list;
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error("Fail to convert result to map " + e.getMessage());
-			return list; 
+			return list;
 		}
 	}
-	
-	
 
 }

@@ -276,7 +276,6 @@ public class Commons {
 		} catch (NumberFormatException e) {
 			AlertsUtils.numberEntryFormatErrorAlerts();
 		}
-
 		return newValue;
 	}
 
@@ -346,7 +345,7 @@ public class Commons {
 				}
 			}
 			if ("".equalsIgnoreCase(currency)) {
-				log.debug("Can't find the match " + lookupKey);
+				log.info("Can't find the match " + lookupKey);
 			}
 		} else {
 			log.error("Currency Map is Empty ");
@@ -443,7 +442,7 @@ public class Commons {
 			if (Constants.depositTypeList.get(i).equalsIgnoreCase(lookupValue))
 				depType = i; 
 			else 
-				log.debug("can't find a match " + lookupValue);
+				log.info("can't find a match " + lookupValue);
 		}
 		
 		return depType; 
@@ -485,5 +484,6 @@ public class Commons {
 		int tinyint = Integer.parseInt(object.toString());
 		return (tinyint == 0) ? false : true; 
 	}
+	
 
 }

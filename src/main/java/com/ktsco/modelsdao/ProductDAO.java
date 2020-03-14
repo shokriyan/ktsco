@@ -68,7 +68,7 @@ public class ProductDAO {
 		list = FXCollections.observableArrayList();
 
 		query = "Select * from products";
-		log.debug("Executing query {}", query);
+		log.info("Executing query {}", query);
 		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 
 		try {
@@ -94,7 +94,7 @@ public class ProductDAO {
 			try {
 				resultSet.close();
 			} catch (SQLException e) {
-				log.debug("Fail to Closing result set {}", e.getMessage());
+				log.info("Fail to Closing result set {}", e.getMessage());
 				log.error(e.getMessage());
 			}
 		}
@@ -124,7 +124,7 @@ public class ProductDAO {
 			try {
 				resultSet.close();
 			} catch (SQLException e) {
-				log.debug("Fail to Closing result set {}", e.getMessage());
+				log.info("Fail to Closing result set {}", e.getMessage());
 				log.error(e.getMessage());
 			}
 		}
@@ -188,7 +188,7 @@ public class ProductDAO {
 			try {
 				preStmt.close();
 			} catch (SQLException e) {
-				log.debug("Fail to Closing PreparedStatement {}", e.getMessage());
+				log.info("Fail to Closing PreparedStatement {}", e.getMessage());
 				log.error(e.getMessage());
 			}
 		}
@@ -216,7 +216,7 @@ public class ProductDAO {
 			try {
 				preStmt.close();
 			} catch (SQLException e) {
-				log.debug("Fail to Closing PreparedStatement {}", e.getMessage());
+				log.info("Fail to Closing PreparedStatement {}", e.getMessage());
 				log.error(e.getMessage());
 			}
 		}
@@ -240,7 +240,7 @@ public class ProductDAO {
 			try {
 				preStmt.close();
 			} catch (SQLException e) {
-				log.debug("Fail to Closing PreparedStatement {}", e.getMessage());
+				log.info("Fail to Closing PreparedStatement {}", e.getMessage());
 				log.error(e.getMessage());
 			}
 		}
@@ -265,7 +265,7 @@ public class ProductDAO {
 			try {
 				preStmt.close();
 			} catch (SQLException e) {
-				log.debug("Fail to Closing PreparedStatement {}", e.getMessage());
+				log.info("Fail to Closing PreparedStatement {}", e.getMessage());
 				log.error(e.getMessage());
 			}
 		}
@@ -298,7 +298,7 @@ public class ProductDAO {
 			try {
 				preStmt.close();
 			} catch (SQLException e) {
-				log.debug("Fail to Closing PreparedStatement {}", e.getMessage());
+				log.info("Fail to Closing PreparedStatement {}", e.getMessage());
 				log.error(e.getMessage());
 			}
 		}
@@ -337,7 +337,7 @@ public class ProductDAO {
 				preStmt.close();
 				resultSet.close();
 			} catch (SQLException e) {
-				log.debug("Fail to Closing PreparedStatement {}", e.getMessage());
+				log.info("Fail to Closing PreparedStatement {}", e.getMessage());
 				log.error(e.getMessage());
 			}
 		}

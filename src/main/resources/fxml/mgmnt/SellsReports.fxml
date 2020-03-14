@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.StocksReportController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.SellsReportController">
 	<children>
 		<VBox prefHeight="635.0" prefWidth="1166.0">
 			<children>
@@ -16,8 +16,10 @@
 						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 					</padding>
 					<children>
-						<Button fx:id="btnCentralStock" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="موجودی انبار مرکزی" />
-                  <Button fx:id="btnFactoryStock" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="موجودی انبار کارخانه" />
+						<Button fx:id="btnSellsReport" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="گزارش کلی فروشات" />
+                  <Button fx:id="btnSellSummeryUSD" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="گزارش کلی فروشات به دلار" />
+                  <Button fx:id="btnSaleDetailsReports" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="گزارش جزيی فروشات" />
+                  <Button fx:id="btnReceiveDetailReport" layoutX="360.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="گزارش جزیی رسیدها" />
 					</children>
 				</HBox>
             <HBox alignment="CENTER" prefHeight="27.0" prefWidth="1166.0" spacing="20.0" styleClass="subtitleStyle">

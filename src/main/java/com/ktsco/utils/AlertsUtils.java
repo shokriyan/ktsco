@@ -50,7 +50,7 @@ public class AlertsUtils {
 	public static boolean ResposeAlert(String alertTitle, String alertMsg) {
 		boolean response = false;
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		log.debug("Alert response created {} , {}", alertTitle, alertMsg);
+		log.info("Alert response created {} , {}", alertTitle, alertMsg);
 		alert.setTitle(alertTitle);
 		alert.setContentText(alertMsg);
 		Optional<ButtonType> result = alert.showAndWait();

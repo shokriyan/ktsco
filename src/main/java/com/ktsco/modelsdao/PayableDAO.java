@@ -1,5 +1,6 @@
 package com.ktsco.modelsdao;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.csr.PaybillModel;
 import com.ktsco.models.csr.ReceivableModel;
+import com.ktsco.models.mgmt.ReceivedDetailModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
@@ -280,5 +282,60 @@ public class PayableDAO {
 		
 		return list; 
 	}
+
+	public static ObservableList<ReceivedDetailModel> getPaymentsReport(String employee, String currencyType,
+			String fromDate, String toDate) {
+		
+		ObservableList<ReceivedDetailModel> list = FXCollections.observableArrayList();
+
+		query = "select pb.pay_id, pb.expns_id, eb.currency, cu.rate, pb.employee,em.fullname, pb.paydate, pb.amount " + 
+				"from paybills pb " + 
+				"inner join expensebill eb on eb.expns_id = pb.expns_id " + 
+				"inner join employee em on em.employee_id = pb.employee " + 
+				"inner join currencies cu on cu.currency = eb.currency where cu.entrydate = pb.paydate " + 
+				"and pb.employee like ? and eb.currency like ? and pb.paydate between ? and ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setString(1, employee + "%");
+			preStatement.setString(2, "%" + currencyType + "%");
+			preStatement.setString(3, fromDate);
+			preStatement.setString(4, toDate);
+			log.info("Execute Received Detail Query " + preStatement);
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				int receivedId = resultSet.getInt("pay_id");
+				int billId = resultSet.getInt("expns_id");
+				int employeeId = resultSet.getInt("employee");
+				String employeeName = resultSet.getString("fullname");
+				String currency =Commons.getCurrencyValue(resultSet.getString("currency"));
+				String receivedDate = DateUtils.convertGregoryToJalali(resultSet.getString("paydate"));
+				BigDecimal currencyRate = resultSet.getBigDecimal("rate");
+				double originalAmount = resultSet.getDouble("amount");
+				double dolarAmount = originalAmount * currencyRate.doubleValue();
+
+				ReceivedDetailModel model = new ReceivedDetailModel(receivedId, billId, employeeId, employeeName,
+						currency, currencyRate.toPlainString(), receivedDate, originalAmount, dolarAmount);
+				
+				list.add(model);
+
+			}
+
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+
+		return list;
+	}
+	
 
 }

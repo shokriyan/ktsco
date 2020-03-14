@@ -102,12 +102,12 @@ public class SettingController implements Initializable {
 	public void allButtonAction(ActionEvent event) {
 
 		if (event.getSource() == btnStatus) {
-			log.debug("Button clicked {} ", btnStatus);
+			log.info("Button clicked {} ", btnStatus);
 			executeAndShowResponse("status");
 			setButtonTextbasedOnStatus(responseValue);
 			log.info("SQL Server with response {}" + responseValue);
 		} else if (event.getSource() == btnStartStop) {
-			log.debug("Button clicked {} ", btnStartStop);
+			log.info("Button clicked {} ", btnStartStop);
 			if (btnStartStop.getText().equalsIgnoreCase("Start")) {
 				executeAndShowResponse("start");
 				setButtonTextbasedOnStatus(responseValue);

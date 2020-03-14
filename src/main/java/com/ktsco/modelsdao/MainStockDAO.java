@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.ktsco.models.csr.MainStockModel;
+import com.ktsco.models.mgmt.ProductsRepoModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
@@ -69,7 +70,9 @@ public class MainStockDAO {
 		return DatabaseUtils.convertResultSetToMap(resultSet);
 	}
 	
-	public static List<Map<String, Object>> getFactoryStockReport(String code) {
+	public static ObservableList<ProductsRepoModel> getFactoryStockReport(String code) {
+		
+		ObservableList<ProductsRepoModel> tableData = FXCollections.observableArrayList();
 		query = "SELECT P.PROD_ID, P.PROD_NAME, P.PROD_UM,ptv.productionTotal , PV.EXPORTTOTAL\n" + 
 				", (select price from prod_prc_hst where prod_id = p.prod_id order by dttm_create desc limit 1) as unitPrice\n" + 
 				"FROM PRODUCTS P \n" + 
@@ -77,7 +80,38 @@ public class MainStockDAO {
 				"LEFT OUTER JOIN  productiontotalview ptv ON ptv.prod_id = P.PROD_ID "+" where p.prod_id like '%"+code+"%'";
 		
 		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
-		return DatabaseUtils.convertResultSetToMap(resultSet);
+		try {
+			while (resultSet.next()) {
+				int id = resultSet.getInt("PROD_ID");
+				String item = resultSet.getString("PROD_NAME");
+				String unit = resultSet.getString("PROD_UM");
+				
+				double produced = resultSet.getDouble("productionTotal");
+				double exported = resultSet.getDouble("EXPORTTOTAL");
+				double remained = produced - exported;
+				double unitPrice = resultSet.getDouble("unitPrice");
+				double lineTotal = remained * unitPrice;
+
+				ProductsRepoModel model = new ProductsRepoModel(id, item, unit, produced,
+						exported, remained, unitPrice, lineTotal);
+				tableData.add(model);
+			}
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		log.info("Result set for factory Stock report " + tableData.toString());
+		return tableData;
 	}
 
 }

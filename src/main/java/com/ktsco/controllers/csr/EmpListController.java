@@ -97,7 +97,7 @@ public class EmpListController implements Initializable {
 	}
 
 	private void reloadPrerequisition() {
-		log.debug("Loading all required prerequisitions");
+		log.info("Loading all required prerequisitions");
 		generateEmpID();
 		clearTextFields();
 		populateEmpTable();
@@ -109,7 +109,7 @@ public class EmpListController implements Initializable {
 	}
 
 	private void generateEmpID() {
-		log.debug("Generating Employee ID from text box");
+		log.info("Generating Employee ID from text box");
 		int employeeID = EmployeeDAO.getMaxEmpID();
 		txtEmpID.setText(String.valueOf(employeeID));
 	}

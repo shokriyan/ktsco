@@ -1,5 +1,6 @@
 package com.ktsco.modelsdao;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.csr.ReceivableModel;
 import com.ktsco.models.csr.ReceiveModel;
+import com.ktsco.models.mgmt.ReceivedDetailModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.Constants;
@@ -23,7 +25,7 @@ import javafx.collections.ObservableList;
 public class ReceivableDAO {
 
 	private static Logger log = LoggerFactory.getLogger(ReceivableDAO.class);
-	
+
 	private static String query;
 	private static ResultSet resultSet;
 	private static PreparedStatement preStatement;
@@ -44,8 +46,8 @@ public class ReceivableDAO {
 				ReceivableModel model = new ReceivableModel(code, company, billDate, duedate, billTotal, currency);
 				list.add(model);
 			}
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -60,19 +62,17 @@ public class ReceivableDAO {
 		}
 		return list;
 	}
-	
-	public static Map<String, Object> reteivedBillDetail(int code){
+
+	public static Map<String, Object> reteivedBillDetail(int code) {
 		Map<String, Object> billDetail = new HashMap<String, Object>();
 		query = "SELECT sbt.bill_id, sbt.company, sbt.billdate, sbt.currencyType, sbt.billtotal, sum(r.amount) as totalReceived "
-				+ "FROM ktscodb.salesBillTotal  sbt "
-				+"left outer join received r on sbt.bill_id = r.bill_id "
-				+"where sbt.bill_id = ? "
-				+"group by bill_id";
+				+ "FROM ktscodb.salesBillTotal  sbt " + "left outer join received r on sbt.bill_id = r.bill_id "
+				+ "where sbt.bill_id = ? " + "group by bill_id";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setInt(1, code);
 			resultSet = preStatement.executeQuery();
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				billDetail.put("billID", resultSet.getInt("bill_id"));
 				billDetail.put("company", resultSet.getString("company"));
 				billDetail.put("billdate", DateUtils.convertGregoryToJalali(resultSet.getString("billdate")));
@@ -80,8 +80,8 @@ public class ReceivableDAO {
 				billDetail.put("billTotal", resultSet.getDouble("billTotal"));
 				billDetail.put("totalReceived", resultSet.getDouble("totalReceived"));
 			}
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -95,27 +95,27 @@ public class ReceivableDAO {
 			}
 		}
 		return billDetail;
-		
+
 	}
-	
-	public static ObservableList<ReceiveModel> getReceiveDetailByID(int billID){
+
+	public static ObservableList<ReceiveModel> getReceiveDetailByID(int billID) {
 		ObservableList<ReceiveModel> list = FXCollections.observableArrayList();
 		query = "select receive_id, receive_date, amount from received where bill_id = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setInt(1, billID);
-			
+
 			resultSet = preStatement.executeQuery();
 			while (resultSet.next()) {
 				int receiveID = resultSet.getInt("receive_id");
 				String receiveDate = DateUtils.convertGregoryToJalali(resultSet.getString("receive_date"));
 				double amount = resultSet.getDouble("amount");
-				
+
 				ReceiveModel model = new ReceiveModel(receiveID, receiveDate, amount);
 				list.add(model);
 			}
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -130,24 +130,25 @@ public class ReceivableDAO {
 		}
 		return list;
 	}
-	
-	public static boolean insertIntoReceiveTable (int billID, String receiveDate, String employee, String amount, String depositeType) {
-		boolean isSuccess = false; 
-		
+
+	public static boolean insertIntoReceiveTable(int billID, String receiveDate, String employee, String amount,
+			String depositeType) {
+		boolean isSuccess = false;
+
 		query = "insert into received (bill_id, receive_date, emp_id, amount, deposittype) values (?,?,?,?,?)";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
-		
+
 		try {
 			preStatement.setInt(1, billID);
 			preStatement.setString(2, DateUtils.convertJalaliToGregory(receiveDate));
 			preStatement.setInt(3, EmployeeDAO.getEmployeeID(employee));
 			preStatement.setDouble(4, Double.parseDouble(amount));
 			preStatement.setInt(5, Commons.getDepositType(depositeType));
-			
+
 			preStatement.execute();
 			isSuccess = true;
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -160,19 +161,19 @@ public class ReceivableDAO {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
+
 		return isSuccess;
 	}
-	
+
 	public static void updateBillPaidFlagSale(boolean flag, int bill_id) {
 		query = "update salebills set paidflag = ? where bill_id = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
-			int paidFlag = (flag) ? 1 :0;
+			int paidFlag = (flag) ? 1 : 0;
 			preStatement.setInt(1, paidFlag);
 			preStatement.setInt(2, bill_id);
 			preStatement.executeUpdate();
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -186,15 +187,15 @@ public class ReceivableDAO {
 			}
 		}
 	}
-	
-	public static void updateReceiveAmount(String newAmount , int recieve_id) {
+
+	public static void updateReceiveAmount(String newAmount, int recieve_id) {
 		query = "update received set amount = ? where receive_id = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setDouble(1, Double.parseDouble(newAmount));
 			preStatement.setInt(2, recieve_id);
 			preStatement.executeUpdate();
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -208,14 +209,14 @@ public class ReceivableDAO {
 			}
 		}
 	}
-	
+
 	public static void deleteReceiveRecord(int recieve_id) {
 		query = "delete from received where receive_id = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setInt(1, recieve_id);
 			preStatement.execute();
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -229,25 +230,27 @@ public class ReceivableDAO {
 			}
 		}
 	}
-	
-	public static ObservableList<ReceiveModel> searchReceiveRecords(String billID, String startDate, String endDate, String employee){
+
+	public static ObservableList<ReceiveModel> searchReceiveRecords(String billID, String startDate, String endDate,
+			String employee) {
 		ObservableList<ReceiveModel> list = FXCollections.observableArrayList();
 		billID = (!"".equalsIgnoreCase(billID)) ? billID : "";
-		String gstartDate = (!"".equalsIgnoreCase(startDate)) ? DateUtils.convertJalaliToGregory(startDate) : "1900-01-01";
-		String gendDate = (!"".equalsIgnoreCase(endDate)) ?DateUtils.convertJalaliToGregory(endDate): "2900-12-31"; 
-		String empID = (!"".equalsIgnoreCase(employee))? String.valueOf(EmployeeDAO.getEmployeeID(employee)):"";
-		
-		query = "select r.receive_id, r.bill_id, e.fullname, r.receive_date, r.amount , r.deposittype " + 
-				"from received r inner join employee e on e.employee_id = r.emp_id " + 
-				"where r.bill_id like ? AND r.receive_date between ? and ? AND r.emp_id like ? " + 
-				"order by r.receive_id";
+		String gstartDate = (!"".equalsIgnoreCase(startDate)) ? DateUtils.convertJalaliToGregory(startDate)
+				: "1900-01-01";
+		String gendDate = (!"".equalsIgnoreCase(endDate)) ? DateUtils.convertJalaliToGregory(endDate) : "2900-12-31";
+		String empID = (!"".equalsIgnoreCase(employee)) ? String.valueOf(EmployeeDAO.getEmployeeID(employee)) : "";
+
+		query = "select r.receive_id, r.bill_id, e.fullname, r.receive_date, r.amount , r.deposittype "
+				+ "from received r inner join employee e on e.employee_id = r.emp_id "
+				+ "where r.bill_id like ? AND r.receive_date between ? and ? AND r.emp_id like ? "
+				+ "order by r.receive_id";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
-			preStatement.setString(1, "%"+billID+"%");
+			preStatement.setString(1, "%" + billID + "%");
 			preStatement.setString(2, gstartDate);
 			preStatement.setString(3, gendDate);
-			preStatement.setString(4, "%"+empID+"%");
-			
+			preStatement.setString(4, "%" + empID + "%");
+
 			resultSet = preStatement.executeQuery();
 			while (resultSet.next()) {
 				int receiveID = resultSet.getInt("receive_id");
@@ -256,12 +259,13 @@ public class ReceivableDAO {
 				String employeeName = resultSet.getString("fullname");
 				double receiveAmount = resultSet.getDouble("amount");
 				String depositType = Constants.depositTypeList.get(resultSet.getInt("deposittype"));
-				
-				ReceiveModel model = new ReceiveModel(receiveID, bill_id, receiveDate, employeeName, depositType, receiveAmount);
+
+				ReceiveModel model = new ReceiveModel(receiveID, bill_id, receiveDate, employeeName, depositType,
+						receiveAmount);
 				list.add(model);
 			}
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -274,14 +278,13 @@ public class ReceivableDAO {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-				
-		
-		return list; 
+
+		return list;
 	}
-	
+
 	public static boolean getDepositFlag(int receiveID) {
-		boolean isDeposit = false; 
-		query = "select received_flag from received where receive_id = ?"; 
+		boolean isDeposit = false;
+		query = "select received_flag from received where receive_id = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setInt(1, receiveID);
@@ -289,15 +292,16 @@ public class ReceivableDAO {
 			while (resultSet.next()) {
 				int flagCheck = resultSet.getInt("received_flag");
 				if (flagCheck == 0)
-					isDeposit = false; 
+					isDeposit = false;
 				else
-					isDeposit = true; 
+					isDeposit = true;
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
 			try {
+				
 				if (resultSet != null)
 					resultSet.close();
 				if (preStatement != null)
@@ -306,19 +310,19 @@ public class ReceivableDAO {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
-		return isDeposit; 
+
+		return isDeposit;
 	}
-	
-	public static void updateReceivedFlag (int receiveID) {
+
+	public static void updateReceivedFlag(int receiveID) {
 		query = "update received set received_flag = 1 where RECEIVE_ID = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setInt(1, receiveID);
-			
+
 			preStatement.executeUpdate();
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -331,6 +335,58 @@ public class ReceivableDAO {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
+	}
+
+	public static ObservableList<ReceivedDetailModel> getReceivedDetailReport(String employee, String currencyType,
+			String fromDate, String toDate) {
+		ObservableList<ReceivedDetailModel> list = FXCollections.observableArrayList();
+
+		query = "select r.receive_id, r.bill_id, r.receive_date , r.emp_id , e.fullname, amount, c.currency, c.rate "
+				+ "from received r " + "inner join employee e on r.emp_id = e.employee_id "
+				+ "inner join currencies c on c.currency = (select currencyType from salebills where bill_id = r.bill_id and c.entryDate = r.receive_date) "
+				+ "where  r.emp_id like ? and c.currency like ? and r.receive_date between ? AND ? "
+				+ "order by r.receive_id asc";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setString(1, employee + "%");
+			preStatement.setString(2, "%" + currencyType + "%");
+			preStatement.setString(3, fromDate);
+			preStatement.setString(4, toDate);
+			log.info("Execute Received Detail Query " + preStatement);
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				int receivedId = resultSet.getInt("receive_id");
+				int billId = resultSet.getInt("bill_id");
+				int employeeId = resultSet.getInt("emp_id");
+				String employeeName = resultSet.getString("fullname");
+				String currency =Commons.getCurrencyValue(resultSet.getString("currency"));
+				String receivedDate = DateUtils.convertGregoryToJalali(resultSet.getString("receive_date"));
+				BigDecimal currencyRate = resultSet.getBigDecimal("rate");
+				double originalAmount = resultSet.getDouble("amount");
+				double dolarAmount = originalAmount * currencyRate.doubleValue();
+
+				ReceivedDetailModel model = new ReceivedDetailModel(receivedId, billId, employeeId, employeeName,
+						currency, currencyRate.toPlainString(), receivedDate, originalAmount, dolarAmount);
+				
+				list.add(model);
+
+			}
+
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+
+		return list;
 	}
 
 }

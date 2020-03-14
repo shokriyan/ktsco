@@ -73,7 +73,7 @@ private static Logger log = LoggerFactory.getLogger(SaleSearchController.class);
 			if (!tableItemDetail.getSelectionModel().isEmpty()) {
 				SalesSearchModel model = tableItemDetail.getSelectionModel().getSelectedItem();
 				Commons.copyToClipboard(model.getBillID());
-				log.debug("Copied :::: " + String.valueOf(model.getBillID()) );
+				log.info("Copied :::: " + String.valueOf(model.getBillID()) );
 			}
 		}
 	}

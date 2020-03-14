@@ -22,8 +22,7 @@ public class MgmntController implements Initializable{
 	public static Stage mgmntStage; 
 	public static ViewClass views = new ViewClass(); 
 	
-	private static Button production, rawMaterial, Stocks; 
-	
+	private static Button production, rawMaterial, Stocks, Sells, expenses, banks;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
@@ -43,12 +42,21 @@ public class MgmntController implements Initializable{
 		production = Commons.addMenuButton("گرازش محصولات");
 		rawMaterial = Commons.addMenuButton("گزارش مواد اولیه");
 		Stocks = Commons.addMenuButton("انبارها");
+		Sells = Commons.addMenuButton("فروشات");
+		expenses = Commons.addMenuButton("هزینه ها");
+		banks = Commons.addMenuButton("بانک");
 		production.setOnAction(event -> allButtonActions(event));
 		rawMaterial.setOnAction(event -> allButtonActions(event));
 		Stocks.setOnAction(event -> allButtonActions(event));
+		Sells.setOnAction(event -> allButtonActions(event));
+		expenses.setOnAction(event -> allButtonActions(event));
+		banks.setOnAction(event -> allButtonActions(event));
 		buttonList.add(production);
 		buttonList.add(rawMaterial);
 		buttonList.add(Stocks);
+		buttonList.add(Sells);
+		buttonList.add(expenses);
+		buttonList.add(banks);
 		
 		for (int i = 0; i < buttonList.size() ; i ++) {
 			vbox.getChildren().add(buttonList.get(i));
@@ -67,6 +75,15 @@ public class MgmntController implements Initializable{
 		}else if (event.getSource() == Stocks) {
 			Commons.reloadTopView(mgmntBorderScene, Stocks);
 			setCenterPanel(Commons.getFxmlPanel("StocksReportPanel"));
+		}else if (event.getSource() == Sells) {
+			Commons.reloadTopView(mgmntBorderScene, Sells);
+			setCenterPanel(Commons.getFxmlPanel("SellsReports"));
+		}else if (event.getSource() == expenses) {
+			Commons.reloadTopView(mgmntBorderScene, expenses);
+			setCenterPanel(Commons.getFxmlPanel("ExpenseReports"));
+		}else if (event.getSource() == banks) {
+			Commons.reloadTopView(mgmntBorderScene, banks);
+			setCenterPanel(Commons.getFxmlPanel("BanksReports"));
 		}
 	}
 	

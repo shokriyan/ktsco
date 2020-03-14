@@ -73,7 +73,7 @@ public class SaleSearchController implements Initializable{
 			if (!tableItemDetail.getSelectionModel().isEmpty()) {
 				SalesSearchModel model = tableItemDetail.getSelectionModel().getSelectedItem();
 				Commons.copyToClipboard(model.getBillID());
-				log.debug("Copied :::: " + String.valueOf(model.getBillID()) );
+				log.info("Copied :::: " + String.valueOf(model.getBillID()) );
 			}
 		}
 	}

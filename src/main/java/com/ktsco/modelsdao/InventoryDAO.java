@@ -430,5 +430,30 @@ public class InventoryDAO {
 		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 		return DatabaseUtils.convertResultSetToMap(resultSet);
 	}
+	
+	public static List<String> getInvItemsWithCode() {
+		List<String> list = new ArrayList<String>();
+		String query = "select inv_id, inv_name from inventory order by inv_id";
+		ResultSet result = DatabaseUtils.dbSelectExuteQuery(query);
+		log.info("Exectuing query {}", query);
+		try {
+			while (result.next()) {
+				String items = result.getString("inv_id").concat(" - ").concat(result.getString("inv_name"));
+				list.add(items);
+			}
+		} catch (SQLException e) {
+			log.error("Error Executing query {}", query + "with error massage {}", e.getMessage());
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				result.close();
+			} catch (SQLException e) {
+				log.error(e.getMessage());
+			}
+		}
+
+		return list;
+	}
+
 
 }

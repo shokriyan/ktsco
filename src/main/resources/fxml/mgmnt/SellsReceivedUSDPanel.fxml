@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="546.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.SellUSDSummeryController">
+	<children>
+		<HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="1166.0" spacing="20.0">
+			<children>
+				<Label fx:id = "labelComboText" text="مشتری" />
+				<ComboBox fx:id="comboCustomer" prefHeight="27.0" prefWidth="194.0" HBox.hgrow="ALWAYS" />
+				<Label layoutX="428.0" layoutY="25.0" text="تاریخ از" />
+				<TextField fx:id="txtFromDate" prefHeight="27.0" prefWidth="124.0" />
+				<Label text="تا" />
+				<TextField fx:id="txtToDate" prefHeight="27.0" prefWidth="134.0" />
+				<Button fx:id="btnSearch" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="125.0" text="جستجو" />
+				<Button fx:id="btnReset" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="125.0" text="باگذاری مجدد" />
+			</children>
+		</HBox>
+		<HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+			<children>
+				<VBox prefHeight="411.0" prefWidth="853.0" HBox.hgrow="ALWAYS">
+					<children>
+						<TableView fx:id="tableDetailList" prefHeight="416.0" prefWidth="1166.0" VBox.vgrow="ALWAYS">
+							<columns>
+								<TableColumn fx:id="colNo" prefWidth="100.0" resizable="false" text="فاکتور" />
+								<TableColumn fx:id="colCustomer" prefWidth="250.0" resizable="false" text="نام مشتری" />
+								<TableColumn fx:id="colSellDate" prefWidth="170.0" resizable="false" text="تاریخ" />
+								<TableColumn fx:id="colBillTotal" prefWidth="210.0" resizable="false" text="مبلغ فاکتور" />
+								<TableColumn fx:id="colReceiveTotal" prefWidth="210.0" resizable="false" text="مبلغ رسید شده" />
+								<TableColumn fx:id="colRemained" prefWidth="208.0" resizable="false" text="باقی مانده" />
+							</columns>
+						</TableView>
+						<HBox alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="1166.0" spacing="30.0">
+							<children>
+								<Label text="جمع کل فاکتور">
+									<font>
+										<Font name="Tahoma Bold" size="18.0" />
+									</font>
+								</Label>
+								<Region prefHeight="18.0" prefWidth="77.0" />
+								<Label fx:id="labelBillTotal" text="Label">
+									<font>
+										<Font name="Tahoma Bold" size="18.0" />
+									</font>
+								</Label>
+								<Region layoutX="1019.0" layoutY="30.0" prefHeight="18.0" prefWidth="77.0" />
+							</children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+						</HBox>
+						<HBox alignment="CENTER_RIGHT" prefHeight="13.0" prefWidth="1166.0" spacing="30.0">
+							<children>
+								<Label fx:id="labelTableRecText" text="جمع کل رسید">
+									<font>
+										<Font name="Tahoma Bold" size="18.0" />
+									</font>
+								</Label>
+								<Region prefHeight="18.0" prefWidth="77.0" />
+								<Label fx:id="labelReceivedTotal" text="Label">
+									<font>
+										<Font name="Tahoma Bold" size="18.0" />
+									</font>
+								</Label>
+								<Region layoutX="1019.0" layoutY="30.0" prefHeight="18.0" prefWidth="77.0" />
+							</children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+						</HBox>
+						<HBox alignment="CENTER_RIGHT" prefHeight="13.0" prefWidth="1166.0" spacing="30.0">
+							<children>
+								<Label text="جمع کل باقیمانده">
+									<font>
+										<Font name="Tahoma Bold" size="18.0" />
+									</font>
+								</Label>
+								<Region prefHeight="18.0" prefWidth="77.0" />
+								<Label fx:id="labelRemainTotal" text="Label">
+									<font>
+										<Font name="Tahoma Bold" size="18.0" />
+									</font>
+								</Label>
+								<Region layoutX="1019.0" layoutY="30.0" prefHeight="18.0" prefWidth="77.0" />
+							</children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+						</HBox>
+					</children>
+				</VBox>
+			</children>
+		</HBox>
+	</children>
+</VBox>

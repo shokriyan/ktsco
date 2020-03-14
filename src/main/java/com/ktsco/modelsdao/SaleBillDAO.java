@@ -1,5 +1,6 @@
 package com.ktsco.modelsdao;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.csr.BillDetailModel;
 import com.ktsco.models.csr.SalesSearchModel;
+import com.ktsco.models.mgmt.SalesDetailModel;
+import com.ktsco.models.mgmt.SellSummaryModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
@@ -298,21 +301,23 @@ public class SaleBillDAO {
 	public static ObservableList<SalesSearchModel> searchForSalesBill(String code, String company, String startDate,
 			String endDate) {
 		ObservableList<SalesSearchModel> list = FXCollections.observableArrayList();
-		
-		String billID = (null == code || "".equalsIgnoreCase(code)) ? "":code;
-		String customerID = (null == company || "".equalsIgnoreCase(company)) ? "":company;
-		String convertedStartDate = (null == startDate || "".equalsIgnoreCase(startDate)) ? "1900-01-01" : DateUtils.convertJalaliToGregory(startDate);
-		String convertedEndDate = (null == endDate || "".equalsIgnoreCase(endDate)) ? "2900-12-31" : DateUtils.convertJalaliToGregory(endDate);
+
+		String billID = (null == code || "".equalsIgnoreCase(code)) ? "" : code;
+		String customerID = (null == company || "".equalsIgnoreCase(company)) ? "" : company;
+		String convertedStartDate = (null == startDate || "".equalsIgnoreCase(startDate)) ? "1900-01-01"
+				: DateUtils.convertJalaliToGregory(startDate);
+		String convertedEndDate = (null == endDate || "".equalsIgnoreCase(endDate)) ? "2900-12-31"
+				: DateUtils.convertJalaliToGregory(endDate);
 		query = "SELECT SB.BILL_ID , C.COMPANY, C.CURRENCY, SB.BILLDATE, SB.DUEDATE , SUM(SD.QUANTITY * SD.UNITPRICE ) AS BILLTOTAL "
 				+ "FROM SALEBILLS SB INNER JOIN CUSTOMERS C ON SB.CUSTOMER_ID = C.CUSTOMER_ID "
 				+ "INNER JOIN SALEDETAIL SD ON SB.BILL_ID = SD.BILL_ID "
 				+ "WHERE SB.BILL_ID LIKE ? AND C.CUSTOMER_ID LIKE ? AND SB.BILLDATE BETWEEN ? AND ? "
 				+ "GROUP BY SB.BILL_ID ORDER BY BILL_ID";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
-		
+
 		try {
-			preStatement.setString(1, "%"+billID+"%");
-			preStatement.setString(2, "%"+customerID+"%");
+			preStatement.setString(1, "%" + billID + "%");
+			preStatement.setString(2, "%" + customerID + "%");
 			preStatement.setString(3, convertedStartDate);
 			preStatement.setString(4, convertedEndDate);
 			resultSet = preStatement.executeQuery();
@@ -323,11 +328,12 @@ public class SaleBillDAO {
 				String billDate = DateUtils.convertGregoryToJalali(resultSet.getString("billDate"));
 				String dueDate = DateUtils.convertGregoryToJalali(resultSet.getString("duedate"));
 				String billTotal = resultSet.getString("billtotal");
-				SalesSearchModel model = new SalesSearchModel(billCode, billCompany, currency, billDate, dueDate, billTotal);
+				SalesSearchModel model = new SalesSearchModel(billCode, billCompany, currency, billDate, dueDate,
+						billTotal);
 				list.add(model);
-				
+
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -342,6 +348,162 @@ public class SaleBillDAO {
 		}
 
 		return list;
+	}
+
+	public static ObservableList<SellSummaryModel> getSalesSummaryReport(String code, String fromDate, String toDate,
+			String currency) {
+		
+		ObservableList<SellSummaryModel> list = FXCollections.observableArrayList();
+		String currKey = (currency.equalsIgnoreCase("")) ? "" : Commons.getCurrencyKey(currency);
+		String convFromDate = (fromDate.equalsIgnoreCase("")) ? "1900-01-01"
+				: DateUtils.convertJalaliToGregory(fromDate);
+		String convToDate = (toDate.equalsIgnoreCase("")) ? "2900-12-31" : DateUtils.convertJalaliToGregory(toDate);
+
+		query = "SELECT sb.bill_id,c.customer_id, sb.company, sb.billdate, sb.currencytype, "
+				+ "(select rate from currencies where currency = sb.currencytype and entryDate = sb.billdate) as currencyrate, "
+				+ "sb.billtotal FROM salesbilltotal sb left outer join received r on r.bill_id = sb.bill_id "
+				+ "inner join customers c on c.customer_id = (select customer_id from salebills where bill_id = sb.bill_id) "
+				+ "where c.customer_id like ? and sb.currencytype like ? and sb.billdate between ? and ? "
+				+ "group by sb.bill_id, c.customer_id order by sb.bill_id";
+
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setString(1, "%" + code + "%");
+			preStatement.setString(2, "%" + currKey + "%");
+			preStatement.setString(3, convFromDate);
+			preStatement.setString(4, convToDate);
+			resultSet = preStatement.executeQuery();
+
+			while (resultSet.next()) {
+				int billID = resultSet.getInt("bill_id");
+				String customer = resultSet.getString("company");
+				String billdate = DateUtils.convertGregoryToJalali(resultSet.getString("billdate"));
+				String currencyType = Commons.getCurrencyValue(resultSet.getString("currencytype"));
+				BigDecimal rateBig = resultSet.getBigDecimal("currencyrate");
+				double currencyRate = rateBig.doubleValue();
+				double originalPrice = resultSet.getDouble("billtotal");
+				double usdTotal = originalPrice * currencyRate;
+				SellSummaryModel model = new SellSummaryModel(billID, customer, currencyType, billdate, rateBig.toPlainString(),
+						originalPrice, 0, usdTotal);
+				list.add(model);
+			}
+
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		return list;
+	}
+
+	public static ObservableList<SellSummaryModel> getSalesUSDSummaryReport(String customerCode, String fromDate,
+			String toDate) {
+
+		ObservableList<SellSummaryModel> list = FXCollections.observableArrayList();
+		String convFromDate = (fromDate.equalsIgnoreCase("")) ? "1900-01-01"
+				: DateUtils.convertJalaliToGregory(fromDate);
+		String convToDate = (toDate.equalsIgnoreCase("")) ? "2900-12-31" : DateUtils.convertJalaliToGregory(toDate);
+
+		query = "SELECT sb.bill_id,c.customer_id, sb.company, sb.billdate, (sb.billtotal * cu.rate) as billtotal, ifnull(urt.receivedtotal,0) as receivedtotal "
+				+ "FROM salesbilltotal sb\n" + "left outer join usdreceivedtotal urt on urt.bill_id = sb.bill_id "
+				+ "inner join customers c on (c.customer_id = (select customer_id from salebills where bill_id = sb.bill_id)) "
+				+ "inner join currencies cu on cu.currency = sb.currencytype "
+				+ "where sb.billdate = cu.entryDate and c.customer_id like ? and sb.billdate between ? and ? "
+				+ "order by sb.bill_id asc";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setString(1, "%" + customerCode + "%");
+			preStatement.setString(2, convFromDate);
+			preStatement.setString(3, convToDate);
+			resultSet = preStatement.executeQuery();
+
+			while (resultSet.next()) {
+				int billID = resultSet.getInt("bill_id");
+				String customer = resultSet.getString("company");
+				String billdate = DateUtils.convertGregoryToJalali(resultSet.getString("billdate"));
+				double billTotal = resultSet.getDouble("billtotal");
+				double receivedTotal = resultSet.getDouble("receivedtotal");
+				double remainedTotal = billTotal - receivedTotal;
+				SellSummaryModel model = new SellSummaryModel(billID, customer, "", billdate, "0", billTotal,
+						receivedTotal, remainedTotal);
+				list.add(model);
+			}
+
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		return list;
+	}
+
+	public static ObservableList<SalesDetailModel>  getSalesDetailReport(String productName, String currencyType, String fromDate, String toDate) {
+		ObservableList<SalesDetailModel> list = FXCollections.observableArrayList();
+		String productCode = (productName.equalsIgnoreCase("")) ? "" : String.valueOf(ProductDAO.getProductID(productName));
+		
+		String convertyCurrencyType = Commons.getCurrencyKey(currencyType);
+		String convertFromDate = (fromDate.equalsIgnoreCase("")) ? "1900-01-01" : DateUtils.convertJalaliToGregory(fromDate);
+		String convertToDate = (fromDate.equalsIgnoreCase("")) ? "2999-12-30" : DateUtils.convertJalaliToGregory(toDate);
+		
+		query = "SELECT sb.bill_id, sb.billdate, sd.product_id, concat(pd.prod_name, ' - ' , prod_um) as product, sb.currencytype,cu.rate, "
+				+ "sd.quantity, sd.unitprice From salebills sb inner join saledetail sd on sd.bill_id = sb.bill_id "
+				+ "inner join products pd on pd.prod_id = sd.product_id inner join currencies cu on cu.currency = sb.currencytype "
+				+ "where cu.entrydate = sb.billdate and sd.product_id like ? and sb.currencyType like ? and sb.billdate between ? and ? "
+				+ "order by sb.bill_id asc ";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setString(1, "%" + productCode + "%");
+			preStatement.setString(2, "%" + convertyCurrencyType + "%");
+			preStatement.setString(3,  convertFromDate );
+			preStatement.setString(4, convertToDate);
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				int billCode = resultSet.getInt("bill_id");
+				int prodCode = resultSet.getInt("product_id");
+				String prodName = resultSet.getString("product");
+				String saleDate = DateUtils.convertGregoryToJalali(resultSet.getString("billdate"));
+				String currency = Commons.getCurrencyValue(resultSet.getString("currencytype"));
+				BigDecimal currencyRate = resultSet.getBigDecimal("rate");
+				double quantity = resultSet.getDouble("quantity");
+				double unitPrice = resultSet.getDouble("unitprice");
+				double originalLinePrice = quantity * unitPrice; 
+				double usdLinePrice = originalLinePrice * currencyRate.doubleValue(); 
+				
+				SalesDetailModel model = new SalesDetailModel(billCode, prodCode, prodName, saleDate, currency, currencyRate.toPlainString(), quantity, unitPrice, originalLinePrice, usdLinePrice);
+				list.add(model);
+			}
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+				
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		return list; 
 	}
 
 }

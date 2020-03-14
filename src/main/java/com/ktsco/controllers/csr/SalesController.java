@@ -43,10 +43,10 @@ public class SalesController implements Initializable{
 	@FXML
 	private void allButtonActions(ActionEvent event){
 		if (event.getSource() == btnCustomerList) {
-			log.debug("Customer list button clicked");
+			log.info("Customer list button clicked");
 			CustomersController.customerStage = Commons.openPanelsUndecorate(Commons.getFxmlPanel("customerPanelList"));
 		}else if (event.getSource() == btnCurrencyList) {
-			log.debug("Currency List Button Clicked");
+			log.info("Currency List Button Clicked");
 			CurrenciesController.currencyStage = Commons.openPanelsUndecorate(Commons.getFxmlPanel("CurrenciesPanel"));
 		}else if (event.getSource() == btnBillEntry) {
 			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("SalesBillPanel"));

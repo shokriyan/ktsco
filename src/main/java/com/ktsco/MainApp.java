@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.Constants;
+import com.ktsco.utils.DatabaseUtils;
 import com.ktsco.utils.ViewClass;
 
 public class MainApp extends Application {
@@ -26,10 +27,9 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
 
         log.info("Starting KTSCO Management application");
-
         loginScene = view.setSplitPane(Commons.getFxmlPanel("loginPanelFxml"));
         loginStage = view.setSceneShowStage(loginScene, Constants.title, false);
         
-        
+        DatabaseUtils.OpenConnection();
     }
 }

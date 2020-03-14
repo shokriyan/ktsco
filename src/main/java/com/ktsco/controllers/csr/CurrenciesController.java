@@ -81,34 +81,34 @@ public class CurrenciesController implements Initializable {
 		if (event.getSource() == btnClose) {
 			if (currencyStage.isShowing()) {
 				currencyStage.hide();
-				log.debug("Closing Currency Panel");
+				log.info("Closing Currency Panel");
 			}
 		} else if (event.getSource() == btnSearch) {
-			log.debug("Search Button Clicked");
+			log.info("Search Button Clicked");
 			populateCurrencyListTable();
 			tableCurrencyList.setEditable(false);
 		} else if (event.getSource() == btnRefresh) {
-			log.debug("Referesh Button Clicked");
+			log.info("Referesh Button Clicked");
 			txtDate.clear();
 			loadPrerequisitions();
 			tableCurrencyList.setEditable(false);
 		} else if (event.getSource() == btnSave) {
-			log.debug("Save Button Clicked");
+			log.info("Save Button Clicked");
 			if (AlertsUtils.askForSaveItems()) {
 				saveCurrencyRecors();
 			}
 		} else if (event.getSource() == btnDelete) {
-			log.debug("Delete Button Clicked");
+			log.info("Delete Button Clicked");
 			deleteCurrencyRecord();
 			loadPrerequisitions();
 		} else if (event.getSource() == btnCalculate) {
-			log.debug("Calulate Button Clicked");
+			log.info("Calulate Button Clicked");
 			calculateRate();
 		} else if (event.getSource() == btnReset) {
 			txtValueEntry.clear();
 			txtResult.clear();
 		}else if (event.getSource() == menuEdit) {
-			log.debug("Edit Menu Button Clicked");
+			log.info("Edit Menu Button Clicked");
 			tableCurrencyList.setEditable(true);
 		}
 	}
@@ -118,6 +118,7 @@ public class CurrenciesController implements Initializable {
 		CurrencyEntryModel model = tableEntry.getSelectionModel().getSelectedItem();
 		model.setRate(editCell.getNewValue());
 	}
+	
 
 	@FXML
 	private void onRateChangeEdit(CellEditEvent<CurrencyModel, String> editCell) {

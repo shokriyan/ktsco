@@ -14,6 +14,7 @@ import com.ktsco.controllers.mgmnt.MgmntController;
 import com.ktsco.modelsdao.UsersDAO;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.Constants;
+import com.ktsco.utils.DatabaseUtils;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -115,6 +116,7 @@ public class LoginController implements Initializable {
 	private void onButtonClick(ActionEvent event) {
 
 		if (event.getSource() == btnExit) {
+			DatabaseUtils.closeConnection();
 			System.exit(0);
 		} else if (event.getSource() == btnSubmit) {
 			String username = txtUsername.getText();
@@ -147,7 +149,6 @@ public class LoginController implements Initializable {
 				}
 			} else {
 				Map<String, Object> userDetail = UsersDAO.getUserInfoByUsername(username);
-				
 				if (!userDetail.isEmpty()) {
 					if (userDetail.get("password").equals(password)) {
 						Constants.setLoggedUser(userDetail.get("fullname").toString());
@@ -203,7 +204,7 @@ public class LoginController implements Initializable {
 			MainApp.loginStage.hide();
 			MgmntController.initialMgmntPanel();
 		} else {
-			log.debug("Login Window is Not Showing at this point");
+			log.info("Login Window is Not Showing at this point");
 		}
 	}
 
@@ -214,7 +215,7 @@ public class LoginController implements Initializable {
 			MainApp.loginStage.hide();
 			CSRController.initialCSRPanel();
 		} else {
-			log.debug("Login Window is Not Showing at this point");
+			log.info("Login Window is Not Showing at this point");
 		}
 	}
 
@@ -225,7 +226,7 @@ public class LoginController implements Initializable {
 			MainApp.loginStage.hide();
 			FactoryController.initialFactoryPanel();
 		} else {
-			log.debug("Login Window is Not Showing at this point");
+			log.info("Login Window is Not Showing at this point");
 		}
 	}
 
@@ -236,7 +237,7 @@ public class LoginController implements Initializable {
 			MainApp.loginStage.hide();
 			AdminController.initialAdminPanel();
 		} else {
-			log.debug("Login Window is Not Showing at this point");
+			log.info("Login Window is Not Showing at this point");
 		}
 	}
 

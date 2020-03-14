@@ -240,5 +240,28 @@ public class EmployeeDAO {
 		}
 		return empid;
 	}
+	
+	public static List<String> getEmployeeNameWithID(){
+		List<String> empNameList = new ArrayList<String>(); 
+		String query = "select concat(employee_id,' - ', fullname) as employee from employee";
+		try {
+			resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+			while(resultSet.next()) {
+				 String empName = resultSet.getString(1);
+				 empNameList.add(empName);
+			}
+		}catch(SQLException e) {
+			log.error(dbExceptionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		}finally {
+			try {
+				resultSet.close();
+			}catch(SQLException e) {
+				log.error(dbClosingLog(e.getMessage()));
+			}
+		}
+		
+		return empNameList;
+	}
 
 }
