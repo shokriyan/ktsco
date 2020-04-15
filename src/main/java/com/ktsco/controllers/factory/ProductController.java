@@ -31,9 +31,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
+import javafx.util.converter.DoubleStringConverter;
 
 public class ProductController implements Initializable {
 
@@ -91,7 +94,7 @@ public class ProductController implements Initializable {
 		comboInvItem.setValue("");
 		comboInvItem.setEditable(true);
 		TextFields.bindAutoCompletion(comboInvItem.getEditor(), comboInvItem.getItems());
-
+		tableDetail.setEditable(true);
 	}
 
 	private void clearTextFields() {
@@ -266,12 +269,20 @@ public class ProductController implements Initializable {
 		colDetailInvItem.setCellValueFactory(cellData -> cellData.getValue().getInvNameProperty());
 		colDetailInvUnit.setCellValueFactory(cellData -> cellData.getValue().getInvUnitProperty());
 		colDetailQty.setCellValueFactory(cellData -> cellData.getValue().getReqQtyProperty().asObject());
-		
+		colDetailQty.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
 		tableDetail.setItems(list);
+	}
+	
+	@FXML
+	private void onDetailQtyChange(CellEditEvent<ProdDetailModel, String> editedCell) {
+		ProdDetailModel selectedModel = tableDetail.getSelectionModel().getSelectedItem();
+		selectedModel.setReqQty(Double.parseDouble(editedCell.getNewValue()));
+		
+		
 	}
 
 	/**
-	 * private getProdName concating name and size
+	 * private getProdName concatenate name and size
 	 * 
 	 * @return String prodName
 	 */

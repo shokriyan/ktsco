@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.image.Image?>
 
-<VBox nodeOrientation="RIGHT_TO_LEFT" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.TopViewController">
+<VBox fx:id="vboxTop" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="1080.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.TopViewController">
    <children>
-      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="1366.0" styleClass="top-panel" VBox.vgrow="ALWAYS">
+      <HBox nodeOrientation="RIGHT_TO_LEFT" styleClass="top-panel" VBox.vgrow="ALWAYS">
       	<children>
       		<ImageView fitHeight="80.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
       			<image>

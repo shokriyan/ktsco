@@ -6,11 +6,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.factory.ProductController">
+<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="487.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.factory.ProductController">
 	<children>
-		<VBox prefHeight="635.0" prefWidth="1166.0">
+		<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="487.0" prefWidth="1080.0">
 			<children>
-				<HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
+				<HBox alignment="CENTER_LEFT" maxHeight="40.0" minHeight="30.0" spacing="20.0">
 					<padding>
 						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 					</padding>
@@ -24,7 +24,7 @@
 						<Button fx:id="btnRefresh" layoutX="870.0" layoutY="22.0" mnemonicParsing="false" onAction="#allButtonAction" prefWidth="150.0" text="بارگذاری مجدد" />
 					</children>
 				</HBox>
-				<HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="30.0" prefWidth="200.0" spacing="20.0">
+				<HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="30.0" minHeight="30.0" spacing="20.0">
 					<padding>
 						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 					</padding>
@@ -32,11 +32,11 @@
 						<Label fx:id="labelMessage" textAlignment="CENTER" />
 					</children>
 				</HBox>
-				<HBox prefHeight="200.0" prefWidth="200.0" VBox.vgrow="NEVER">
+				<HBox prefHeight="200.0" prefWidth="200.0">
 					<children>
-						<VBox prefHeight="100.0" prefWidth="100.0" spacing="30.0">
+						<VBox spacing="10.0">
 							<padding>
-								<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 							</padding>
 							<children>
 								<Label layoutX="30.0" layoutY="30.0" text="شماره" />
@@ -46,7 +46,7 @@
 								<Label layoutX="20.0" layoutY="74.0" text="تولید کارخانه" />
 							</children>
 						</VBox>
-						<VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="300.0" spacing="20.0">
+						<VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="300.0" spacing="10.0">
 							<children>
 								<TextField fx:id="txtProdId" editable="false" layoutX="30.0" layoutY="25.0" prefWidth="400.0" style="-fx-background-color: lightgray;" />
 								<HBox prefHeight="100.0" prefWidth="200.0">
@@ -60,12 +60,12 @@
 								<CheckBox fx:id="checkFactoryProduct" mnemonicParsing="false" onAction="#onSelectActionForTable" />
 							</children>
 							<padding>
-								<Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
+								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 							</padding>
 						</VBox>
-						<VBox fx:id="vboxProdDetail" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+						<VBox fx:id="vboxProdDetail" HBox.hgrow="ALWAYS">
 							<children>
-								<HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+								<HBox alignment="CENTER_LEFT" spacing="10.0">
 									<children>
 										<ComboBox fx:id="comboInvItem" prefHeight="27.0" prefWidth="364.0" promptText="مواد اولیه" HBox.hgrow="ALWAYS" />
 										<TextField fx:id="txtReqQty" prefHeight="27.0" prefWidth="230.0" promptText="تعداد" HBox.hgrow="ALWAYS" />
@@ -82,7 +82,7 @@
 									<columns>
 										<TableColumn fx:id="colDetailInvItem" prefWidth="300.0" resizable="false" text="مواد اولیه" />
                               <TableColumn fx:id="colDetailInvUnit" prefWidth="236.0" resizable="false" text="دسته بندی" />
-										<TableColumn fx:id="colDetailQty" prefWidth="212.0" resizable="false" text="مقدار" />
+										<TableColumn fx:id="colDetailQty" onEditCommit="#onDetailQtyChange" prefWidth="195.0" resizable="false" text="مقدار" />
 									</columns>
                            <contextMenu>
                               <ContextMenu>
@@ -100,7 +100,7 @@
 					<children>
 						<TableView fx:id="tableProducts" prefHeight="303.0" prefWidth="1147.0" HBox.hgrow="ALWAYS">
 							<columns>
-								<TableColumn fx:id="colNo" prefWidth="200.0" resizable="false" text="شماره" />
+								<TableColumn fx:id="colNo" prefWidth="100.0" resizable="false" text="شماره" />
 								<TableColumn fx:id="colCategory" prefWidth="285.0" resizable="false" text="دسته بندی" />
 								<TableColumn fx:id="colProduct" prefWidth="450.0" resizable="false" text="نام محصول" />
 								<TableColumn fx:id="colUm" prefWidth="213.0" resizable="false" text="واحد شمارش" />

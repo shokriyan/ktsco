@@ -7,21 +7,24 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="487.0" prefWidth="1080" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.SellsSummeryController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="487.0" prefWidth="1080" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.AmountOweController">
 	<children>
 		<HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="40.0" spacing="20.0">
 			<children>
 				<Label fx:id="labelComboValue" text="مشتری" />
-				<ComboBox fx:id="comboCustomer" prefHeight="27.0" prefWidth="179.0" HBox.hgrow="ALWAYS" />
+				<ComboBox fx:id="comboList" prefHeight="27.0" prefWidth="179.0" HBox.hgrow="ALWAYS" />
             <Label layoutX="20.0" layoutY="25.0" text="نوع ارز" />
             <ComboBox fx:id="comboCurrency" layoutX="113.0" layoutY="20.0" prefHeight="27.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
-            <Label layoutX="428.0" layoutY="25.0" text="تاریخ فروش از" />
+            <Label layoutX="428.0" layoutY="25.0" text="تاریخ از" />
             <TextField fx:id="txtFromDate" prefHeight="27.0" prefWidth="100.0" />
             <Label text="تا" />
             <TextField fx:id="txtToDate" prefHeight="27.0" prefWidth="100.0" />
             <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="125.0" text="جستجو" />
             <Button fx:id="btnReset" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="125.0" text="باگذاری مجدد" />
 			</children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
 		</HBox>
 		<HBox VBox.vgrow="ALWAYS">
 			<children>
@@ -29,28 +32,17 @@
 					<children>
 						<TableView fx:id="tableDetailList" prefHeight="416.0" prefWidth="1166.0" VBox.vgrow="ALWAYS">
 							<columns>
-								<TableColumn fx:id="colNo" prefWidth="100.0" resizable="false" text="فاکتور" />
-								<TableColumn fx:id="colCustomer" prefWidth="200.0" resizable="false" text="نام مشتری" />
-								<TableColumn fx:id="colSellDate" prefWidth="115.0" resizable="false" text="تاریخ" />
-								<TableColumn fx:id="colCurrency" prefWidth="90.0" resizable="false" text="نوع ارز" />
-								<TableColumn fx:id="colCurrencyRate" prefWidth="150.0" resizable="false" text="نرخ ارز" />
-								<TableColumn fx:id="colOriginalAmount" prefWidth="200.0" resizable="false" text="مبلغ اصلی" />
-								<TableColumn fx:id="colUsdAmount" prefWidth="207.0" resizable="false" text="تبدیل به دلار" />
+								<TableColumn fx:id="colNo" prefWidth="73.0" resizable="false" text="کد" />
+								<TableColumn fx:id="colCustomer" prefWidth="230.0" resizable="false" text="نام مشتری" />
+								<TableColumn fx:id="colCurrency" prefWidth="120.0" resizable="false" text="نوع ارز" />
+								<TableColumn fx:id="colBillTotal" prefWidth="210.0" resizable="false" text="کل فروشات" />
+								<TableColumn fx:id="colRecPay" prefWidth="210.0" resizable="false" text="کل رسید" />
+                        <TableColumn fx:id="colRemained" prefWidth="210.0" resizable="false" text="باقیمانده" />
 							</columns>
 						</TableView>
 						<HBox alignment="CENTER_RIGHT" spacing="30.0">
 							<children>
-								<Label text="مجموع گزارش به دلار">
-									<font>
-										<Font name="Tahoma Bold" size="18.0" />
-									</font>
-								</Label>
 								<Region prefHeight="18.0" prefWidth="77.0" />
-								<Label fx:id="labelTotal" text="Label">
-									<font>
-										<Font name="Tahoma Bold" size="18.0" />
-									</font>
-								</Label>
 								<Region layoutX="1019.0" layoutY="30.0" prefHeight="18.0" prefWidth="77.0" />
 							</children>
 							<padding>

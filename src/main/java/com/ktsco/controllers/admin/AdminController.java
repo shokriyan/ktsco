@@ -34,7 +34,7 @@ public class AdminController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+		
 	}
 
 	public static void initialAdminPanel() {
@@ -42,6 +42,9 @@ public class AdminController implements Initializable {
 		adminScene.setTop(view.setVboxFxml(Commons.getFxmlPanel("topViewFxml")));
 		adminScene.setRight(setSideMenu(Commons.getFxmlPanel("sideMenuFxml")));
 		adminStage = view.setSceneShowStage(adminScene, Constants.title, true);
+		view.setWindowMax(adminStage);
+
+		
 	}
 
 	private static VBox setSideMenu(String fxml) {

@@ -34,6 +34,7 @@ public class MgmntController implements Initializable{
 		mgmntBorderScene.setRight(setSideMenu(Commons.getFxmlPanel("sideMenuFxml")));
 		
 		mgmntStage = views.setSceneShowStage(mgmntBorderScene, Constants.title, true);
+		views.setWindowMax(mgmntStage);
 	}
 	
 	public static VBox setSideMenu(String fxml) {

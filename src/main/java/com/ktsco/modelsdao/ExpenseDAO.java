@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.csr.BillDetailModel;
 import com.ktsco.models.csr.SalesSearchModel;
+import com.ktsco.models.mgmt.AmountOweModal;
 import com.ktsco.models.mgmt.SalesDetailModel;
 import com.ktsco.models.mgmt.SellSummaryModel;
 import com.ktsco.utils.AlertsUtils;
@@ -57,7 +58,7 @@ public class ExpenseDAO {
 
 	public static boolean insertIntoExpnsBill(int expense_id, int vendorID, String billDate, String currencyType,
 			String billMemo) {
-		
+
 		boolean isSuccess = false;
 		query = "INSERT INTO EXPENSEBILL (EXPNS_ID, vendor_id, expns_date, currency, memo) VALUES "
 				+ "(?,?,?,?,?) ON DUPLICATE KEY UPDATE vendor_id = ? , expns_date = ? , currency = ? , memo = ?";
@@ -101,12 +102,10 @@ public class ExpenseDAO {
 		return isSuccess;
 	}
 
-	public static boolean insertBillDetail(int id, int billID, String product, String quantity, String unitPrice) {
+	public static boolean insertBillDetail(int id, int billID, String product, double quantity, double unitPrice) {
 		boolean isSuccess = false;
 		int detailID = (id > 0) ? id : 0;
 		int productID = InventoryDAO.getInvId(product);
-		double quantityValue = Double.parseDouble(quantity.replace(",", ""));
-		double unitpriceValue = Double.parseDouble(unitPrice.replace(",", ""));
 
 		query = "INSERT INTO expenseDetail (ID, expns_id, inv_id, QUANTITY, UNITPRICE) VALUES (?,?,?,?,?)"
 				+ " ON DUPLICATE KEY UPDATE inv_id = ? , QUANTITY = ? , UNITPRICE = ?";
@@ -116,11 +115,11 @@ public class ExpenseDAO {
 			preStatement.setInt(1, detailID);
 			preStatement.setInt(2, billID);
 			preStatement.setInt(3, productID);
-			preStatement.setDouble(4, quantityValue);
-			preStatement.setDouble(5, unitpriceValue);
+			preStatement.setDouble(4, quantity);
+			preStatement.setDouble(5, unitPrice);
 			preStatement.setInt(6, productID);
-			preStatement.setDouble(7, quantityValue);
-			preStatement.setDouble(8, unitpriceValue);
+			preStatement.setDouble(7, quantity);
+			preStatement.setDouble(8, unitPrice);
 			preStatement.execute();
 			isSuccess = true;
 
@@ -170,9 +169,9 @@ public class ExpenseDAO {
 			}
 		}
 
-		return data;		
+		return data;
 	}
-	
+
 	public static boolean deleteSaleBill(int billID) {
 		boolean isSuccess = false;
 		query = "Delete from expensebill where expns_id = ?";
@@ -197,7 +196,6 @@ public class ExpenseDAO {
 
 		return isSuccess;
 	}
-	
 
 	public static boolean deleteBillDetail(int id) {
 		boolean isSuccess = false;
@@ -223,16 +221,15 @@ public class ExpenseDAO {
 
 		return isSuccess;
 	}
-	
+
 	public static ObservableList<BillDetailModel> retrieveSaleDateAfterSave(int billID) {
 		ObservableList<BillDetailModel> list = FXCollections.observableArrayList();
 		int lineNumber = 1;
 
-		query = "SELECT ID, concat(inv.inv_name, ' - ', cat.category) AS Item, ex.QUANTITY, ex.UNITPRICE FROM expenseDetail ex "
+		query = "SELECT ID, ex.inv_id, concat(inv.inv_name, ' - ', cat.category) AS Item, ex.QUANTITY, ex.UNITPRICE FROM expenseDetail ex "
 				+ "INNER JOIN inventory inv ON ex.inv_id = inv.inv_id "
-				+"inner join category cat on inv.category_id = cat.category_id "
-				+ "WHERE expns_id = ?";
-		
+				+ "inner join category cat on inv.category_id = cat.category_id " + "WHERE expns_id = ?";
+
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setInt(1, billID);
@@ -241,11 +238,12 @@ public class ExpenseDAO {
 			while (resultSet.next()) {
 				int id = resultSet.getInt("id");
 				String items = resultSet.getString("item");
-				String unit =InventoryDAO.getInvUnitMeasure(items);
-				String quantity = String.valueOf(resultSet.getDouble("quantity"));
-				String unitPrice = String.valueOf(resultSet.getDouble("unitprice"));
-				String lineTotal = Commons.calculateLineTotal(quantity, unitPrice);
-				BillDetailModel model = new BillDetailModel(id, lineNumber, items, unit, quantity, unitPrice,
+				String itemCode = resultSet.getString("inv_id");
+				String unit = InventoryDAO.getInvUnitMeasure(items);
+				double quantity = resultSet.getDouble("quantity");
+				double unitPrice = resultSet.getDouble("unitprice");
+				BigDecimal lineTotal = BigDecimal.valueOf(Commons.calculateLineTotal(quantity, unitPrice));
+				BillDetailModel model = new BillDetailModel(id, itemCode, lineNumber, items, unit, quantity, unitPrice,
 						lineTotal);
 				list.add(model);
 				lineNumber++;
@@ -267,25 +265,27 @@ public class ExpenseDAO {
 
 		return list;
 	}
-	
+
 	public static ObservableList<SalesSearchModel> searchExpense(String code, String company, String startDate,
 			String endDate) {
 		ObservableList<SalesSearchModel> list = FXCollections.observableArrayList();
-		
-		String billID = (null == code || "".equalsIgnoreCase(code)) ? "":code;
-		String customerID = (null == company || "".equalsIgnoreCase(company)) ? "":company;
-		String convertedStartDate = (null == startDate || "".equalsIgnoreCase(startDate)) ? "1900-01-01" : DateUtils.convertJalaliToGregory(startDate);
-		String convertedEndDate = (null == endDate || "".equalsIgnoreCase(endDate)) ? "2900-12-31" : DateUtils.convertJalaliToGregory(endDate);
+
+		String billID = (null == code || "".equalsIgnoreCase(code)) ? "" : code;
+		String customerID = (null == company || "".equalsIgnoreCase(company)) ? "" : company;
+		String convertedStartDate = (null == startDate || "".equalsIgnoreCase(startDate)) ? "1900-01-01"
+				: DateUtils.convertJalaliToGregory(startDate);
+		String convertedEndDate = (null == endDate || "".equalsIgnoreCase(endDate)) ? "2900-12-31"
+				: DateUtils.convertJalaliToGregory(endDate);
 		query = "SELECT EB.EXPNS_ID , V.COMPANY, V.CURRENCY, EB.EXPNS_DATE , SUM(ED.QUANTITY * ED.UNITPRICE ) AS BILLTOTAL "
 				+ "FROM EXPENSEBILL EB INNER JOIN VENDORS V ON EB.VENDOR_ID = V.VENDOR_ID "
 				+ "INNER JOIN EXPENSEDETAIL ED ON EB.EXPNS_ID = ED.EXPNS_ID "
 				+ "WHERE EB.EXPNS_ID LIKE ? AND V.VENDOR_ID LIKE ? AND EB.EXPNS_DATE BETWEEN ? AND ? "
 				+ "GROUP BY EB.EXPNS_ID ORDER BY EB.EXPNS_ID";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
-		
+
 		try {
-			preStatement.setString(1, "%"+billID+"%");
-			preStatement.setString(2, "%"+customerID+"%");
+			preStatement.setString(1, "%" + billID + "%");
+			preStatement.setString(2, "%" + customerID + "%");
 			preStatement.setString(3, convertedStartDate);
 			preStatement.setString(4, convertedEndDate);
 			resultSet = preStatement.executeQuery();
@@ -297,9 +297,9 @@ public class ExpenseDAO {
 				String billTotal = resultSet.getString("billtotal");
 				SalesSearchModel model = new SalesSearchModel(billCode, billCompany, currency, billDate, billTotal);
 				list.add(model);
-				
+
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -315,22 +315,22 @@ public class ExpenseDAO {
 
 		return list;
 	}
-	
+
 	public static ObservableList<SellSummaryModel> getExpenseSummaryReport(String code, String fromDate, String toDate,
 			String currency) {
-		
+
 		ObservableList<SellSummaryModel> list = FXCollections.observableArrayList();
 		String currKey = (currency.equalsIgnoreCase("")) ? "" : Commons.getCurrencyKey(currency);
 		String convFromDate = (fromDate.equalsIgnoreCase("")) ? "1900-01-01"
 				: DateUtils.convertJalaliToGregory(fromDate);
 		String convToDate = (toDate.equalsIgnoreCase("")) ? "2900-12-31" : DateUtils.convertJalaliToGregory(toDate);
 
-		query = "SELECT ex.expns_id,eb.expns_date ,eb.vendor_id, v.company, eb.currency,cu.rate, ex.billtotal FROM expnsbilltotal ex " + 
-				"inner join expenseBill eb on eb.expns_id = ex.expns_id " + 
-				"inner join vendors v on v.vendor_id = eb.vendor_id " + 
-				"inner join currencies cu on cu.currency = eb.currency " + 
-				"where cu.entryDate = eb.expns_date and eb.vendor_id like ? and eb.currency like ? and eb.expns_date between ? and ? \n" + 
-				"order by ex.expns_id";
+		query = "SELECT ex.expns_id,eb.expns_date ,eb.vendor_id, v.company, eb.currency,cu.rate, ex.billtotal FROM expnsbilltotal ex "
+				+ "inner join expenseBill eb on eb.expns_id = ex.expns_id "
+				+ "inner join vendors v on v.vendor_id = eb.vendor_id "
+				+ "inner join currencies cu on cu.currency = eb.currency "
+				+ "where cu.entryDate = eb.expns_date and eb.vendor_id like ? and eb.currency like ? and eb.expns_date between ? and ? \n"
+				+ "order by ex.expns_id";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setString(1, code + "%");
@@ -348,8 +348,8 @@ public class ExpenseDAO {
 				double currencyRate = rateBigDecimal.doubleValue();
 				double originalPrice = resultSet.getDouble("billtotal");
 				double usdTotal = originalPrice * currencyRate;
-				SellSummaryModel model = new SellSummaryModel(billID, customer, currencyType, billdate, rateBigDecimal.toPlainString(),
-						originalPrice, 0, usdTotal);
+				SellSummaryModel model = new SellSummaryModel(billID, customer, currencyType, billdate,
+						rateBigDecimal.toPlainString(), originalPrice, 0, usdTotal);
 				list.add(model);
 			}
 
@@ -376,14 +376,14 @@ public class ExpenseDAO {
 				: DateUtils.convertJalaliToGregory(fromDate);
 		String convToDate = (toDate.equalsIgnoreCase("")) ? "2900-12-31" : DateUtils.convertJalaliToGregory(toDate);
 
-		query = "SELECT ex.expns_id,eb.expns_date ,eb.vendor_id, v.company, (ex.billtotal * cu.rate) as billTotal , " + 
-				"IFNULL(tpd.paiddoloramount,0) as payTotal FROM expnsbilltotal ex " + 
-				"inner join expenseBill eb on eb.expns_id = ex.expns_id " + 
-				"left join totalpaiddolor tpd on tpd.expns_id = eb.expns_id " + 
-				"inner join vendors v on v.vendor_id = eb.vendor_id " + 
-				"inner join currencies cu on cu.currency = eb.currency " + 
-				"where cu.entryDate = eb.expns_date and eb.vendor_id like ? and eb.expns_date between ? and ?" + 
-				"order by ex.expns_id";
+		query = "SELECT ex.expns_id,eb.expns_date ,eb.vendor_id, v.company, (ex.billtotal * cu.rate) as billTotal , "
+				+ "IFNULL(tpd.paiddoloramount,0) as payTotal FROM expnsbilltotal ex "
+				+ "inner join expenseBill eb on eb.expns_id = ex.expns_id "
+				+ "left join totalpaiddolor tpd on tpd.expns_id = eb.expns_id "
+				+ "inner join vendors v on v.vendor_id = eb.vendor_id "
+				+ "inner join currencies cu on cu.currency = eb.currency "
+				+ "where cu.entryDate = eb.expns_date and eb.vendor_id like ? and eb.expns_date between ? and ?"
+				+ "order by ex.expns_id";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setString(1, customerCode + "%");
@@ -421,26 +421,27 @@ public class ExpenseDAO {
 
 	public static ObservableList<SalesDetailModel> getExpenseDetailReport(String productName, String currencyType,
 			String fromDate, String toDate) {
-		
+
 		ObservableList<SalesDetailModel> list = FXCollections.observableArrayList();
 		String productCode = (productName.equalsIgnoreCase("")) ? "" : productName.split("-")[0].trim();
-		
+
 		String convertyCurrencyType = Commons.getCurrencyKey(currencyType);
-		String convertFromDate = (fromDate.equalsIgnoreCase("")) ? "1900-01-01" : DateUtils.convertJalaliToGregory(fromDate);
-		String convertToDate = (fromDate.equalsIgnoreCase("")) ? "2999-12-30" : DateUtils.convertJalaliToGregory(toDate);
-		
-		query = "select eb.expns_id, eb.expns_date, eb.currency, ed.inv_id, concat(inv.inv_name,' - ',inv.inv_um) as item, " + 
-				"ed.unitprice, ed.quantity, cu.rate " + 
-				"from expensebill eb " + 
-				"inner join expenseDetail ed on ed.expns_id = eb.expns_id " + 
-				"inner join inventory inv on inv.inv_id = ed.inv_id " + 
-				"inner join currencies cu on cu.currency = eb.currency where cu.entrydate = eb.expns_date " + 
-				"and ed.inv_id like ? and cu.currency like ? and eb.expns_date between ? and ?";
+		String convertFromDate = (fromDate.equalsIgnoreCase("")) ? "1900-01-01"
+				: DateUtils.convertJalaliToGregory(fromDate);
+		String convertToDate = (fromDate.equalsIgnoreCase("")) ? "2999-12-30"
+				: DateUtils.convertJalaliToGregory(toDate);
+
+		query = "select eb.expns_id, eb.expns_date, eb.currency, ed.inv_id, concat(inv.inv_name,' - ',inv.inv_um) as item, "
+				+ "ed.unitprice, ed.quantity, cu.rate " + "from expensebill eb "
+				+ "inner join expenseDetail ed on ed.expns_id = eb.expns_id "
+				+ "inner join inventory inv on inv.inv_id = ed.inv_id "
+				+ "inner join currencies cu on cu.currency = eb.currency where cu.entrydate = eb.expns_date "
+				+ "and ed.inv_id like ? and cu.currency like ? and eb.expns_date between ? and ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setString(1, productCode + "%");
 			preStatement.setString(2, "%" + convertyCurrencyType + "%");
-			preStatement.setString(3,  convertFromDate );
+			preStatement.setString(3, convertFromDate);
 			preStatement.setString(4, convertToDate);
 			resultSet = preStatement.executeQuery();
 			while (resultSet.next()) {
@@ -452,13 +453,14 @@ public class ExpenseDAO {
 				BigDecimal currencyRate = resultSet.getBigDecimal("rate");
 				double quantity = resultSet.getDouble("quantity");
 				double unitPrice = resultSet.getDouble("unitprice");
-				double originalLinePrice = quantity * unitPrice; 
-				double usdLinePrice = originalLinePrice * currencyRate.doubleValue(); 
-				
-				SalesDetailModel model = new SalesDetailModel(billCode, prodCode, prodName, saleDate, currency, currencyRate.toPlainString(), quantity, unitPrice, originalLinePrice, usdLinePrice);
+				double originalLinePrice = quantity * unitPrice;
+				double usdLinePrice = originalLinePrice * currencyRate.doubleValue();
+
+				SalesDetailModel model = new SalesDetailModel(billCode, prodCode, prodName, saleDate, currency,
+						currencyRate.toPlainString(), quantity, unitPrice, originalLinePrice, usdLinePrice);
 				list.add(model);
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -467,13 +469,67 @@ public class ExpenseDAO {
 					resultSet.close();
 				if (preStatement != null)
 					preStatement.close();
-				
+
 			} catch (SQLException e) {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
-		return list; 
+
+		return list;
+	}
+
+	public static ObservableList<AmountOweModal> getExpenseAmountOweReport(String vendorCode, String currencyType,
+			String fromDate, String toDate) {
+		ObservableList<AmountOweModal> list = FXCollections.observableArrayList();
+		String vendorId = (vendorCode.equalsIgnoreCase("")) ? "" : vendorCode;
+		String convertyCurrencyType = Commons.getCurrencyKey(currencyType);
+		String convertFromDate = (fromDate.equalsIgnoreCase("")) ? "1900-01-01"
+				: DateUtils.convertJalaliToGregory(fromDate);
+		String convertToDate = (fromDate.equalsIgnoreCase("")) ? "2999-12-30"
+				: DateUtils.convertJalaliToGregory(toDate);
+
+		query = "select v.vendor_id,v.company, v.currency, SUM(ebt.billtotal) as billtotal , IFNULL(SUM(ept.totalpaid) , 0) as paytotal from expensebill eb "
+				+ "inner join expnsbilltotal ebt on ebt.expns_id = eb.expns_id "
+				+ "left outer join expnspaytotal ept on ept.expns_id = ebt.expns_id "
+				+ "inner join vendors v on v.vendor_id = eb.vendor_id "
+				+ "where v.vendor_id like ? and v.currency like ? and eb.expns_date between ? and ? "
+				+ "group by v.vendor_id";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setString(1, vendorId + "%");
+			preStatement.setString(2, "%" + convertyCurrencyType + "%");
+			preStatement.setString(3, convertFromDate);
+			preStatement.setString(4, convertToDate);
+
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				int id = resultSet.getInt("vendor_id");
+				String company = resultSet.getString("company");
+				String currency = Commons.getCurrencyValue(resultSet.getString("currency"));
+				double billTotal = resultSet.getDouble("billtotal");
+				double paidTotal = resultSet.getDouble("paytotal");
+				double amountRemained = billTotal - paidTotal;
+
+				AmountOweModal model = new AmountOweModal(id, company, currency, billTotal, 0, paidTotal,
+						amountRemained);
+				list.add(model);
+			}
+
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		return list;
 	}
 
 }

@@ -1,8 +1,10 @@
 package com.ktsco.controllers.csr;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.DoubleStringConverter;
 
 public class SalesBillController implements Initializable {
 
@@ -57,9 +60,11 @@ public class SalesBillController implements Initializable {
 	@FXML
 	private TableColumn<BillDetailModel, Integer> colLineNumber;
 	@FXML
-	private TableColumn<BillDetailModel, String> colItems, colUnit;
+	private TableColumn<BillDetailModel, String> colItems, colUnit, colProdCode;
 	@FXML
-	private TableColumn<BillDetailModel, String> colQuantity, colUnitPrice, colLineTotal;
+	private TableColumn<BillDetailModel, Double> colQuantity, colUnitPrice;
+	@FXML
+	private TableColumn<BillDetailModel, String> colLineTotal;
 
 	@FXML
 	private Label labelBillTotal, labelExRate, labelUSDAmount, labelInfoMessage;
@@ -68,14 +73,17 @@ public class SalesBillController implements Initializable {
 
 	private ObservableList<BillDetailModel> tableItems = FXCollections.observableArrayList();
 	private ObservableList<MainStockModel> stockList = FXCollections.observableArrayList();
-
+	ObservableList<String> productsItems = FXCollections.observableArrayList();
 	private List<String> customerList = new ArrayList<String>();
+	NumberFormat formatQuantity = NumberFormat.getNumberInstance();
+	NumberFormat formatPrice = NumberFormat.getCurrencyInstance();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		loadPrerequisitions();
 		generateOneRow();
 		comboCustomer.setEditable(true);
+		tableBillDetail.setEditable(true);
 		TextFields.bindAutoCompletion(comboCustomer.getEditor(), comboCustomer.getItems());
 
 		txtBillDate.textProperty().addListener(new ChangeListener<String>() {
@@ -231,6 +239,7 @@ public class SalesBillController implements Initializable {
 		populateCustomerCombo();
 		populatePayTermCombo();
 		generateBillID();
+		productsItems = ProductDAO.getProductObservableList();
 		checkCurrencyType();
 	}
 
@@ -258,19 +267,22 @@ public class SalesBillController implements Initializable {
 
 	private void generateTableColumns(ObservableList<BillDetailModel> list) {
 		colLineNumber.setCellValueFactory(cellData -> cellData.getValue().getLineNumberProperty().asObject());
-		ObservableList<String> items = ProductDAO.getProductObservableList();
+		colProdCode.setCellValueFactory(cellData -> cellData.getValue().prodCodeProperty());
+		colProdCode.setCellFactory(TextFieldTableCell.forTableColumn());
 		colItems.setCellValueFactory(cellData -> cellData.getValue().getItemsProperty());
-		colItems.setCellFactory(ComboBoxTableCell.forTableColumn(items));
+		colItems.setCellFactory(ComboBoxTableCell.forTableColumn(productsItems));
 		colUnit.setCellValueFactory(cellData -> cellData.getValue().getUnitProperty());
-		colQuantity.setCellValueFactory(cellData -> cellData.getValue().getQuantityProperty());
-		colQuantity.setCellFactory(TextFieldTableCell.forTableColumn());
-		colUnitPrice.setCellValueFactory(cellData -> cellData.getValue().getUnitPriceProperty());
-		colUnitPrice.setCellFactory(TextFieldTableCell.forTableColumn());
+		colQuantity.setCellValueFactory(cellData -> cellData.getValue().getQuantityProperty().asObject());
+		colQuantity.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+		colUnitPrice.setCellValueFactory(cellData -> cellData.getValue().getUnitPriceProperty().asObject());
+		colUnitPrice.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
 		colLineTotal.setCellValueFactory(cellData -> cellData.getValue().getLineTotalProperty());
 		tableBillDetail.setEditable(true);
 		tableBillDetail.setItems(list);
+		
 	}
-
+	
+	
 	private void generateOneRow() {
 		int size = tableItems.size();
 		BillDetailModel model = new BillDetailModel(size + 1);
@@ -279,33 +291,51 @@ public class SalesBillController implements Initializable {
 	}
 
 	@FXML
+	private void onCodeEnter(CellEditEvent<BillDetailModel, String> editedCell) {
+		BillDetailModel model = tableBillDetail.getSelectionModel().getSelectedItem();
+		model.setProdCode(editedCell.getNewValue());
+		String code = editedCell.getNewValue().toString();
+		for (String item : productsItems) {
+			if (item.split(":")[0].equals(code)) {
+				model.setItems(item);
+				String product = item.split(":")[1];
+				String unit = ProductDAO.getUnitMeasure(product);
+				model.setUnit(unit);
+				generateTableColumns(tableItems);
+			}
+		}
+		generateTableColumns(tableItems);
+	}
+
+	@FXML
 	private void onItemChangeAction(CellEditEvent<BillDetailModel, String> editedCell) {
 		BillDetailModel model = tableBillDetail.getSelectionModel().getSelectedItem();
 		model.setItems(editedCell.getNewValue());
-
-		String unit = ProductDAO.getUnitMeasure(editedCell.getNewValue());
+		String product = model.getItems().split(":")[1];
+		String unit = ProductDAO.getUnitMeasure(product);
+		model.setProdCode(model.getItems().split(":")[0]);
 		model.setUnit(unit);
 		generateTableColumns(tableItems);
 	}
 
 	@FXML
-	private void onQauntityChangeAction(CellEditEvent<BillDetailModel, String> editedCell) {
+	private void onQauntityChangeAction(CellEditEvent<BillDetailModel, Double> editedCell) {
 		BillDetailModel model = tableBillDetail.getSelectionModel().getSelectedItem();
 		model.setQuantity(editedCell.getNewValue());
-		checkForSaleQuantityinStock(model.getItems(), Double.parseDouble(model.getQuantity()));
-		String linetotal = Commons.calculateLineTotal(editedCell.getNewValue(), model.getUnitPrice().replace(",", ""));
-		model.setLineTotal(linetotal);
+		checkForSaleQuantityinStock(model.getItems(), model.getQuantity());
+		double linetotal =Commons.calculateLineTotal(model.getQuantity(), model.getUnitPrice());
+		model.setLineTotal(BigDecimal.valueOf(linetotal));
 		generateTableColumns(tableItems);
 		calucalteBillTotal();
 	}
 
 	@FXML
-	private void onUnitPriceChangeAction(CellEditEvent<BillDetailModel, String> editedCell) {
+	private void onUnitPriceChangeAction(CellEditEvent<BillDetailModel, Double> editedCell) {
 		BillDetailModel model = tableBillDetail.getSelectionModel().getSelectedItem();
 		model.setUnitPrice(editedCell.getNewValue());
 
-		String linetotal = Commons.calculateLineTotal(model.getQuantity().replace(",", ""), editedCell.getNewValue());
-		model.setLineTotal(linetotal);
+		double linetotal = Commons.calculateLineTotal(model.getQuantity(), model.getUnitPrice());
+		model.setLineTotal(BigDecimal.valueOf(linetotal));
 		generateTableColumns(tableItems);
 		calucalteBillTotal();
 	}
@@ -315,15 +345,15 @@ public class SalesBillController implements Initializable {
 		Double total = 0.00;
 		for (BillDetailModel model : tableItems) {
 
-			total += Double.parseDouble(model.getLineTotal().replace(",", ""));
+			total += Double.parseDouble(model.getLineTotal());
 
 		}
 
 		Double exRate = Double.parseDouble(labelExRate.getText());
 
-		labelBillTotal.setText(decimalFormat.format(total));
+		labelBillTotal.setText(formatQuantity.format(total));
 
-		labelUSDAmount.setText("$ " + decimalFormat.format(total * exRate));
+		labelUSDAmount.setText(formatPrice.format(total * exRate));
 	}
 
 	private boolean checkFlag() {
@@ -336,8 +366,7 @@ public class SalesBillController implements Initializable {
 				if (!comboPayTerm.getValue().equalsIgnoreCase("")) {
 					for (BillDetailModel model : tableItems) {
 						if (!"".equalsIgnoreCase(model.getItems())) {
-							if (!model.getQuantity().equalsIgnoreCase("0")
-									&& !model.getUnitPrice().equalsIgnoreCase("0")) {
+							if (model.getQuantity() != 0 && model.getUnitPrice() != 0) {
 								isSuccess = true;
 							} else {
 								isSuccess = false;
@@ -372,9 +401,9 @@ public class SalesBillController implements Initializable {
 		for (BillDetailModel model : tableItems) {
 			int id = model.getID();
 			int billID = Integer.parseInt(txtCode.getText());
-			String product = model.getItems();
-			String quantity = model.getQuantity();
-			String unitPrice = model.getUnitPrice();
+			String product = model.getItems().split(":")[1];
+			double quantity = model.getQuantity();
+			double unitPrice = model.getUnitPrice();
 
 			isSuccess = SaleBillDAO.insertBillDetail(id, billID, product, quantity, unitPrice);
 			if (!isSuccess)
@@ -439,6 +468,5 @@ public class SalesBillController implements Initializable {
 			}
 		}
 	}
-	
 
 }

@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class TopViewController implements Initializable {
@@ -34,16 +35,17 @@ public class TopViewController implements Initializable {
 	public Label lblPanelName;
 	@FXML
 	public Text txtCompanyName;
+	@FXML
+	private VBox  vboxTop; 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+		
 		String loggedUser = Constants.getLoggedUser();
 		lblWelcomeMsg.setText("خوش آمدید:  " + loggedUser);
 		textPanelName.setText(Constants.getPanelName());
 		txtCompanyName.setText(Constants.companyName);
 		lblPanelName.setText(Constants.getDisplayPanelName());
-
 	}
 
 	

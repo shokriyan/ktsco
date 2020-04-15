@@ -5,13 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.factory.InventoryModel;
 import com.ktsco.models.mgmt.ProductCostModel;
+import com.ktsco.models.mgmt.RawMtrlRptModel;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
@@ -421,16 +421,43 @@ public class InventoryDAO {
 		return list;
 	}
 
-	public static List<Map<String, Object>> getInventoryReport(String code) {
-		String query = "select inv.inv_id , i.inv_name, i.inv_um, (select totalImport from rawmaterialimport where inv_id = inv.inv_id) as importedRawMaterail , sum(inv.lineTotal) as UsedRawMaterial, (select (select rate from currencies c where c.currency = eb.currency and c.entryDate = eb.expns_date)* ed.unitprice\n"
+	public static ObservableList<RawMtrlRptModel> getInventoryReport(String code) {
+		ObservableList<RawMtrlRptModel> list = FXCollections.observableArrayList();
+		String query = "select inv.inv_id , i.inv_name, i.inv_um, (select totalImport from rawmaterialimport "
+				+ "where inv_id = inv.inv_id) as importedRawMaterail , sum(inv.lineTotal) as UsedRawMaterial, "
+				+ "(select (select rate from currencies c where c.currency = eb.currency and c.entryDate = eb.expns_date)* ed.unitprice "
 				+ "as usdunitprice from expenseDetail ed inner join expensebill eb on eb.expns_id = ed.expns_id\n"
 				+ "where inv_id = inv.inv_id order by eb.expns_date desc LIMIT 1) as unitPrice \n"
 				+ "from productionrawmaterial inv inner join inventory i on i.inv_id = inv.inv_id\n"
-				+ "where inv.inv_id like '%"+code+"%' group by inv_id;";
+				+ "where inv.inv_id like '%" + code + "%' group by inv_id;";
 		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
-		return DatabaseUtils.convertResultSetToMap(resultSet);
+		try {
+			while (resultSet.next()) {
+				int id = resultSet.getInt("inv_id");
+				String items = resultSet.getString("inv_name");
+				String unit = resultSet.getString("inv_um");
+				double imported = resultSet.getDouble("importedRawMaterail");
+				double used = resultSet.getDouble("UsedRawMaterial");
+				double remained = imported - used;
+				double unitPrice = resultSet.getDouble("unitPrice");
+				double lineTotal = remained * unitPrice;
+
+				RawMtrlRptModel model = new RawMtrlRptModel(id, items, unit, imported, used, unitPrice, lineTotal);
+				list.add(model);
+			}
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				resultSet.close();
+			} catch (SQLException e) {
+				log.error(e.getMessage());
+			}
+		}
+		return list;
 	}
-	
+
 	public static List<String> getInvItemsWithCode() {
 		List<String> list = new ArrayList<String>();
 		String query = "select inv_id, inv_name from inventory order by inv_id";
@@ -454,6 +481,5 @@ public class InventoryDAO {
 
 		return list;
 	}
-
 
 }

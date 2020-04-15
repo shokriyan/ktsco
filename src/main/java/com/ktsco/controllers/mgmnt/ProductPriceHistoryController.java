@@ -1,9 +1,10 @@
 package com.ktsco.controllers.mgmnt;
 
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
-import com.ktsco.models.mgmt.ProductRptModel;
+import com.ktsco.models.mgmt.ProductHstModal;
 import com.ktsco.modelsdao.ProductDAO;
 import com.ktsco.utils.Commons;
 
@@ -14,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -29,13 +31,18 @@ public class ProductPriceHistoryController implements Initializable{
 	@FXML
 	private HBox detailPanel; 
 	@FXML
-	private TableView<ProductRptModel> tableDetailList; 
+	private TableView<ProductHstModal> tableDetailList; 
 	@FXML
-	private TableColumn<ProductRptModel, Integer> colNo; 
+	private TableColumn<ProductHstModal, Integer> colNo; 
 	@FXML
-	private TableColumn<ProductRptModel, String> colItems, colUnit, colPrice; 
+	private TableColumn<ProductHstModal, String> colItems, colUnit,colDate; 
+	@FXML
+	private TableColumn<ProductHstModal, Double> colPrice; 
 	
-	private ObservableList<ProductRptModel> tableData = FXCollections.observableArrayList(); 
+	private ObservableList<ProductHstModal> tableData = FXCollections.observableArrayList(); 
+	NumberFormat formatQuantity = NumberFormat.getNumberInstance();
+	NumberFormat formatPrice = NumberFormat.getCurrencyInstance();
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		populateComboData();
@@ -53,26 +60,35 @@ public class ProductPriceHistoryController implements Initializable{
 		}
 	}
 	
-	private void generateTableColumns(ObservableList<ProductRptModel> list) {
+	private void generateTableColumns(ObservableList<ProductHstModal> list) {
 		colNo.setCellValueFactory(cell -> cell.getValue().idProperty().asObject());
 		colItems.setCellValueFactory(cell -> cell.getValue().itemsProperty());
 		colUnit.setCellValueFactory(cell -> cell.getValue().unitProperty());
-		colPrice.setCellValueFactory(cell -> cell.getValue().totalPriceProperty());
-		
+		colPrice.setCellValueFactory(cell -> cell.getValue().dolorAmountProperty().asObject());
+		formatColumn(colPrice, formatPrice);
+		colDate.setCellValueFactory(cell -> cell.getValue().dateProperty());
 		tableDetailList.setItems(list);
+	}
+	
+	private void formatColumn(TableColumn<ProductHstModal, Double> column, NumberFormat format) {
+
+		column.setCellFactory(tc -> new TableCell<ProductHstModal, Double>() {
+
+			@Override
+			protected void updateItem(Double price, boolean empty) {
+				super.updateItem(price, empty);
+				if (empty) {
+					setText(null);
+				} else {
+					setText(format.format(price));
+				}
+			}
+		});
 	}
 	
 	private void populateTableData(String code, String days) {
 		tableData.clear();
-		ProductDAO.prodPriceHistoryData(code, days).forEach(map -> {
-			int id = Integer.parseInt(map.get("prod_id").toString());
-			String items = map.get("prod_name").toString();
-			String unit = map.get("prod_um").toString(); 
-			String price = map.get("price").toString(); 
-			ProductRptModel model = new ProductRptModel(id, items, unit, price);
-			tableData.add(model); 
-		});
-		
+		tableData = ProductDAO.prodPriceHistoryData(code, days);
 		generateTableColumns(tableData);
 	}
 	

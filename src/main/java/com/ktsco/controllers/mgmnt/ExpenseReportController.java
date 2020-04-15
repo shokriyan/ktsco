@@ -18,7 +18,7 @@ public class ExpenseReportController implements Initializable{
 	private ViewClass views = new ViewClass();
 	
 	@FXML
-	private Button btnExpenseSummary, btnPaymentSummary, btnExpenseDetailReport, btnPaymentDetailReport;
+	private Button btnExpenseSummary, btnPaymentSummary, btnExpenseDetailReport, btnPaymentDetailReport, btnVendorsReport;
 
 	@FXML
 	private Text textPageSubtitle;
@@ -48,6 +48,10 @@ public class ExpenseReportController implements Initializable{
 			SalesDetailReportController.panelName = "expense";
 			textPageSubtitle.setText(btnExpenseDetailReport.getText());
 			setReportBox("SelesDetailsReport");
+		}else if (event.getSource() == btnVendorsReport) {
+			AmountOweController.reportType ="expense";
+			textPageSubtitle.setText(btnVendorsReport.getText());
+			setReportBox("AmountOweReports");
 		}
 		
 	}

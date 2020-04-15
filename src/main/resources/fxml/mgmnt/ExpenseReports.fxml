@@ -7,24 +7,25 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.ExpenseReportController">
+<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="487.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.ExpenseReportController">
 	<children>
-		<VBox prefHeight="635.0" prefWidth="1166.0">
+		<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="487.0" prefWidth="1080.0">
 			<children>
-				<HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="1166.0" spacing="20.0">
+				<HBox alignment="CENTER_LEFT" spacing="20.0">
 					<padding>
-						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					</padding>
 					<children>
 						<Button fx:id="btnExpenseSummary" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="گزارش کلی هزینه ها" />
                   <Button fx:id="btnPaymentSummary" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="گزارش کلی پرداخت" />
                   <Button fx:id="btnExpenseDetailReport" layoutX="190.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="گزارش خرید اجناس" />
                   <Button fx:id="btnPaymentDetailReport" layoutX="190.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="گزارش پرداختی" />
+                  <Button fx:id="btnVendorsReport" layoutX="525.0" layoutY="15.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="گزارش فروشندگان" />
 					</children>
 				</HBox>
-            <HBox alignment="CENTER" prefHeight="27.0" prefWidth="1166.0" spacing="20.0" styleClass="subtitleStyle">
+            <HBox alignment="CENTER" maxHeight="30.0" minHeight="30.0" styleClass="subtitleStyle">
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
                <children>
                   <Text fx:id="textPageSubtitle" strokeType="OUTSIDE" strokeWidth="0.0">
@@ -33,7 +34,7 @@
                      </font></Text>
                </children>
             </HBox>
-            <HBox fx:id="hboxReportResults" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <HBox fx:id="hboxReportResults" VBox.vgrow="ALWAYS" />
 			</children>
 		</VBox>
 	</children>

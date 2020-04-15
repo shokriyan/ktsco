@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.NodeOrientation;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
@@ -15,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -59,11 +61,11 @@ public class ViewClass {
 		scene.getStylesheets().add(getClass().getResource(Commons.getFxmlPanel("styleSheetPath")).toExternalForm());
 		log.info("Initial Style Sheet from {}" + Commons.getFxmlPanel("styleSheetPath"));
 		stage.setScene(scene);
-		stage.setResizable(false);
+		stage.setResizable(true);
 		stage.setTitle(title);
 		if (!decorate) {
 			log.info("Not Decorating with Stage");
-			stage.initStyle(StageStyle.UNDECORATED);
+			stage.initStyle(StageStyle.DECORATED);
 		}
 		stage.setAlwaysOnTop(false);
 		stage.show();
@@ -84,9 +86,9 @@ public class ViewClass {
 		Scene scene = new Scene(rootNote);
 		log.info("Create Root from {}" + rootNote);
 		scene.getStylesheets().add(getClass().getResource(Commons.getFxmlPanel("styleSheetPath")).toExternalForm());
-		log.info("Initial Style Sheet from {}" + Commons.getFxmlPanel("styleSheetPath"));
+		log.info("Initial Style Sheet from " + Commons.getFxmlPanel("styleSheetPath"));
 		stage.setScene(scene);
-		stage.setResizable(false);
+		stage.setResizable(true);
 		stage.setTitle(title);
 		if (!decorate) {
 			log.info("Not Decorating Stage");
@@ -172,6 +174,7 @@ public class ViewClass {
 		FXMLLoader loader = new FXMLLoader();
 		try {
 			pane = (Pane) loader.load(getClass().getResourceAsStream(fxml));
+			
 			log.info("FXMl file " + fxml + "Loaded");
 		} catch (IOException e) {
 			log.error("Fail to load fxml file " + fxml + " with error massage " + e.getMessage());
@@ -197,6 +200,16 @@ public class ViewClass {
 		stackPane.getChildren().add(view.setPane(fxml));
 
 		return stackPane;
+	}
+	
+	public void setWindowMax(Stage stage) {
+		Screen screen = Screen.getPrimary();
+		Rectangle2D bounds = screen.getVisualBounds();
+
+		stage.setX(bounds.getMinX());
+		stage.setY(bounds.getMinY());
+		stage.setWidth(bounds.getWidth());
+		stage.setHeight(bounds.getHeight());
 	}
 
 }

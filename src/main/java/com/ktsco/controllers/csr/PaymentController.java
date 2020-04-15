@@ -67,10 +67,10 @@ public class PaymentController implements Initializable {
 
 	ObservableList<PaybillModel> tableData = FXCollections.observableArrayList();
 	public static int expenseID = 0;
+	private String currencyType = null;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
 		tablePaymentDetail.setEditable(false);
 		payBanner.setVisible(false);
 		reloadPreRequisition();
@@ -114,6 +114,7 @@ public class PaymentController implements Initializable {
 		if (expenseID != 0) {
 			txtCode.setText(String.valueOf(expenseID));
 			searchForBillDetail();
+			populateComboBox();
 		}
 	}
 
@@ -123,6 +124,7 @@ public class PaymentController implements Initializable {
 			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("PayablePanel"));
 		} else if (event.getSource() == btnSearchBill) {
 			searchForBillDetail();
+			populateComboBox();
 		} else if (event.getSource() == btnSave) {
 			SaveReceiveRecords();
 		} else if (event.getSource() == btnNew) {
@@ -198,6 +200,7 @@ public class PaymentController implements Initializable {
 			labelBillDate.setText(billData.get("expns_date").toString());
 			labelCompany.setText(billData.get("company").toString());
 			labelCurrency.setText(billData.get("currency").toString());
+			currencyType = billData.get("currency").toString();
 			double billTotal = Double.parseDouble(billData.get("billtotal").toString());
 			labelBillTotal.setText(String.valueOf(decimalFormat.format(billTotal)));
 			double totalPaid = Double.parseDouble(billData.get("totalPaid").toString());
@@ -229,9 +232,11 @@ public class PaymentController implements Initializable {
 		List<String> employeeList = EmployeeDAO.getEmployeeName();
 		Commons.populateAllComboBox(comboEmployee, employeeList);
 		comboEmployee.setValue("");
-		List<String> accountsList = AccountsDAO.getBankAccounts();
-		Commons.populateAllComboBox(comboAccount, accountsList);
-		comboAccount.setValue("");
+		if (!txtCode.getText().equalsIgnoreCase("")) {
+			List<String> accountsList = AccountsDAO.getBankAccounts(currencyType);
+			Commons.populateAllComboBox(comboAccount, accountsList);
+			comboAccount.setValue("");
+		}
 	}
 
 	private boolean checkFlag() {

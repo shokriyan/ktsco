@@ -6,7 +6,4 @@
 <?import javafx.scene.layout.BorderPane?>
 
 
-<BorderPane minHeight="768.0" minWidth="1366.0"
-	nodeOrientation="LEFT_TO_RIGHT" prefHeight="768.0" prefWidth="1366.0"
-	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="com.ktsco.controllers.admin.AdminController" />
+<BorderPane nodeOrientation="LEFT_TO_RIGHT" prefHeight="587.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.admin.AdminController" />

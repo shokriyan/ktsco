@@ -7,12 +7,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="546.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.SalesDetailReportController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="487.0" prefWidth="1080" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.SalesDetailReportController">
 	<children>
-		<HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="1166.0" spacing="20.0">
+		<HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="40.0" spacing="20.0">
 			<children>
 				<Label fx:id="labelComboItems" text="محصول" />
-				<ComboBox fx:id="comboProducts" prefHeight="27.0" prefWidth="194.0" HBox.hgrow="ALWAYS" />
+				<ComboBox fx:id="comboProducts" prefHeight="27.0" prefWidth="161.0" HBox.hgrow="ALWAYS" />
             <Label layoutX="20.0" layoutY="25.0" text="نوع ارز" />
             <ComboBox fx:id="comboCurrency" layoutX="113.0" layoutY="20.0" prefHeight="27.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
             <Label layoutX="428.0" layoutY="25.0" text="تاریخ از" />
@@ -20,25 +20,25 @@
             <Label text="تا" />
             <TextField fx:id="txtToDate" prefHeight="27.0" prefWidth="134.0" />
             <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="125.0" text="جستجو" />
-            <Button fx:id="btnReset" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="125.0" text="باگذاری مجدد" />
+            <Button fx:id="btnReset" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="125.0" text="بارگذاری مجدد" />
 			</children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
 		</HBox>
-		<HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+		<HBox VBox.vgrow="ALWAYS">
 			<children>
-				<VBox prefHeight="411.0" prefWidth="853.0" HBox.hgrow="ALWAYS">
+				<VBox HBox.hgrow="ALWAYS">
 					<children>
-						<TableView fx:id="tableDetailList" prefHeight="416.0" prefWidth="1166.0" VBox.vgrow="ALWAYS">
+						<TableView fx:id="tableDetailList" VBox.vgrow="ALWAYS">
 							<columns>
-								<TableColumn fx:id="colNo" prefWidth="84.0" resizable="false" text="فاکتور" />
-								<TableColumn fx:id="colProducts" prefWidth="180.0" resizable="false" text="محصول" />
+								<TableColumn fx:id="colNo" prefWidth="75.0" resizable="false" text="فاکتور" />
+								<TableColumn fx:id="colProducts" prefWidth="150.0" resizable="false" text="محصول" />
 								<TableColumn fx:id="colSellDate" prefWidth="100.0" resizable="false" text="تاریخ" />
 								<TableColumn fx:id="colCurrency" prefWidth="75.0" resizable="false" text="نوع ارز" />
 								<TableColumn fx:id="colCurrencyRate" prefWidth="109.0" resizable="false" text="نرخ ارز" />
-								<TableColumn fx:id="colQuantity" prefWidth="150.0" resizable="false" text="تعداد" />
-								<TableColumn fx:id="colUnitPrice" prefWidth="150.0" resizable="false" text="قیمت" />
+								<TableColumn fx:id="colQuantity" prefWidth="120.0" resizable="false" text="تعداد" />
+								<TableColumn fx:id="colUnitPrice" prefWidth="133.0" resizable="false" text="قیمت" />
                         <TableColumn fx:id="colOriginalTotal" prefWidth="150.0" resizable="false" text="مجموع اصلی" />
                         <TableColumn fx:id="colTotalUSD" prefWidth="150.0" resizable="false" text="مجموع دلار" />
 							</columns>
@@ -46,9 +46,9 @@
                         <Insets />
                      </VBox.margin>
 						</TableView>
-						<HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="1166.0" spacing="30.0">
+						<HBox alignment="CENTER_RIGHT" maxHeight="40.0" minHeight="30.0" spacing="30.0">
 							<children>
-								<Label text="مجموغ گزارش به دلار">
+								<Label text="مجموع گزارش به دلار">
 									<font>
 										<Font name="Tahoma Bold" size="18.0" />
 									</font>
@@ -68,6 +68,9 @@
 					</children>
 				</VBox>
 			</children>
+         <padding>
+            <Insets top="5.0" />
+         </padding>
 		</HBox>
 	</children>
 </VBox>

@@ -1,8 +1,9 @@
 package com.ktsco.controllers.csr;
 
-import java.math.RoundingMode;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,14 +38,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.DoubleStringConverter;
 
 public class ExpenseBillController implements Initializable {
-	
 
 	private static DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 
 	@FXML
-	private Button btnNew, btnSave, btnSaveClose, btnSearch, btnReturn, btnSearchBill, btnDeleteBill, btnVendors, btnItemList;
+	private Button btnNew, btnSave, btnSaveClose, btnSearch, btnReturn, btnSearchBill, btnDeleteBill, btnVendors,
+			btnItemList;
 	@FXML
 	private TextField txtCode, txtBillDate, txtCurrencyType, txtmemo;
 
@@ -58,8 +60,9 @@ public class ExpenseBillController implements Initializable {
 	@FXML
 	private TableColumn<BillDetailModel, String> colItems, colUnit;
 	@FXML
-	private TableColumn<BillDetailModel, String> colQuantity, colUnitPrice, colLineTotal;
-
+	private TableColumn<BillDetailModel, Double> colQuantity, colUnitPrice;
+	@FXML
+	private TableColumn<BillDetailModel, String> colLineTotal;
 	@FXML
 	private Label labelBillTotal, labelExRate, labelUSDAmount, labelInfoMessage;
 	@FXML
@@ -69,6 +72,9 @@ public class ExpenseBillController implements Initializable {
 
 	private List<String> vendorList = new ArrayList<String>();
 	private ObservableList<String> items = FXCollections.observableArrayList();
+	NumberFormat formatQuantity = NumberFormat.getNumberInstance();
+	NumberFormat formatPrice = NumberFormat.getCurrencyInstance();
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		loadPrerequisitions();
@@ -218,10 +224,10 @@ public class ExpenseBillController implements Initializable {
 		} else if (event.getSource() == btnSearch) {
 			ExpenseSearchController.expenseStage = Commons
 					.openPanelsUndecorate(Commons.getFxmlPanel("ExpenseSearchPanel"));
-		}else if (event.getSource() == btnVendors) {
+		} else if (event.getSource() == btnVendors) {
 			VendorsController.vendorStage = Commons.openPanelsUndecorate(Commons.getFxmlPanel("VendorsPanel"));
-			VendorsController.vendorStage.setOnHidden(e-> populateVendorCombo());
-		}else if (event.getSource() == btnItemList) {
+			VendorsController.vendorStage.setOnHidden(e -> populateVendorCombo());
+		} else if (event.getSource() == btnItemList) {
 			InventoryController.invStage = Commons.openPanelsUndecorate(Commons.getFxmlPanel("inventoryListPanelFxml"));
 			InventoryController.invStage.setOnHidden(e -> populateItemsList());
 		}
@@ -241,7 +247,6 @@ public class ExpenseBillController implements Initializable {
 		comboVendor.setValue("");
 	}
 
-
 	private void setTodayDate() {
 		String todayDate = DateUtils.convertGregoryToJalali(Commons.getTodaysDate());
 		txtBillDate.setText(todayDate);
@@ -251,19 +256,21 @@ public class ExpenseBillController implements Initializable {
 		int id = ExpenseDAO.getLastBillID();
 		txtCode.setText(String.valueOf(id));
 	}
+
 	private void populateItemsList() {
 		items = InventoryDAO.getInventoryObservableList();
 	}
+
 	private void generateTableColumns(ObservableList<BillDetailModel> list) {
 		colLineNumber.setCellValueFactory(cellData -> cellData.getValue().getLineNumberProperty().asObject());
 		populateItemsList();
 		colItems.setCellValueFactory(cellData -> cellData.getValue().getItemsProperty());
 		colItems.setCellFactory(ComboBoxTableCell.forTableColumn(items));
 		colUnit.setCellValueFactory(cellData -> cellData.getValue().getUnitProperty());
-		colQuantity.setCellValueFactory(cellData -> cellData.getValue().getQuantityProperty());
-		colQuantity.setCellFactory(TextFieldTableCell.forTableColumn());
-		colUnitPrice.setCellValueFactory(cellData -> cellData.getValue().getUnitPriceProperty());
-		colUnitPrice.setCellFactory(TextFieldTableCell.forTableColumn());
+		colQuantity.setCellValueFactory(cellData -> cellData.getValue().getQuantityProperty().asObject());
+		colQuantity.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+		colUnitPrice.setCellValueFactory(cellData -> cellData.getValue().getUnitPriceProperty().asObject());
+		colUnitPrice.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
 		colLineTotal.setCellValueFactory(cellData -> cellData.getValue().getLineTotalProperty());
 		tableBillDetail.setEditable(true);
 		tableBillDetail.setItems(list);
@@ -287,40 +294,39 @@ public class ExpenseBillController implements Initializable {
 	}
 
 	@FXML
-	private void onQauntityChangeAction(CellEditEvent<BillDetailModel, String> editedCell) {
+	private void onQauntityChangeAction(CellEditEvent<BillDetailModel, Double> editedCell) {
 		BillDetailModel model = tableBillDetail.getSelectionModel().getSelectedItem();
 		model.setQuantity(editedCell.getNewValue());
-		String linetotal = Commons.calculateLineTotal(editedCell.getNewValue(), model.getUnitPrice().replace(",", ""));
-		model.setLineTotal(linetotal);
+		double linetotal = Commons.calculateLineTotal(editedCell.getNewValue(), model.getUnitPrice());
+		model.setLineTotal(BigDecimal.valueOf(linetotal));
 		generateTableColumns(tableItems);
 		calucalteBillTotal();
 	}
 
 	@FXML
-	private void onUnitPriceChangeAction(CellEditEvent<BillDetailModel, String> editedCell) {
+	private void onUnitPriceChangeAction(CellEditEvent<BillDetailModel, Double> editedCell) {
 		BillDetailModel model = tableBillDetail.getSelectionModel().getSelectedItem();
 		model.setUnitPrice(editedCell.getNewValue());
 
-		String linetotal = Commons.calculateLineTotal(model.getQuantity().replace(",", ""), editedCell.getNewValue());
-		model.setLineTotal(linetotal);
+		double linetotal = Commons.calculateLineTotal(model.getQuantity(), editedCell.getNewValue());
+		model.setLineTotal(BigDecimal.valueOf(linetotal));
 		generateTableColumns(tableItems);
 		calucalteBillTotal();
 	}
 
 	private void calucalteBillTotal() {
-		decimalFormat.setRoundingMode(RoundingMode.UP);
 		Double total = 0.00;
 		for (BillDetailModel model : tableItems) {
 
-			total += Double.parseDouble(model.getLineTotal().replace(",", ""));
+			total += Double.parseDouble(model.getLineTotal());
 
 		}
 
 		Double exRate = Double.parseDouble(labelExRate.getText());
 
-		labelBillTotal.setText(decimalFormat.format(total));
+		labelBillTotal.setText(formatQuantity.format(total));
 
-		labelUSDAmount.setText("$ " + decimalFormat.format(total * exRate));
+		labelUSDAmount.setText(formatPrice.format(total * exRate));
 	}
 
 	private boolean checkFlag() {
@@ -330,19 +336,18 @@ public class ExpenseBillController implements Initializable {
 
 		if (!comboVendor.getValue().equalsIgnoreCase("")) {
 			if (!txtBillDate.getText().equalsIgnoreCase("")) {
-					for (BillDetailModel model : tableItems) {
-						if (!"".equalsIgnoreCase(model.getItems())) {
-							if (!model.getQuantity().equalsIgnoreCase("0")
-									&& !model.getUnitPrice().equalsIgnoreCase("0")) {
-								isSuccess = true;
-							} else {
-								isSuccess = false;
-							}
+				for (BillDetailModel model : tableItems) {
+					if (!"".equalsIgnoreCase(model.getItems())) {
+						if (model.getQuantity() != 0 && model.getUnitPrice() != 0) {
+							isSuccess = true;
 						} else {
 							isSuccess = false;
 						}
+					} else {
+						isSuccess = false;
 					}
 				}
+			}
 		}
 
 		return isSuccess;
@@ -367,8 +372,8 @@ public class ExpenseBillController implements Initializable {
 			int id = model.getID();
 			int billID = Integer.parseInt(txtCode.getText());
 			String product = model.getItems().split("-")[0].trim();
-			String quantity = model.getQuantity();
-			String unitPrice = model.getUnitPrice();
+			double quantity = model.getQuantity();
+			double unitPrice = model.getUnitPrice();
 
 			isSuccess = ExpenseDAO.insertBillDetail(id, billID, product, quantity, unitPrice);
 			if (!isSuccess)

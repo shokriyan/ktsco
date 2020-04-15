@@ -88,6 +88,7 @@ public class Commons {
 		button.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 		button.setAlignment(Pos.CENTER_LEFT);
 		button.setPrefWidth(198);
+		button.setPrefHeight(30);
 		button.setStyle("-fx-border-color: #B0C4DE");
 		return button;
 
@@ -174,7 +175,7 @@ public class Commons {
 		}
 
 	}
-	
+
 	public static void setErrorMessage(Label label) {
 		label.setStyle("-fx-text-fill : Red");
 		label.setText("تلاش ناموفق");
@@ -366,6 +367,7 @@ public class Commons {
 		ViewClass views = new ViewClass();
 		Pane centerPane = views.setPane(fxml);
 		borderPane.setCenter(centerPane);
+		log.info("Pane Size ::: " + centerPane.getHeight()  + " - " + centerPane.getWidth());
 	}
 
 	public static Integer getPayTermValue(String lookupValue) {
@@ -374,14 +376,14 @@ public class Commons {
 		return payTerm;
 	}
 
-	public static String calculateLineTotal(String quantity, String unitprice) {
+	public static double calculateLineTotal(double quantity, double unitprice) {
 		double result = 0;
 		try {
-			result = Double.parseDouble(quantity) * Double.parseDouble(unitprice);
+			result = quantity * unitprice;
 		} catch (NumberFormatException e) {
 			AlertsUtils.numberEntryFormatErrorAlerts();
 		}
-		return String.valueOf(result);
+		return result;
 
 	}
 
@@ -427,63 +429,62 @@ public class Commons {
 		days = ChronoUnit.DAYS.between(from, to);
 		return days;
 	}
-	
+
 	public static void copyToClipboard(Object text) {
 		String textToCopy = String.valueOf(text);
 		StringSelection stringSelection = new StringSelection(textToCopy);
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clipboard.setContents(stringSelection, null);
 	}
-	
+
 	public static int getDepositType(String lookupValue) {
 		int size = Constants.depositTypeList.size();
-		int depType = 1; 
-		for (int i = 0; i < size ; i++) {
+		int depType = 1;
+		for (int i = 0; i < size; i++) {
 			if (Constants.depositTypeList.get(i).equalsIgnoreCase(lookupValue))
-				depType = i; 
-			else 
+				depType = i;
+			else
 				log.info("can't find a match " + lookupValue);
 		}
-		
-		return depType; 
+
+		return depType;
 	}
-	
+
 	public static boolean isTextFieldHasValue(TextField textField) {
-		boolean hasValue = false; 
+		boolean hasValue = false;
 		if (textField != null) {
 			if (!textField.getText().equalsIgnoreCase(""))
 				hasValue = true;
-			else 
+			else
 				hasValue = false;
 		}
-		
+
 		return hasValue;
 	}
-	
-	public static boolean isPassEmptyVerification(boolean isPass , TextField textField) {
+
+	public static boolean isPassEmptyVerification(boolean isPass, TextField textField) {
 		isPass = (isPass || isTextFieldHasValue(textField)) ? true : false;
 		return isPass;
 	}
-	
+
 	public static String accessSymployes(int access) {
-		String symbole = null; 
-		if (access == 0) 
+		String symbole = null;
+		if (access == 0)
 			symbole = "✗";
 		else if (access == 1)
 			symbole = "✓";
 		else
 			symbole = null;
-		return symbole; 
+		return symbole;
 	}
-	
+
 	public static boolean changeSymboleToBoolean(String symbole) {
 		return (symbole.equals("✗")) ? false : true;
 	}
-	
-	public static boolean getAccessVerification (Object object) {
+
+	public static boolean getAccessVerification(Object object) {
 		int tinyint = Integer.parseInt(object.toString());
-		return (tinyint == 0) ? false : true; 
+		return (tinyint == 0) ? false : true;
 	}
-	
 
 }

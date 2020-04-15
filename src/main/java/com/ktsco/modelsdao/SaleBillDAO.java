@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.csr.BillDetailModel;
 import com.ktsco.models.csr.SalesSearchModel;
+import com.ktsco.models.mgmt.AmountOweModal;
 import com.ktsco.models.mgmt.SalesDetailModel;
 import com.ktsco.models.mgmt.SellSummaryModel;
 import com.ktsco.utils.AlertsUtils;
@@ -132,12 +133,10 @@ public class SaleBillDAO {
 		return isSuccess;
 	}
 
-	public static boolean insertBillDetail(int id, int billID, String product, String quantity, String unitPrice) {
+	public static boolean insertBillDetail(int id, int billID, String product, double quantity, double unitPrice) {
 		boolean isSuccess = false;
 		int detailID = (id > 0) ? id : 0;
 		int productID = ProductDAO.getProductID(product);
-		double quantityValue = Double.parseDouble(quantity.replace(",", ""));
-		double unitpriceValue = Double.parseDouble(unitPrice.replace(",", ""));
 
 		query = "INSERT INTO SALEDETAIL (ID, BILL_ID, PRODUCT_ID, QUANTITY, UNITPRICE) VALUES (?,?,?,?,?)"
 				+ " ON DUPLICATE KEY UPDATE PRODUCT_ID = ? , QUANTITY = ? , UNITPRICE = ?";
@@ -147,11 +146,11 @@ public class SaleBillDAO {
 			preStatement.setInt(1, detailID);
 			preStatement.setInt(2, billID);
 			preStatement.setInt(3, productID);
-			preStatement.setDouble(4, quantityValue);
-			preStatement.setDouble(5, unitpriceValue);
+			preStatement.setDouble(4, quantity);
+			preStatement.setDouble(5, unitPrice);
 			preStatement.setInt(6, productID);
-			preStatement.setDouble(7, quantityValue);
-			preStatement.setDouble(8, unitpriceValue);
+			preStatement.setDouble(7, quantity);
+			preStatement.setDouble(8, unitPrice);
 			preStatement.execute();
 			isSuccess = true;
 
@@ -176,7 +175,7 @@ public class SaleBillDAO {
 		ObservableList<BillDetailModel> list = FXCollections.observableArrayList();
 		int lineNumber = 1;
 
-		query = "SELECT ID, P.PROD_NAME AS PRODUCT, QUANTITY, UNITPRICE FROM SALEDETAIL SD "
+		query = "SELECT ID,SD.PRODUCT_ID, P.PROD_NAME AS PRODUCT, QUANTITY, UNITPRICE FROM SALEDETAIL SD "
 				+ "INNER JOIN PRODUCTS P ON SD.PRODUCT_ID = P.PROD_ID WHERE BILL_ID = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
@@ -185,12 +184,13 @@ public class SaleBillDAO {
 			resultSet = preStatement.executeQuery();
 			while (resultSet.next()) {
 				int id = resultSet.getInt("id");
+				String prodCode = resultSet.getString("PRODUCT_ID");
 				String product = resultSet.getString("product");
 				String unit = ProductDAO.getUnitMeasure(product);
-				String quantity = String.valueOf(resultSet.getDouble("quantity"));
-				String unitPrice = String.valueOf(resultSet.getDouble("unitprice"));
-				String lineTotal = Commons.calculateLineTotal(quantity, unitPrice);
-				BillDetailModel model = new BillDetailModel(id, lineNumber, product, unit, quantity, unitPrice,
+				double quantity = resultSet.getDouble("quantity");
+				double unitPrice = resultSet.getDouble("unitprice");
+				BigDecimal lineTotal = BigDecimal.valueOf(Commons.calculateLineTotal(quantity, unitPrice));
+				BillDetailModel model = new BillDetailModel(id, prodCode, lineNumber, product, unit, quantity, unitPrice,
 						lineTotal);
 				list.add(model);
 				lineNumber++;
@@ -503,6 +503,56 @@ public class SaleBillDAO {
 			}
 		}
 		
+		return list; 
+	}
+	
+	public static ObservableList<AmountOweModal>  getSalesAmountOweReport(String cusomterCode, String currencyType, String fromDate, String toDate) {
+		ObservableList<AmountOweModal> list = FXCollections.observableArrayList(); 
+		String customerId = (cusomterCode.equalsIgnoreCase("")) ? "" : cusomterCode;
+		String convertyCurrencyType = Commons.getCurrencyKey(currencyType);
+		String convertFromDate = (fromDate.equalsIgnoreCase("")) ? "1900-01-01" : DateUtils.convertJalaliToGregory(fromDate);
+		String convertToDate = (fromDate.equalsIgnoreCase("")) ? "2999-12-30" : DateUtils.convertJalaliToGregory(toDate);
+		
+		query = "select sb.customer_id,c.company, c.currency, SUM(sbt.billTotal) as saleTotal , IFNULL(SUM(r.amount) , 0) as receivedTotal  from salebills sb " + 
+				"inner join salesbilltotal sbt on sbt.bill_id = sb.bill_id " + 
+				"left outer join received r on r.bill_id = sb.bill_id " + 
+				"inner join customers c on c.customer_id = sb.customer_id " + 
+				"where sb.customer_id like ? and c.currency like ? and sb.billdate between ? and ? " + 
+				"group by sb.customer_id";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setString(1, customerId + "%");
+			preStatement.setString(2, "%" + convertyCurrencyType + "%");
+			preStatement.setString(3,  convertFromDate );
+			preStatement.setString(4, convertToDate);
+			
+			resultSet = preStatement.executeQuery(); 
+			while (resultSet.next()) {
+				int id = resultSet.getInt("customer_id");
+				String company = resultSet.getString("company");
+				String currency = Commons.getCurrencyValue(resultSet.getString("currency"));
+				double billTotal = resultSet.getDouble("saleTotal");
+				double receivedTotal = resultSet.getDouble("receivedTotal");
+				double amountRemained = billTotal - receivedTotal; 
+				
+				AmountOweModal model = new AmountOweModal(id, company, currency, billTotal, receivedTotal, 0, amountRemained);
+				list.add(model);
+			}
+			
+		}catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+				
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
 		return list; 
 	}
 

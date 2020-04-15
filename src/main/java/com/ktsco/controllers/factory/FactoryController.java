@@ -42,7 +42,7 @@ public class FactoryController implements Initializable {
 		factoryBorderPane.setRight(setSideMenu(Commons.getFxmlPanel("sideMenuFxml")));
 		
 		factoryStage = view.setSceneShowStage(factoryBorderPane, Constants.title, true);
-		
+		view.setWindowMax(factoryStage);
 	}
 	
 	

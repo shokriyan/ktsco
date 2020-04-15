@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="546.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.ProductPriceHistoryController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="487.0" prefWidth="1080" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.ProductPriceHistoryController">
 	<children>
-      <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="1166.0" spacing="20.0">
+      <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="40.0" spacing="20.0">
          <children>
             <Label text="انتخاب محصول" />
             <ComboBox fx:id="comboProducts" prefHeight="27.0" prefWidth="278.0" />
@@ -17,7 +17,7 @@
             <TextField fx:id="txtDays" prefHeight="27.0" prefWidth="87.0" />
             <Label layoutX="472.0" layoutY="25.0" text="قبل" />
             <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="122.0" text="جستجو" />
-            <Button fx:id="btnReset" layoutX="934.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="122.0" text="باگذاری مجدد" />
+            <Button fx:id="btnReset" layoutX="934.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="122.0" text="بارگذاری مجدد" />
          </children>
          <VBox.margin>
             <Insets />
@@ -28,14 +28,15 @@
       </HBox>
       <HBox fx:id="detailPanel" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
          <children>
-            <VBox prefHeight="411.0" prefWidth="853.0" HBox.hgrow="ALWAYS">
+            <VBox HBox.hgrow="ALWAYS">
                <children>
             		<TableView fx:id="tableDetailList" prefHeight="416.0" prefWidth="1166.0" VBox.vgrow="ALWAYS">
             			<columns>
-            				<TableColumn fx:id="colNo" prefWidth="250.0" text="شماره" />
+            				<TableColumn fx:id="colNo" prefWidth="100.0" text="شماره" />
             				<TableColumn fx:id="colItems" prefWidth="380.0" text="نوع جنس" />
-                        <TableColumn fx:id="colUnit" prefWidth="250.0" text="واحد شمارش" />
-                        <TableColumn fx:id="colPrice" prefWidth="250.0" text="قیمت به دلار" />
+                        <TableColumn fx:id="colUnit" prefWidth="150.0" text="واحد شمارش" />
+                        <TableColumn fx:id="colDate" prefWidth="159.0" text="تاریخ" />
+                        <TableColumn fx:id="colPrice" prefWidth="231.0" text="قیمت به دلار" />
             			</columns>
             		</TableView>
                </children>

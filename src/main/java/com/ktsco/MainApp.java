@@ -2,6 +2,7 @@ package com.ktsco;
 
 import javafx.application.Application;
 import javafx.scene.control.SplitPane;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import org.slf4j.Logger;
@@ -27,9 +28,9 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
 
         log.info("Starting KTSCO Management application");
+        loginStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/Logo.png")));
         loginScene = view.setSplitPane(Commons.getFxmlPanel("loginPanelFxml"));
         loginStage = view.setSceneShowStage(loginScene, Constants.title, false);
-        
         DatabaseUtils.OpenConnection();
     }
 }

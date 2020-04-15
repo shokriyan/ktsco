@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.factory.ProdDetailModel;
 import com.ktsco.models.factory.ProductModel;
+import com.ktsco.models.mgmt.ProductHstModal;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
@@ -414,6 +415,7 @@ public class ProductDAO {
 	}
 
 	public static String getUnitMeasure(String products) {
+		log.info("Start Get Unit Measure Service");
 		String unit = null;
 		query = "Select prod_um from products where prod_name = ?";
 		preStmt = DatabaseUtils.dbPreparedStatment(query);
@@ -439,7 +441,7 @@ public class ProductDAO {
 
 	public static ObservableList<String> getProductObservableList() {
 		ObservableList<String> list = FXCollections.observableArrayList();
-		query = "select prod_name from products";
+		query = "select concat(prod_id , ':',prod_name) as product from products";
 		try {
 			resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 			while (resultSet.next()) {
@@ -541,8 +543,9 @@ public class ProductDAO {
 		}
 	}
 
-	public static List<Map<String, Object>> prodPriceHistoryData(String code, String days) {
-		query = "select p.prod_id, p.prod_name, p.prod_um, pph.price from products p\n"
+	public static ObservableList<ProductHstModal> prodPriceHistoryData(String code, String days) {
+		ObservableList<ProductHstModal> list = FXCollections.observableArrayList();
+		query = "select p.prod_id, p.prod_name, p.prod_um, pph.price,DATE_FORMAT(pph.dttm_create,'%Y-%m-%d') as date from products p\n"
 				+ "inner join prod_prc_hst pph on p.prod_id = pph.prod_id\n" + "where p.prod_id like '%" + code + "%'";
 		if (!days.equalsIgnoreCase("")) {
 			query = query + " and pph.dttm_create between CURRENT_DATE - INTERVAL " + days + " DAY AND NOW() ";
@@ -550,7 +553,31 @@ public class ProductDAO {
 
 		query = query + " order by pph.dttm_create desc";
 		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
-		return DatabaseUtils.convertResultSetToMap(resultSet);
+		try {
+			while (resultSet.next()) {
+				int id = resultSet.getInt("prod_id");
+				String items = resultSet.getString("prod_name");
+				String unit = resultSet.getString("prod_um");
+				double dolorAmount = resultSet.getDouble("price");
+				String date = DateUtils.convertGregoryToJalali(resultSet.getString("date"));
+				ProductHstModal model = new ProductHstModal(id, items, unit, dolorAmount, date);
+				list.add(model);
+			}
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStmt != null)
+					preStmt.close();
+
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		return list;
 	}
 
 }

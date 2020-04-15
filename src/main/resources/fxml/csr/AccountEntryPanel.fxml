@@ -7,11 +7,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.csr.AccountController">
+<Pane nodeOrientation="RIGHT_TO_LEFT" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.csr.AccountController">
 	<children>
-		<VBox prefHeight="635.0" prefWidth="1166.0">
+		<VBox prefHeight="487.0" prefWidth="1080.0">
 			<children>
-				<HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="20.0">
+				<HBox alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="ALWAYS">
 					<padding>
 						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 					</padding>
@@ -19,11 +19,11 @@
 						<Button fx:id="btnNew" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="جدید" />
                   <Button fx:id="btnSave" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="ثبت " />
                   <Button fx:id="btnSaveReturn" layoutX="190.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="ثبت و خروج" />
-                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <Region prefHeight="60.0" prefWidth="395.0" HBox.hgrow="ALWAYS" />
                   <Button fx:id="btnReturn" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="بازگشت" />
 					</children>
 				</HBox>
-            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
+            <HBox alignment="CENTER" maxHeight="0.0" minHeight="50.0">
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" styleClass="subtitleStyle" HBox.hgrow="ALWAYS">
                      <children>
@@ -37,9 +37,9 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <HBox VBox.vgrow="ALWAYS">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="150.0" spacing="20.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="439.0" prefWidth="117.0" spacing="10.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0">
                            <font>
@@ -104,10 +104,10 @@
                         </HBox>
                      </children>
                      <padding>
-                        <Insets top="10.0" />
+                        <Insets left="5.0" top="5.0" />
                      </padding>
                   </VBox>
-                  <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="495.0" prefWidth="200.0" spacing="20.0">
+                  <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="469.0" prefWidth="200.0" spacing="10.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="مشخصات حساب بانکی">
                            <font>
@@ -172,20 +172,20 @@
                         </HBox>
                      </children>
                      <padding>
-                        <Insets top="10.0" />
+                        <Insets top="5.0" />
                      </padding>
                   </VBox>
-                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                  <VBox alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="لیست بانک ها" />
-                        <TableView fx:id="tableAccounts" prefHeight="200.0" prefWidth="200.0" styleClass="noBorderTableView" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tableAccounts" prefHeight="449.0" prefWidth="723.0" styleClass="noBorderTableView" VBox.vgrow="ALWAYS">
                           <columns>
-                            <TableColumn fx:id="colCode" prefWidth="75.0" text="کد" />
-                            <TableColumn fx:id="colBankAccount" prefWidth="160.0" text="شماره حساب" />
-                              <TableColumn fx:id="colBankName" prefWidth="160.0" text="نام بانک" />
+                            <TableColumn fx:id="colCode" prefWidth="50.0" text="کد" />
+                            <TableColumn fx:id="colBankAccount" prefWidth="150.0" text="شماره حساب" />
+                              <TableColumn fx:id="colBankName" prefWidth="150.0" text="نام بانک" />
                               <TableColumn fx:id="colCurrency" prefWidth="100.0" text="واحد ارز" />
-                              <TableColumn fx:id="colStartDate" prefWidth="133.0" text="تاریخ شروع" />
-                              <TableColumn fx:id="colOpeningBalance" prefWidth="150.0" text="موجودی اولیه" />
+                              <TableColumn fx:id="colStartDate" prefWidth="100.0" text="تاریخ شروع" />
+                              <TableColumn fx:id="colOpeningBalance" prefWidth="171.0" text="موجودی اولیه" />
                           </columns>
                            <contextMenu>
                               <ContextMenu>

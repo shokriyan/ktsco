@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.admin.UsersController">
+<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="487.0" prefWidth="1080" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.admin.UsersController">
 	<children>
-		<VBox prefHeight="635.0" prefWidth="1166.0">
+		<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="487.0" prefWidth="1080.0">
 			<children>
-				<HBox prefHeight="100.0" prefWidth="1166.0" spacing="50.0">
+				<HBox maxHeight="40.0" minHeight="30.0" spacing="10.0">
 					<padding>
-						<Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					</padding>
 					<children>
 						<Button fx:id="btnSave" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="150.0" text="ثبت" />
@@ -24,7 +24,7 @@
 						<Button fx:id="btnReload" layoutX="340.0" layoutY="40.0" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="150.0" text="بارگذاری مجدد" />
 					</children>
 				</HBox>
-            <VBox alignment="TOP_CENTER" prefHeight="88.0" prefWidth="1166.0" spacing="20.0" styleClass="subtitleStyle">
+            <VBox alignment="TOP_CENTER" maxHeight="50.0" minHeight="50.0" spacing="10.0" styleClass="subtitleStyle">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="کنترل کاربران">
                      <font>
@@ -37,12 +37,12 @@
                   <Insets />
                </VBox.margin>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <HBox VBox.vgrow="ALWAYS">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="120.0" spacing="30.0">
+                  <VBox spacing="30.0">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="15.0" />
                      </padding>
@@ -56,7 +56,7 @@
                         <Label layoutX="20.0" layoutY="235.0" text="دسترسی مدیریت" />
                      </children>
                   </VBox>
-                  <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0">
+                  <VBox layoutX="10.0" layoutY="10.0" spacing="20.0">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
@@ -64,7 +64,7 @@
                         <TextField fx:id="txtFullName" />
                         <TextField fx:id="txtUsername" layoutX="20.0" layoutY="20.0" />
                         <TextField fx:id="txtPassword" layoutX="20.0" layoutY="67.0" />
-                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
+                        <VBox alignment="TOP_CENTER" spacing="30.0">
                            <children>
                               <CheckBox fx:id="chboxAdmin" mnemonicParsing="false" />
                               <CheckBox fx:id="chboxCsr" mnemonicParsing="false" />
@@ -77,14 +77,14 @@
                         </VBox>
                      </children>
                   </VBox>
-                  <VBox layoutX="130.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                  <VBox layoutX="130.0" layoutY="10.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TableView fx:id="tableUserDetail" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="tableUserDetail" VBox.vgrow="ALWAYS">
                           <columns>
                             <TableColumn fx:id="colCode" prefWidth="75.0" text="کد" />
                             <TableColumn fx:id="colFullName" prefWidth="150.0" text="نام کامل" />
                               <TableColumn fx:id="colUsername" prefWidth="150.0" text="نام کاربری" />
-                              <TableColumn fx:id="colPassword" prefWidth="150.0" text="رمز ورود" />
+                              <TableColumn fx:id="colPassword" prefWidth="107.0" text="رمز ورود" />
                               <TableColumn fx:id="colAdmin" prefWidth="75.0" text="ادمین" />
                               <TableColumn fx:id="colFactory" prefWidth="75.0" text="کارخانه" />
                               <TableColumn fx:id="colCsr" prefWidth="75.0" text="اداری" />
@@ -93,7 +93,7 @@
                            <contextMenu>
                               <ContextMenu>
                                 <items>
-                                  <MenuItem fx:id="menuEdit" onAction="#allButtonsAction" mnemonicParsing="false" text="اعمال تغییرات" />
+                                  <MenuItem fx:id="menuEdit" mnemonicParsing="false" onAction="#allButtonsAction" text="اعمال تغییرات" />
                                 </items>
                               </ContextMenu>
                            </contextMenu>

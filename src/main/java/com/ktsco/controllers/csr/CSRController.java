@@ -42,6 +42,7 @@ public class CSRController implements Initializable{
 		csrBorderScene.setRight(setSideMenu(Commons.getFxmlPanel("sideMenuFxml")));
 		
 		csrStage = views.setSceneShowStage(csrBorderScene, Constants.title, true);
+		views.setWindowMax(csrStage);
 	}
 	
 	public static VBox setSideMenu(String fxml) {
@@ -104,7 +105,9 @@ public class CSRController implements Initializable{
 	
 	public static void setCenterPanel(String fxml) {
 		Pane centerPane = views.setPane(fxml);
+//		centerPane.setPrefSize(Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
 		csrBorderScene.setCenter(centerPane);
+		
 	}
 	
 	

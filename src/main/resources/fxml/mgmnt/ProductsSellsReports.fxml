@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="546.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.ProductSellRptController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="487.0" prefWidth="1080" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.mgmnt.ProductSellRptController">
 	<children>
-      <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="1166.0" spacing="20.0">
+      <HBox alignment="CENTER_LEFT" maxHeight="60.0" minHeight="40.0" spacing="20.0">
          <children>
             <Label text="انتخاب محصول" />
             <ComboBox fx:id="comboProducts" prefHeight="27.0" prefWidth="278.0" />
@@ -18,7 +18,7 @@
             <Label layoutX="472.0" layoutY="25.0" text="تاریخ پایان" />
             <TextField fx:id="txtEndDate" layoutX="546.0" layoutY="20.0" prefHeight="27.0" prefWidth="141.0" />
             <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="122.0" text="جستجو" />
-            <Button fx:id="btnReset" layoutX="934.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="122.0" text="باگذاری مجدد" />
+            <Button fx:id="btnReset" layoutX="934.0" layoutY="20.0" mnemonicParsing="false" onAction="#allButtonsAction" prefHeight="27.0" prefWidth="122.0" text="بارگذاری مجدد" />
          </children>
          <VBox.margin>
             <Insets />
@@ -27,27 +27,27 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
-      <HBox fx:id="detailPanel" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <HBox fx:id="detailPanel" VBox.vgrow="ALWAYS">
          <children>
-            <VBox prefHeight="411.0" prefWidth="853.0" HBox.hgrow="ALWAYS">
+            <VBox HBox.hgrow="ALWAYS">
                <children>
-            		<TableView fx:id="tableDetailList" prefHeight="416.0" prefWidth="1166.0" VBox.vgrow="ALWAYS">
+            		<TableView fx:id="tableDetailList" VBox.vgrow="ALWAYS">
             			<columns>
-            				<TableColumn fx:id="colNo" prefWidth="200.0" text="شماره" />
+            				<TableColumn fx:id="colNo" prefWidth="110.0" text="شماره" />
             				<TableColumn fx:id="colItems" prefWidth="348.0" text="نوع جنس" />
                         <TableColumn fx:id="colUnit" prefWidth="200.0" text="واحد شمارش" />
                         <TableColumn fx:id="colQuantity" prefWidth="200.0" text="مجموع تعداد فروش" />
                         <TableColumn fx:id="colPrice" prefWidth="200.0" text="مجموع قیمت فروش" />
             			</columns>
             		</TableView>
-                  <HBox prefHeight="10.0" prefWidth="1166.0">
+                  <HBox>
                      <children>
-                        <Region prefHeight="70.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                        <VBox layoutX="322.0" layoutY="10.0" prefHeight="212.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+                        <Region HBox.hgrow="ALWAYS" />
+                        <VBox layoutX="322.0" layoutY="10.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                              <HBox prefHeight="43.0" prefWidth="0.0">
                                  <children>
-                                    <VBox prefHeight="70.0" prefWidth="254.0" spacing="30.0">
+                                    <VBox spacing="30.0">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
@@ -58,7 +58,7 @@
                                              </font></Label>
                                        </children>
                                     </VBox>
-                                    <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="70.0" prefWidth="162.0" spacing="30.0" HBox.hgrow="ALWAYS">
+                                    <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="43.0" prefWidth="241.0" spacing="30.0" HBox.hgrow="ALWAYS">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>

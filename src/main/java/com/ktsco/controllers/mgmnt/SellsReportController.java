@@ -18,7 +18,7 @@ public class SellsReportController implements Initializable{
 	private ViewClass views = new ViewClass();
 	
 	@FXML
-	private Button btnSellsReport , btnSaleDetailsReports, btnSellSummeryUSD, btnReceiveDetailReport;
+	private Button btnSellsReport , btnSaleDetailsReports, btnSellSummeryUSD, btnReceiveDetailReport, btnCustomerReports;
 
 	@FXML
 	private Text textPageSubtitle;
@@ -41,11 +41,17 @@ public class SellsReportController implements Initializable{
 			textPageSubtitle.setText(btnSellSummeryUSD.getText());
 			setReportBox("SellsReceivedUSDPanel");
 		}else if (event.getSource() == btnSaleDetailsReports) {
+			SalesDetailReportController.panelName = "sale";
 			textPageSubtitle.setText(btnSaleDetailsReports.getText());
 			setReportBox("SelesDetailsReport");
 		}else if (event.getSource() == btnReceiveDetailReport) {
+			ReceivedDetailReportController.panelName = "sale";
 			textPageSubtitle.setText(btnReceiveDetailReport.getText());
 			setReportBox("ReceivedDetailReport");
+		}else if (event.getSource() == btnCustomerReports) {
+			AmountOweController.reportType = "sale";
+			textPageSubtitle.setText(btnCustomerReports.getText());
+			setReportBox("AmountOweReports");
 		}
 	}
 	

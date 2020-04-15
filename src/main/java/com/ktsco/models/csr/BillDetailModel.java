@@ -1,8 +1,10 @@
 package com.ktsco.models.csr;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -11,34 +13,37 @@ public class BillDetailModel {
 	private static DecimalFormat decimalFormat = new DecimalFormat("###,###.###");
 
 	private SimpleIntegerProperty id;
+	private SimpleStringProperty prodCode;
 	private SimpleIntegerProperty lineNumber;
 	private SimpleStringProperty items;
 	private SimpleStringProperty unit;
-	private SimpleStringProperty quantity;
-	private SimpleStringProperty unitprice;
+	private SimpleDoubleProperty quantity;
+	private SimpleDoubleProperty unitprice;
 	private SimpleStringProperty linetotal;
 
 	public BillDetailModel(int lineNumber) {
 		decimalFormat.setRoundingMode(RoundingMode.UP);
 		this.id = new SimpleIntegerProperty(0);
+		this.prodCode = new SimpleStringProperty();
 		this.lineNumber = new SimpleIntegerProperty(lineNumber);
 		this.items = new SimpleStringProperty();
 		this.unit = new SimpleStringProperty();
-		this.quantity = new SimpleStringProperty(decimalFormat.format(0));
-		this.unitprice = new SimpleStringProperty(decimalFormat.format(0));
-		this.linetotal = new SimpleStringProperty(decimalFormat.format(0));
+		this.quantity = new SimpleDoubleProperty(0);
+		this.unitprice = new SimpleDoubleProperty(0);
+		this.linetotal = new SimpleStringProperty("0.0");
 
 	}
 
-	public BillDetailModel(int id,int lineNumber, String product, String unit, String quantity, String unitprice, String linetotal) {
+	public BillDetailModel(int id,String prodCode, int lineNumber, String product, String unit, double quantity, double unitprice, BigDecimal linetotal) {
 		decimalFormat.setRoundingMode(RoundingMode.UP);
 		this.id = new SimpleIntegerProperty(id);
+		this.prodCode = new SimpleStringProperty(prodCode);
 		this.lineNumber = new SimpleIntegerProperty(lineNumber);
 		this.items = new SimpleStringProperty(product);
 		this.unit = new SimpleStringProperty(unit);
-		this.quantity = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(quantity)));
-		this.unitprice = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(unitprice)));
-		this.linetotal = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(linetotal)));
+		this.quantity = new SimpleDoubleProperty(quantity);
+		this.unitprice = new SimpleDoubleProperty(unitprice);
+		this.linetotal = new SimpleStringProperty(linetotal.toPlainString());
 
 	}
 
@@ -55,10 +60,10 @@ public class BillDetailModel {
 	public String getUnit() {
 		return this.unit.get();
 	}
-	public String getQuantity() {
+	public double getQuantity() {
 		return this.quantity.get();
 	}
-	public String getUnitPrice() {
+	public double getUnitPrice() {
 		return this.unitprice.get();
 	}
 	public String getLineTotal() {
@@ -78,17 +83,14 @@ public class BillDetailModel {
 	public void setUnit (String unit) {
 		this.unit = new SimpleStringProperty(unit);
 	}
-	public void setQuantity(String quantity) {
-		decimalFormat.setRoundingMode(RoundingMode.UP);
-		this.quantity = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(quantity)));
+	public void setQuantity(double quantity) {
+		this.quantity = new SimpleDoubleProperty(quantity);
 	}
-	public void setUnitPrice(String unitprice) {
-		decimalFormat.setRoundingMode(RoundingMode.UP);
-		this.unitprice = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(unitprice)));
+	public void setUnitPrice(double unitprice) {
+		this.unitprice = new SimpleDoubleProperty(unitprice);
 	}
-	public void setLineTotal (String linetotal) {
-		decimalFormat.setRoundingMode(RoundingMode.UP);
-		this.linetotal = new SimpleStringProperty(decimalFormat.format(Double.parseDouble(linetotal)));
+	public void setLineTotal (BigDecimal linetotal) {
+		this.linetotal = new SimpleStringProperty(linetotal.toPlainString());
 	}
 	
 	// Get Properties
@@ -105,14 +107,29 @@ public class BillDetailModel {
 	public SimpleStringProperty getUnitProperty() {
 		return this.unit;
 	}
-	public SimpleStringProperty getQuantityProperty() {
+	public SimpleDoubleProperty getQuantityProperty() {
 		return this.quantity;
 	}
-	public SimpleStringProperty getUnitPriceProperty() {
+	public SimpleDoubleProperty getUnitPriceProperty() {
 		return this.unitprice; 
 	}
 	public SimpleStringProperty getLineTotalProperty() {
 		return this.linetotal;
 	}
+
+	public SimpleStringProperty prodCodeProperty() {
+		return this.prodCode;
+	}
+	
+
+	public String getProdCode() {
+		return this.prodCodeProperty().get();
+	}
+	
+
+	public void setProdCode(final String prodCode) {
+		this.prodCodeProperty().set(prodCode);
+	}
+	
 
 }

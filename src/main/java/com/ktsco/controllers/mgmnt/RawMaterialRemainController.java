@@ -2,8 +2,6 @@ package com.ktsco.controllers.mgmnt;
 
 import java.net.URL;
 import java.text.NumberFormat;
-import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.ktsco.models.mgmt.RawMtrlRptModel;
@@ -108,20 +106,8 @@ public class RawMaterialRemainController implements Initializable {
 	}
 
 	private void populateTableData(String itemCode) {
-		List<Map<String, Object>> dataList = InventoryDAO.getInventoryReport(itemCode);
-		for (Map<String, Object> map : dataList) {
-			int code = Integer.parseInt(map.get("inv_id").toString());
-			String items = map.get("inv_name").toString();
-			String unit = map.get("inv_um").toString();
-			double imported = Double.parseDouble(map.get("importedRawMaterail").toString());
-			double used = Double.parseDouble(map.get("UsedRawMaterial").toString());
-			double remained = imported - used;
-			double unitPrice = Double.parseDouble(map.get("unitPrice").toString());
-			double lineTotal = remained * unitPrice;
-
-			RawMtrlRptModel model = new RawMtrlRptModel(code, items, unit, imported, used, unitPrice, lineTotal);
-			tableData.add(model);
-		}
+		tableData= InventoryDAO.getInventoryReport(itemCode);
+		
 		generateTableCol(tableData);
 		calculateTotalValue();
 	}

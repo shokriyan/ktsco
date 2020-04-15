@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="635.0" prefWidth="1166.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.csr.DepositSearchController">
+<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="487.0" prefWidth="1080" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktsco.controllers.csr.DepositSearchController">
 	<children>
-		<VBox prefHeight="635.0" prefWidth="1166.0">
+		<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="487.0" prefWidth="1080.0">
 			<children>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="80.0" prefWidth="200.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" maxHeight="50.0" minHeight="50.0" spacing="20.0" VBox.vgrow="ALWAYS">
                <children>
                   <Button fx:id="btnSearch" layoutX="20.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="جستجو" />
                   <Button fx:id="btnRefresh" layoutX="1039.0" layoutY="37.0" mnemonicParsing="false" onAction="#allButtonActions" prefWidth="150.0" text="بارگذاری" />
@@ -24,7 +24,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </HBox>
-				<HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="20.0" styleClass="subtitleStyle">
+				<HBox alignment="CENTER_LEFT" maxHeight="60.0" minHeight="50.0" spacing="20.0" styleClass="subtitleStyle" VBox.vgrow="ALWAYS">
 					<padding>
 						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 					</padding>
@@ -61,7 +61,7 @@
                   </VBox>
 					</children>
 				</HBox>
-            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" styleClass="subtitleStyle">
+            <HBox alignment="CENTER" maxHeight="30.0" minHeight="30.0" styleClass="subtitleStyle">
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="25.0" prefWidth="1166.0" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
@@ -79,8 +79,8 @@
                   <TableView fx:id="tableDepositTable" prefHeight="214.0" prefWidth="696.0" styleClass="noBorderTableView" HBox.hgrow="ALWAYS">
                      <columns>
                         <TableColumn fx:id="colReceiveID" prefWidth="100.0" text="کد دریافتی" />
-                        <TableColumn fx:id="colBank" prefWidth="300.0" text="بانک" />
-                        <TableColumn fx:id="colEmployee" prefWidth="250.0" text="کارمند" />
+                        <TableColumn fx:id="colBank" prefWidth="250.0" text="بانک" />
+                        <TableColumn fx:id="colEmployee" prefWidth="214.0" text="کارمند" />
                         <TableColumn fx:id="colVoucherNo" prefWidth="178.0" text="شماره رسید" />
                         <TableColumn fx:id="colDepositDate" minWidth="0.0" prefWidth="150.0" text="تاریخ انتقال" />
                         <TableColumn fx:id="colDepositAmount" prefWidth="150.0" text="مبلغ انتقال" />
