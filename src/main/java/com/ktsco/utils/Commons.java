@@ -39,6 +39,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -485,6 +486,22 @@ public class Commons {
 	public static boolean getAccessVerification(Object object) {
 		int tinyint = Integer.parseInt(object.toString());
 		return (tinyint == 0) ? false : true;
+	}
+	
+	public static void amountLabelFormation(Label label, double amount) {
+		if (amount >= 0 )
+			label.setTextFill(Color.BLACK);
+		else
+			label.setTextFill(Color.RED);
+			
+	}
+	
+	public static void amountTextFieldFormation(TextField textField, double amount) {
+		if (amount >= 0 )
+			textField.setStyle("-fx-text-inner-color: black;");
+		else
+			textField.setStyle("-fx-text-inner-color: red;");
+			
 	}
 
 }

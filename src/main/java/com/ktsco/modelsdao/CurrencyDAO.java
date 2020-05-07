@@ -18,7 +18,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class CurrencyDAO {
-	
 
 	private static Logger log = LoggerFactory.getLogger(CurrencyDAO.class);
 	private static String query;
@@ -158,19 +157,19 @@ public class CurrencyDAO {
 		}
 		return isSuccess;
 	}
-	
-	public static boolean updateCurrencyRecord(int id , String inputRate) {
-		boolean isSuccess = false; 
+
+	public static boolean updateCurrencyRecord(int id, String inputRate) {
+		boolean isSuccess = false;
 		double rate = Double.parseDouble(inputRate);
-		query = "Update currencies set rate = TRUNCATE(?,9) where id = ?"; 
+		query = "Update currencies set rate = TRUNCATE(?,9) where id = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setDouble(1, rate);
 			preStatement.setInt(2, id);
 			preStatement.executeUpdate();
 			isSuccess = true;
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -183,16 +182,16 @@ public class CurrencyDAO {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
+
 		return isSuccess;
 	}
-	
-	public static String getCurrencyRate (String currency, String date) {
-		String value = ""; 
+
+	public static String getCurrencyRate(String currency, String date) {
+		String value = "";
 		query = "SELECT RATE FROM CURRENCIES WHERE CURRENCY LIKE ? AND ENTRYDATE = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
-			preStatement.setString(1, "%"+currency+"%");
+			preStatement.setString(1, "%" + currency + "%");
 			preStatement.setString(2, date);
 			resultSet = preStatement.executeQuery();
 			while (resultSet.next()) {
@@ -200,8 +199,8 @@ public class CurrencyDAO {
 				BigDecimal bg = resultSet.getBigDecimal(1, 9);
 				value = bg.toPlainString();
 			}
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -214,15 +213,16 @@ public class CurrencyDAO {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
-		return value; 
+
+		return value;
 	}
-	public static String getCurrencyRate (String date) {
-		String value = ""; 
+
+	public static String getCurrencyRate(String date) {
+		String value = "";
 		query = "SELECT RATE FROM CURRENCIES WHERE ENTRYDATE = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
-			
+
 			preStatement.setString(1, date);
 			resultSet = preStatement.executeQuery();
 			while (resultSet.next()) {
@@ -230,8 +230,8 @@ public class CurrencyDAO {
 				BigDecimal bg = resultSet.getBigDecimal(1, 9);
 				value = bg.toPlainString();
 			}
-			
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			log.error(Commons.dbExcutionLog(query, e.getMessage()));
 			AlertsUtils.databaseErrorAlert();
 		} finally {
@@ -244,10 +244,51 @@ public class CurrencyDAO {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
-		
-		return value; 
+
+		return value;
 	}
-	
-	
+
+	public static ObservableList<CurrencyModel> getTodaysDateCurrency(String date) {
+		ObservableList<CurrencyModel> list = FXCollections.observableArrayList();
+		query = "Select * from currencies where entryDate = ?";
+
+		try {
+			preStatement = DatabaseUtils.dbPreparedStatment(query);
+			preStatement.setString(1, date);
+			
+			resultSet = preStatement.executeQuery();
+			if (!resultSet.isBeforeFirst()) {
+				query = "select * from currencies where entryDate = (select entrydate from currencies order by entrydate desc LIMIT 1)";
+				resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+			}
+			
+			while (resultSet.next()) {
+				int idNumber = resultSet.getInt("id");
+				String currency = Commons.getCurrencyValue(resultSet.getString("currency"));
+				String jalaliDate = DateUtils.convertGregoryToJalali(resultSet.getString("entryDate"));
+				@SuppressWarnings("deprecation")
+				BigDecimal bg = resultSet.getBigDecimal("rate", 9);
+				String rate = bg.toPlainString();
+				CurrencyModel model = new CurrencyModel(idNumber, currency, jalaliDate, rate);
+				list.add(model);
+			}
+
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+
+		return list;
+
+	}
 
 }

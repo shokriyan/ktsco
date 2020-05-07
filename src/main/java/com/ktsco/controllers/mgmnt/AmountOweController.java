@@ -132,7 +132,7 @@ public class AmountOweController implements Initializable {
 		if (reportType.equalsIgnoreCase("sale"))
 			tableData = SaleBillDAO.getSalesAmountOweReport(customerId, currencyType, fromDate, toDate);
 		else if (reportType.equalsIgnoreCase("expense"))
-			tableData = ExpenseDAO.getExpenseAmountOweReport(customer, currencyType, fromDate, toDate);
+			tableData = ExpenseDAO.getExpenseAmountOweReport(customerId, currencyType, fromDate, toDate);
 		generateTableColumns(tableData);
 
 	}

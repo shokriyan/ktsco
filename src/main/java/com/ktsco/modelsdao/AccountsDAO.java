@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.csr.AccountsModel;
 import com.ktsco.models.csr.BankBalanceModel;
+import com.ktsco.models.mgmt.BankDetail;
 import com.ktsco.utils.AlertsUtils;
 import com.ktsco.utils.Commons;
 import com.ktsco.utils.DatabaseUtils;
@@ -25,13 +26,15 @@ public class AccountsDAO {
 	private static String query;
 	private static ResultSet resultSet;
 	private static PreparedStatement preStatement;
-
+	
+	
+	
 	public static ObservableList<AccountsModel> reterieveAllRecords() {
 		ObservableList<AccountsModel> list = FXCollections.observableArrayList();
 		query = "Select * from accounts";
 		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 		try {
-			
+
 			while (resultSet.next()) {
 				int code = resultSet.getInt("account_id");
 				String bankAccount = resultSet.getString("bank_Accnt");
@@ -160,7 +163,7 @@ public class AccountsDAO {
 	public static List<String> getBankAccounts(String currency) {
 		List<String> accountList = new ArrayList<String>();
 		String currencyKey = Commons.getCurrencyKey(currency);
-		 query = "Select bank_name, bank_accnt, currency from accounts where currency = ?";
+		query = "Select bank_name, bank_accnt, currency from accounts where currency = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStatement.setString(1, currencyKey);
@@ -185,7 +188,7 @@ public class AccountsDAO {
 	}
 
 	public static String getBankAccounts(int accountID) {
-		String bank = ""; 
+		String bank = "";
 		query = "Select bank_name, bank_accnt, currency from accounts where account_id = ?";
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
@@ -266,12 +269,11 @@ public class AccountsDAO {
 		}
 		return list;
 	}
-	
 
 	public static List<String> getBankAccounts() {
 		List<String> accountList = new ArrayList<String>();
-		 query = "Select bank_name, bank_accnt, currency from accounts";
-		 resultSet = DatabaseUtils.dbSelectExuteQuery(query);
+		query = "Select bank_name, bank_accnt, currency from accounts";
+		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 		try {
 			while (resultSet.next()) {
 				String accounts = resultSet.getString(1) + " - " + resultSet.getString(2) + " - "
@@ -290,8 +292,93 @@ public class AccountsDAO {
 		}
 
 		return accountList;
-		
+
+	}
+
+	public static ObservableList<BankDetail> getBankDetailReport(int code, String startDate, String endDate) {
+		ObservableList<BankDetail> list = FXCollections.observableArrayList();
+
+		startDate = (startDate.equalsIgnoreCase("")) ? "1900-01-01" : DateUtils.convertJalaliToGregory(startDate);
+		endDate = (endDate.equalsIgnoreCase("")) ? "9999-12-31" : DateUtils.convertJalaliToGregory(endDate);
+
+		query = "select bd.bankdepoid, bd.banks_bank_id as BankId ,a.currency, a.bank_name as bankName, bd.transactiondate, bd.banks_frombank as fromBankId, "
+				+ "IFNULL((select bank_name from accounts where account_id = bd.banks_frombank),'حساب مشتری') as frombank, amount "
+				+ "from bankdeposit bd inner join accounts a on a.account_id = bd.banks_bank_id "
+				+ "where bd.banks_bank_id = ? and bd.transactiondate between ? and ? "
+				+ "order by bd.transactiondate asc";
+
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setInt(1, code);
+			preStatement.setString(2, startDate);
+			preStatement.setString(3, endDate);
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				int depoId = resultSet.getInt("bankdepoid");
+				int bankId = resultSet.getInt("BankId");
+				String bankName = resultSet.getString("bankName");
+				String currency = resultSet.getString("currency");
+				String entryDate = DateUtils.convertGregoryToJalali(resultSet.getString("transactiondate"));
+				int fromBankId = resultSet.getInt("fromBankId");
+				String fromBankName = resultSet.getString("frombank");
+				double orignalAmount = resultSet.getDouble("amount");
+				BankDetail model = new BankDetail(depoId, bankId, bankName, currency, fromBankId, fromBankName, entryDate, orignalAmount);
+				list.add(model);
+				
+			}
+
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				resultSet.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		return list;
 	}
 	
+	public static ObservableList<BankBalanceModel> getBankSummaryReport(String startDate, String endDate) {
+		ObservableList<BankBalanceModel> list = FXCollections.observableArrayList();
+
+		startDate = (startDate.equalsIgnoreCase("")) ? "1900-01-01" : DateUtils.convertJalaliToGregory(startDate);
+		endDate = (endDate.equalsIgnoreCase("")) ? "9999-12-31" : DateUtils.convertJalaliToGregory(endDate);
+
+		query = "select a.currency, a.bank_Accnt , a.bank_name as bankName,SUM( a.opening_balance) as openingBalance,  SUM(bd.amount) as originalAmount " + 
+				"from bankdeposit bd right outer join accounts a on a.account_id = bd.banks_bank_id " + 
+				"where bd.transactiondate between ? and ? " + 
+				"group by a.bank_accnt, a.currency, a.bank_name";
+
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setString(1, startDate);
+			preStatement.setString(2, endDate);
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				String bankName = resultSet.getString("bankName");
+				String currency = resultSet.getString("currency");
+				String bankAccount = resultSet.getString("bank_Accnt");
+				double openingBalance = resultSet.getDouble("openingBalance");
+				double acountBalance = resultSet.getDouble("originalAmount");
+				double originalAmount = openingBalance + acountBalance;
+				BankBalanceModel modal = new BankBalanceModel(0, bankAccount, bankName, currency, originalAmount);
+				list.add(modal);
+				
+			}
+
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				resultSet.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		return list;
+	}
 
 }

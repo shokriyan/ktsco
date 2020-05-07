@@ -24,6 +24,7 @@ public class AccountsModel {
 		this.openingBalance = new SimpleStringProperty(String.valueOf(decimalFormat.format(openingBalance)));
 	}
 	
+	
 	// getters
 	
 	public int getCode () {
@@ -91,5 +92,4 @@ public class AccountsModel {
 		this.currencyProperty().set(currency);
 	}
 	
-
 }

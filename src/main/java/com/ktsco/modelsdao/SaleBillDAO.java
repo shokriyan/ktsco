@@ -516,16 +516,26 @@ public class SaleBillDAO {
 		query = "select sb.customer_id,c.company, c.currency, SUM(sbt.billTotal) as saleTotal , IFNULL(SUM(r.amount) , 0) as receivedTotal  from salebills sb " + 
 				"inner join salesbilltotal sbt on sbt.bill_id = sb.bill_id " + 
 				"left outer join received r on r.bill_id = sb.bill_id " + 
-				"inner join customers c on c.customer_id = sb.customer_id " + 
-				"where sb.customer_id like ? and c.currency like ? and sb.billdate between ? and ? " + 
+				"inner join customers c on c.customer_id = sb.customer_id ";
+		if (!("").equalsIgnoreCase(customerId) ){
+				query += "where sb.customer_id = ? and c.currency like ? and sb.billdate between ? and ? " + 
 				"group by sb.customer_id";
+		}else {
+			query += "where c.currency like ? and sb.billdate between ? and ? " + 
+					"group by sb.customer_id";
+		}
 		preStatement = DatabaseUtils.dbPreparedStatment(query);
 		try {
-			preStatement.setString(1, customerId + "%");
+			if (!("").equalsIgnoreCase(customerId) ){
+			preStatement.setString(1, customerId);
 			preStatement.setString(2, "%" + convertyCurrencyType + "%");
 			preStatement.setString(3,  convertFromDate );
 			preStatement.setString(4, convertToDate);
-			
+			}else {
+				preStatement.setString(1, "%" + convertyCurrencyType + "%");
+				preStatement.setString(2,  convertFromDate );
+				preStatement.setString(3, convertToDate);
+			}
 			resultSet = preStatement.executeQuery(); 
 			while (resultSet.next()) {
 				int id = resultSet.getInt("customer_id");
