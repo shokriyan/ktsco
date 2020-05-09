@@ -30,18 +30,24 @@
 		</HBox>
 		<VBox prefHeight="100.0" prefWidth="100.0">
 			<children>
-				<HBox alignment="CENTER" prefHeight="100.0" prefWidth="30.0" spacing="10.0">
+				<HBox alignment="CENTER" prefHeight="100.0" prefWidth="30.0" spacing="10.0" VBox.vgrow="ALWAYS">
 					<children>
-                  <VBox prefHeight="44.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+                  <VBox prefWidth="150.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label text="دسته بندی پایه" />
                         <ComboBox fx:id="comboMainCat" prefHeight="27.0" prefWidth="305.0" />
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                  <VBox prefWidth="150.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label text="دسته بندی " />
       						<TextField fx:id="txtCategory" prefHeight="27.0" prefWidth="312.0" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="390.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="کد دسته بندی" />
+                        <TextField fx:id="txtCategoryCode" prefHeight="27.0" prefWidth="312.0" />
                      </children>
                   </VBox>
 					</children>
@@ -79,8 +85,9 @@
 				<TableView fx:id="tableCategory" onMouseClicked="#onClickAction" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
 					<columns>
 						<TableColumn fx:id="colNo" prefWidth="100.0" resizable="false" text="شماره" />
-                  <TableColumn fx:id="colMainCat" prefWidth="300.0" resizable="false" text="دسته بندی پایه" />
-						<TableColumn fx:id="colCategory" minWidth="300.0" prefWidth="382.0" resizable="false" text="دسته بندی" />
+                  <TableColumn fx:id="colMainCat" prefWidth="200.0" resizable="false" text="دسته بندی پایه" />
+						<TableColumn fx:id="colCategory" minWidth="100.0" prefWidth="280.0" resizable="false" text="دسته بندی" />
+                  <TableColumn fx:id="colCatCode" minWidth="100.0" prefWidth="200.0" resizable="false" text="کد دسته بندی" />
 					</columns>
 				</TableView>
 			</children>

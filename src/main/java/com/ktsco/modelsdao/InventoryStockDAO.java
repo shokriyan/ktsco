@@ -32,7 +32,7 @@ public class InventoryStockDAO {
 
 	public static ObservableList<InvStockDetailModel> populateInvList() {
 		invStockDetailList = FXCollections.observableArrayList();
-		query = "select inv.inv_name,inv.inv_um, cat.category from inventory inv inner join category cat on inv.category_id = cat.category_id where cat.category = 'مواد اولیه'";
+		query = "select inv.inv_name,inv.inv_um, cat.category from inventory inv inner join category cat on inv.category_id = cat.category_id where cat.cd_category = '100000'";
 		resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 		try {
 			while (resultSet.next()) {
@@ -131,7 +131,7 @@ public class InventoryStockDAO {
 		sb.append("select inv.inv_id, inv.inv_um , inv.inv_name , cat.category , ");
 		sb.append("sum(detail.import_qty) as invTotalQty from inventory inv inner join category cat on ");
 		sb.append("inv.category_id = cat.category_id left join invImportDetail detail on ");
-		sb.append("inv.inv_id = detail.inv_item where cat.category = 'مواد اولیه' group by inv.inv_id");
+		sb.append("inv.inv_id = detail.inv_item where cat.cd_category = '100000' group by inv.inv_id");
 
 		query = String.valueOf(sb);
 

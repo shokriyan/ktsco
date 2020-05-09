@@ -31,7 +31,7 @@ public class CategoryController implements Initializable {
 	private Button btnClose, btnAdd, btnDelete, btnModify, btnSearch, btnRefresh;
 
 	@FXML
-	private TextField txtCategory;
+	private TextField txtCategory , txtCategoryCode;
 	@FXML
 	private ComboBox<String> comboMainCat;
 
@@ -40,7 +40,7 @@ public class CategoryController implements Initializable {
 	@FXML
 	private TableColumn<CategoryModel, Integer> colNo;
 	@FXML
-	private TableColumn<CategoryModel, String> colCategory, colMainCat;
+	private TableColumn<CategoryModel, String> colCategory, colMainCat , colCatCode;
 
 	public static Stage categoryStage = new Stage();
 	private ObservableList<CategoryModel> catList = FXCollections.observableArrayList();
@@ -57,9 +57,11 @@ public class CategoryController implements Initializable {
 			CategoryModel catModel = tableCategory.getSelectionModel().getSelectedItem();
 			String category = catModel.getCategoryName();
 			String mainCat = catModel.getMainCat();
+			String catCode = catModel.getCategoryCode();
 			if (category != null) {
 				txtCategory.setText(category);
 				comboMainCat.setValue(mainCat);
+				txtCategoryCode.setText(catCode);
 			}
 		}
 
@@ -75,6 +77,7 @@ public class CategoryController implements Initializable {
 		} else if (event.getSource() == btnAdd) {
 			addCategoryItem();
 			txtCategory.clear();
+			txtCategoryCode.clear();
 			comboMainCat.setValue("");
 		} else if (event.getSource() == btnDelete) {
 			String value = txtCategory.getText();
@@ -83,7 +86,8 @@ public class CategoryController implements Initializable {
 		} else if (event.getSource() == btnModify) {
 			String value = txtCategory.getText();
 			String mainCat = comboMainCat.getValue();
-			modifyCategoryItem(value, mainCat);
+			String categoryCode = txtCategoryCode.getText();
+			modifyCategoryItem(value, mainCat , categoryCode);
 			txtCategory.clear();
 		} else if (event.getSource() == btnSearch) {
 			String value = txtCategory.getText();
@@ -92,6 +96,7 @@ public class CategoryController implements Initializable {
 			catList = CategoryDAO.selectAllItems();
 			setCategoryTable(catList);
 			txtCategory.clear();
+			txtCategoryCode.clear();
 		}
 	}
 
@@ -109,17 +114,20 @@ public class CategoryController implements Initializable {
 		colNo.setCellValueFactory(cellData -> cellData.getValue().catIDProperty().asObject());
 		colCategory.setCellValueFactory(cellData -> cellData.getValue().categoryNameProperty());
 		colMainCat.setCellValueFactory(cellData -> cellData.getValue().mainCatProperty());
+		colCatCode.setCellValueFactory(cellData -> cellData.getValue().categoryCodeProperty());
+		
 		tableCategory.setItems(list);
 
 	}
 
 	public void addCategoryItem() {
 		String value = txtCategory.getText();
+		String categoryCode = txtCategoryCode.getText();
 		int mainCat = Integer.parseInt(comboMainCat.getValue().split("-")[0].trim());
 		if (!value.isEmpty()) {
 			boolean exist = CategoryDAO.checkExistance(value);
 			if (!exist) {
-				CategoryDAO.addCategory(value, mainCat);
+				CategoryDAO.addCategory(value, mainCat, categoryCode);
 				populateCategoryTable();
 			} else {
 				AlertsUtils.repeatItemAlerts(value);
@@ -158,7 +166,7 @@ public class CategoryController implements Initializable {
 		}
 	}
 
-	public void modifyCategoryItem(String value, String mainCat) {
+	public void modifyCategoryItem(String value, String mainCat, String categoryCode) {
 		if (!value.isEmpty()) {
 			int categoryId = 0;
 			if (!tableCategory.getSelectionModel().isEmpty()) {
@@ -167,7 +175,7 @@ public class CategoryController implements Initializable {
 			}
 			if (categoryId != 0) {
 				int mainCatID = Integer.parseInt(mainCat.split("-")[0].trim());
-				CategoryDAO.modifyCategory(categoryId, value, mainCatID);
+				CategoryDAO.modifyCategory(categoryId, value, mainCatID , categoryCode);
 				populateCategoryTable();
 			}
 		} else {

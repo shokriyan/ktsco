@@ -25,7 +25,8 @@ public class CategoryDAO {
 
 	public static ObservableList<CategoryModel> selectAllItems() {
 		ObservableList<CategoryModel> listObservable = FXCollections.observableArrayList();
-		String query = "Select category_id, category, (select concat(id , ' - ' , name )from maincategory where id = c.maincategory_id) as mainCategory from category c";
+		String query = "Select category_id, category, (select concat(id , ' - ' , name )from maincategory where id = c.maincategory_id) as mainCategory, "
+				+ "cd_category from category c";
 		ResultSet resultSet = DatabaseUtils.dbSelectExuteQuery(query);
 
 		try {
@@ -34,7 +35,9 @@ public class CategoryDAO {
 				int categoryID = resultSet.getInt("category_id");
 				String category = resultSet.getString("category");
 				String mainCatItem = resultSet.getString("maincategory");
-				catModel = new CategoryModel(categoryID, mainCatItem, category);
+				String catCode = resultSet.getString("cd_category");
+				
+				catModel = new CategoryModel(categoryID, mainCatItem, category, catCode);
 				listObservable.add(catModel);
 			}
 
@@ -56,7 +59,8 @@ public class CategoryDAO {
 
 	public static ObservableList<CategoryModel> retrieveSearchItems(String searchContex) {
 		ObservableList<CategoryModel> listObservable = FXCollections.observableArrayList();
-		String query = "Select category_id, category, (select concat(id , ' - ' , name )from maincategory where id = c.maincategory_id) as mainCategory from category c where category like ?";
+		String query = "Select category_id, category, (select concat(id , ' - ' , name )from maincategory where id = c.maincategory_id) as mainCategory, "
+				+ "cd_category from category c where category like ?";
 
 		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
 		ResultSet resultSet = null;
@@ -68,7 +72,8 @@ public class CategoryDAO {
 				int categoryID = resultSet.getInt("category_id");
 				String category = resultSet.getString("category");
 				String mainCatItem = resultSet.getString("maincategory");
-				catModel = new CategoryModel(categoryID, mainCatItem, category);
+				String categoryCode = resultSet.getString("cd_category");
+				catModel = new CategoryModel(categoryID, mainCatItem, category, categoryCode);
 				listObservable.add(catModel);
 			}
 
@@ -90,13 +95,14 @@ public class CategoryDAO {
 
 	}
 
-	public static void addCategory(String category, int mainCat) {
+	public static void addCategory(String category, int mainCat, String categoryCode) {
 
-		String query = "Insert into category (category, maincategory_id) values (?, ?)";
+		String query = "Insert into category (category, maincategory_id,cd_category ) values (?, ?,?)";
 		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStmt.setString(1, category);
 			preStmt.setInt(2, mainCat);
+			preStmt.setString(3, categoryCode);
 			preStmt.execute();
 		} catch (SQLException e) {
 			log.error("Error while executing query {}", query);
@@ -129,13 +135,14 @@ public class CategoryDAO {
 		}
 	}
 
-	public static void modifyCategory(int categoryId, String newValue, int mainCatID) {
-		String query = "Update category set category = ? , maincategory_id = ? where category_id = ?";
+	public static void modifyCategory(int categoryId, String newValue, int mainCatID ,String categoryCode) {
+		String query = "Update category set category = ? , maincategory_id = ? , cd_category = ? where category_id = ?";
 		PreparedStatement preStmt = DatabaseUtils.dbPreparedStatment(query);
 		try {
 			preStmt.setString(1, newValue);
 			preStmt.setInt(2, mainCatID);
-			preStmt.setInt(3, categoryId);
+			preStmt.setString(3, categoryCode);
+			preStmt.setInt(4, categoryId);
 			preStmt.executeUpdate();
 		} catch (SQLException e) {
 			log.error("Error while executing query {}", query);

@@ -241,7 +241,7 @@ public class InventoryDAO {
 	 */
 	public static List<String> getInvItemsForCombo() {
 		List<String> list = new ArrayList<String>();
-		String query = "select inv_name , category from inventory inner join category on inventory.category_id = category.category_id where category like 'مواد اولیه' order by inv_id;";
+		String query = "select inv_name , category from inventory inner join category on inventory.category_id = category.category_id where cd_category = '100000' order by inv_id;";
 		ResultSet result = DatabaseUtils.dbSelectExuteQuery(query);
 		log.info("Exectuing query {}", query);
 		try {

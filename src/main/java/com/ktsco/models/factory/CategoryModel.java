@@ -7,12 +7,14 @@ public class CategoryModel {
 
 	private SimpleIntegerProperty catId;
 	private SimpleStringProperty categoryName;
+	private SimpleStringProperty categoryCode;
 	private SimpleStringProperty mainCat; 
 
-	public CategoryModel(int id, String mainCategory , String categoryName) {
+	public CategoryModel(int id, String mainCategory , String categoryName, String catCode) {
 		this.catId = new SimpleIntegerProperty(id);
 		this.mainCat = new SimpleStringProperty(mainCategory);
 		this.categoryName = new SimpleStringProperty(categoryName);
+		this.categoryCode = new SimpleStringProperty(catCode);
 	}
 
 	// getters value
@@ -55,6 +57,21 @@ public class CategoryModel {
 	public void setMainCat(final String mainCat) {
 		this.mainCatProperty().set(mainCat);
 	}
+
+	public SimpleStringProperty categoryCodeProperty() {
+		return this.categoryCode;
+	}
+	
+
+	public String getCategoryCode() {
+		return this.categoryCodeProperty().get();
+	}
+	
+
+	public void setCategoryCode(final String categoryCode) {
+		this.categoryCodeProperty().set(categoryCode);
+	}
+	
 	
 
 }
