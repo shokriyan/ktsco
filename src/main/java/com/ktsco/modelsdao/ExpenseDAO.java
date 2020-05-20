@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.ktsco.models.csr.BillDetailModel;
 import com.ktsco.models.csr.SalesSearchModel;
 import com.ktsco.models.mgmt.AmountOweModal;
+import com.ktsco.models.mgmt.ExpenseModal;
 import com.ktsco.models.mgmt.SalesDetailModel;
 import com.ktsco.models.mgmt.SellSummaryModel;
 import com.ktsco.utils.AlertsUtils;
@@ -529,6 +530,48 @@ public class ExpenseDAO {
 				log.error(Commons.dbClosingLog(e.getMessage()));
 			}
 		}
+		return list;
+	}
+
+	public static ObservableList<ExpenseModal> getFixAssetReport(String toDate) {
+		ObservableList<ExpenseModal> list = FXCollections.observableArrayList();
+		toDate = (toDate.equalsIgnoreCase("")) ? "2900-12-31" : DateUtils.convertJalaliToGregory(toDate);
+		query = "select eb.expns_id, eb.expns_date, eb.currency,cu.rate, (ed.quantity * ed.unitprice*cu.rate) as totalAmount from expenseDetail ed "
+				+ "inner join expenseBill eb on eb.expns_id = ed.expns_id "
+				+ "inner join inventory i on i.inv_id = ed.inv_id "
+				+ "inner join category c on c.category_id = i.category_id "
+				+ "inner join currencies cu on cu.entryDate = eb.expns_date "
+				+ "where eb.currency = cu.currency and c.cd_category = '300000' and eb.expns_date between '1900-01-01' and ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setString(1, toDate);
+			resultSet = preStatement.executeQuery();
+			
+			while (resultSet.next()) {
+				ExpenseModal modal = new ExpenseModal();
+				modal.setExpenseId(resultSet.getInt("expns_id"));
+				modal.setExpenseDate(resultSet.getString("expns_date"));
+				modal.setCurrencyType(resultSet.getString("currency"));
+				modal.setTotalAmount(resultSet.getDouble("totalAmount"));
+				
+				list.add(modal);
+			}
+			
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+		
 		return list;
 	}
 

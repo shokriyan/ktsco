@@ -27,6 +27,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -35,7 +36,7 @@ public class ProductionController implements Initializable {
 	private ViewClass view = new ViewClass();
 
 	@FXML
-	private Button btnSave, btnArrowDown, btnReload, btnSearch, btnDetailList, btnExportProduction;
+	private Button btnSave, btnArrowDown, btnReload, btnSearch, btnDetailList, btnExportProduction,btnExportSearch;
 	@FXML
 	private Label labelMessage;
 	@FXML
@@ -46,14 +47,14 @@ public class ProductionController implements Initializable {
 	private TableColumn<ProductionDetailModel, String> colProductItemList, colUMList, colQuantityList;
 	@FXML
 	private MenuItem menuItemDeleteRow;
-
+	@FXML
+	private HBox hboxMainPanel; 
 	@FXML
 	private TableView<ProductionDetailModel> tableProductionStock;
 	@FXML
 	private TableColumn<ProductionDetailModel, String> colProductStock, colUMStock, colQuantityStock;
 	@FXML
 	private ComboBox<String> comboEmployee, comboProducts;
-
 	ObservableList<ProductionDetailModel> productionList = FXCollections.observableArrayList();
 
 	@Override
@@ -118,6 +119,8 @@ public class ProductionController implements Initializable {
 			openProductionExport();
 			ProductionExportController.exportPanelStage.setOnHidden(e -> loadPrerequisitions());
 			
+		}else if (event.getSource() == btnExportSearch) {
+			navigateExportSearchPanel();
 		}
 	}
 
@@ -266,5 +269,9 @@ public class ProductionController implements Initializable {
 		generateProductionStockTable(list);
 	}
 
+	private void navigateExportSearchPanel() {
+		FactoryExportSearchController exportSearchController = new FactoryExportSearchController();
+		FactoryController.factoryBorderPane.setCenter(exportSearchController.createExportSearchPane());
+	}
 	
 }

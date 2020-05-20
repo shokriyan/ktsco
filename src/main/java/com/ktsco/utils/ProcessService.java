@@ -11,7 +11,7 @@ public class ProcessService extends Service<Void>{
 
 			@Override
 			protected Void call() throws Exception {
-				Thread.sleep(5000);
+				Thread.sleep(2500);
 				return null;
 			}
 			

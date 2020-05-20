@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.ktsco.models.csr.BankBalanceModel;
 import com.ktsco.models.csr.CurrencyModel;
+import com.ktsco.models.mgmt.ExpenseModal;
 import com.ktsco.models.mgmt.SellSummaryModel;
 import com.ktsco.modelsdao.AccountsDAO;
 import com.ktsco.modelsdao.CurrencyDAO;
@@ -35,6 +36,7 @@ public class BalanceSheetReportController {
 	double bankBalanceTotalValue = 0; 
 	double totalReceivableAmount = 0;
 	double totalPayableAmount = 0; 
+	double fixAssetAmount = 0; 
 	double balanceSheetFinalAmount = 0; 
 	private  String searchToDate = "";
 	
@@ -65,9 +67,10 @@ public class BalanceSheetReportController {
 		VBox bankBalancePanel = createBankBalancePanel();
 		HBox receivablePanel =createReceivablePanel();
 		HBox payablePanel = createPayablePanel();
+		HBox fixAssetPanel = createFixAsset();
 		HBox balanceSheetFinalPanel = createTotalBalanceSheetPanel();
 		report.getChildren().clear();
-		report.getChildren().addAll(bankBalancePanel, receivablePanel , payablePanel , balanceSheetFinalPanel);
+		report.getChildren().addAll(bankBalancePanel, receivablePanel ,fixAssetPanel, payablePanel , balanceSheetFinalPanel);
 		return report;
 	}
 
@@ -234,6 +237,8 @@ public class BalanceSheetReportController {
 		totalPayableAmount = totalPayableAmount * -1;
 	}
 	
+	
+	
 	private HBox createPayablePanel() {
 		Font fontFamily = new Font("Tahoma", 15);
 		accountPayableReport();
@@ -258,11 +263,43 @@ public class BalanceSheetReportController {
 		
 	}
 	
+	private void fixAssetReport() {
+		fixAssetAmount = 0; 
+		ObservableList<ExpenseModal> fixAssertReport = ExpenseDAO.getFixAssetReport(searchToDate);
+		for (ExpenseModal modal:fixAssertReport) {
+			fixAssetAmount +=modal.getTotalAmount();
+		}
+	}
+	
+	private HBox createFixAsset() {
+		Font fontFamily = new Font("Tahoma", 15);
+		fixAssetReport();
+		HBox reportPanel = new HBox(20);
+		
+		Label fieldName = new Label();
+		fieldName.setFont(fontFamily);
+		fieldName.setText("دارایی ثابت");
+		fieldName.setPrefWidth(250);
+		Region region = new Region();
+		region.setPrefWidth(250);
+		Label fieldValue = new Label();
+		fieldValue.setFont(fontFamily);
+		fieldValue.setPrefWidth(250);
+		fieldValue.setAlignment(Pos.BASELINE_LEFT);
+		fieldValue.setText(formatPrice.format(fixAssetAmount));
+		Commons.amountLabelFormation(fieldValue, fixAssetAmount);
+		
+		reportPanel.getChildren().clear();
+		reportPanel.getChildren().addAll(fieldName,region, fieldValue);
+		return reportPanel;
+		
+	}
+	
 	private void balanceSheetReport() {
 		double totalIncome = bankBalanceTotalValue + totalReceivableAmount; 
 		double totalExpense = totalPayableAmount; 
 		
-		balanceSheetFinalAmount = totalIncome + totalExpense; 
+		balanceSheetFinalAmount = totalIncome + totalExpense + fixAssetAmount; 
 	}
 	
 	private HBox createTotalBalanceSheetPanel() {

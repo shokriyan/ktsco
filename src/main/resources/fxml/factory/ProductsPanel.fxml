@@ -34,7 +34,7 @@
 				</HBox>
 				<HBox prefHeight="200.0" prefWidth="200.0">
 					<children>
-						<VBox spacing="10.0">
+						<VBox spacing="22.0">
 							<padding>
 								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 							</padding>
@@ -43,13 +43,13 @@
 								<Label text="نام محصول" />
 								<Label layoutX="20.0" layoutY="20.0" text="دسته بندی" />
 								<Label layoutX="20.0" layoutY="47.0" text="واحد شمارش" />
-								<Label layoutX="20.0" layoutY="74.0" text="تولید کارخانه" />
+								<Label layoutX="20.0" layoutY="74.0" prefWidth="120.0" text="تولید کارخانه" />
 							</children>
 						</VBox>
 						<VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="300.0" spacing="10.0">
 							<children>
 								<TextField fx:id="txtProdId" editable="false" layoutX="30.0" layoutY="25.0" prefWidth="400.0" style="-fx-background-color: lightgray;" />
-								<HBox prefHeight="100.0" prefWidth="200.0">
+								<HBox>
 									<children>
 										<TextField fx:id="txtProduct" prefWidth="200.0" promptText="نام" />
 										<TextField fx:id="txtProdSize" promptText="سایز" />

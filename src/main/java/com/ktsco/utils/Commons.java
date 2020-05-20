@@ -26,12 +26,16 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ktsco.enums.Dictionary;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -177,6 +181,23 @@ public class Commons {
 
 	}
 
+	public static void processToastMessage(boolean response) {
+		Service<Void> service = new ProcessService();
+		if (!service.isRunning()) {
+			service.start();
+			if (response) {
+				Alert successToast = AlertsUtils.toastAlert("", Dictionary.SuccessMessage.getValue());
+				successToast.setResult(ButtonType.OK);
+				successToast.show();
+				service.setOnSucceeded(event -> {
+					successToast.setResult(ButtonType.CLOSE);
+					service.reset();
+				});
+			} 
+		}
+
+	}
+	
 	public static void setErrorMessage(Label label) {
 		label.setStyle("-fx-text-fill : Red");
 		label.setText("تلاش ناموفق");

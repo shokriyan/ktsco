@@ -3,6 +3,8 @@ package com.ktsco.controllers.mgmnt;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.ktsco.enums.Dictionary;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -130,8 +132,8 @@ public class FinancialReportController implements Initializable {
 	private HBox addSearchButton() {
 		HBox searchButtons = new HBox(20);
 		searchButtons.setPadding(new Insets(10, 10, 10, 10));
-		btnSearch.setText("جستجو");
-		btnRefresh.setText("بارگذاری مجدد");
+		btnSearch.setText(Dictionary.Search.getValue());
+		btnRefresh.setText(Dictionary.Refresh.getValue());
 		btnSearch.setPrefWidth(150);
 		btnRefresh.setPrefWidth(150);
 		btnSearch.setOnAction(event -> allButtonActions(event));

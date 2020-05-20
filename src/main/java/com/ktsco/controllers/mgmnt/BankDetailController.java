@@ -9,10 +9,8 @@ import java.util.ResourceBundle;
 
 import com.ktsco.models.csr.AccountsModel;
 import com.ktsco.models.mgmt.BankDetail;
-import com.ktsco.models.mgmt.SellSummaryModel;
 import com.ktsco.modelsdao.AccountsDAO;
 import com.ktsco.utils.Commons;
-import com.ktsco.utils.DateUtils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +25,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 
 public class BankDetailController implements Initializable {
 	

@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 
 public class AlertsUtils {
 	private static final Logger log = LoggerFactory.getLogger(AlertsUtils.class);
@@ -310,6 +311,18 @@ public class AlertsUtils {
 		alertMessage = "امکان اعمال تغییرات و یا حذف نمی باشد";
 		Alert alert = errorAlerts(alertTitle, alertMessage);
 		alert.show();
+	}
+	
+	public static Alert toastAlert(String title, String alertMessage) {
+		Alert alert = new Alert(AlertType.NONE);
+		alert.setTitle(title);
+		alert.setContentText(alertMessage);
+		alert.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+		alert.initStyle(StageStyle.UNDECORATED);
+		alert.initModality(Modality.APPLICATION_MODAL);
+		
+		
+		return alert;
 	}
 	
 	

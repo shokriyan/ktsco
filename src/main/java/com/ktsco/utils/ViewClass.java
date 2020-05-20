@@ -211,5 +211,6 @@ public class ViewClass {
 		stage.setWidth(bounds.getWidth());
 		stage.setHeight(bounds.getHeight());
 	}
+	
 
 }
