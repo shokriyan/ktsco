@@ -32,11 +32,12 @@ public class Constants {
 	private static String panelName; 
 	private static String displayPanelName;
 	public final static Font pageTitleFont = new Font("Tahoma" , 18);
-	public final static Font elementFonts = new Font("Tahoma" , 11);
+	public final static Font elementFonts = new Font("Tahoma" , 13);
 	public final static Insets globalPadding = new Insets(5,5,5,5);
 	public final static double globalSpacing = 20; 
 	public final static double mainPanelPrefHeight = 520;
 	public final static double mainPanelPrefWidth = 1080;
+	public final static double fieldsPrefHeight = 28;
 	public static String getDisplayPanelName() {
 		return displayPanelName;
 	}

@@ -49,7 +49,7 @@ public class SalesController implements Initializable{
 			log.info("Currency List Button Clicked");
 			CurrenciesController.currencyStage = Commons.openPanelsUndecorate(Commons.getFxmlPanel("CurrenciesPanel"));
 		}else if (event.getSource() == btnBillEntry) {
-			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("SalesBillPanel"));
+			Commons.setCenterPanel(CSRController.csrBorderScene, Commons.getFxmlPanel("SalesBillEntryPanel"));
 		}
 		
 	}

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ktsco.models.csr.BillDetailModel;
+import com.ktsco.models.csr.BillEntryModal;
 import com.ktsco.models.csr.SalesSearchModel;
 import com.ktsco.models.mgmt.AmountOweModal;
 import com.ktsco.models.mgmt.SalesDetailModel;
@@ -151,6 +152,43 @@ public class SaleBillDAO {
 			preStatement.setInt(6, productID);
 			preStatement.setDouble(7, quantity);
 			preStatement.setDouble(8, unitPrice);
+			preStatement.execute();
+			isSuccess = true;
+
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+
+		return isSuccess;
+	}
+	
+	public static boolean insertBillDetail(BillEntryModal modal, int billId) {
+		boolean isSuccess = false;
+		int detailID = (modal.getId() > 0) ? modal.getId() : 0;
+
+		query = "INSERT INTO SALEDETAIL (ID, BILL_ID, PRODUCT_ID, QUANTITY, UNITPRICE) VALUES (?,?,?,?,?)"
+				+ " ON DUPLICATE KEY UPDATE PRODUCT_ID = ? , QUANTITY = ? , UNITPRICE = ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+
+			preStatement.setInt(1, detailID);
+			preStatement.setInt(2, billId);
+			preStatement.setInt(3, modal.getProdCode());
+			preStatement.setDouble(4, modal.getQuantity());
+			preStatement.setDouble(5, modal.getUnitprice());
+			preStatement.setInt(6, modal.getProdCode());
+			preStatement.setDouble(7, modal.getQuantity());
+			preStatement.setDouble(8, modal.getUnitprice());
 			preStatement.execute();
 			isSuccess = true;
 
@@ -564,6 +602,50 @@ public class SaleBillDAO {
 			}
 		}
 		return list; 
+	}
+	
+	public static ObservableList<BillEntryModal> retrieveBillEntryData(int billID) {
+		ObservableList<BillEntryModal> list = FXCollections.observableArrayList();
+		int lineNumber = 1;
+
+		query = "SELECT ID,SD.PRODUCT_ID, P.PROD_NAME AS PRODUCT,P.prod_um as Unit,  QUANTITY, UNITPRICE FROM SALEDETAIL SD "
+				+ "INNER JOIN PRODUCTS P ON SD.PRODUCT_ID = P.PROD_ID WHERE BILL_ID = ?";
+		preStatement = DatabaseUtils.dbPreparedStatment(query);
+		try {
+			preStatement.setInt(1, billID);
+
+			resultSet = preStatement.executeQuery();
+			while (resultSet.next()) {
+				BillEntryModal modal = new BillEntryModal();
+				modal.setId(resultSet.getInt("id"));
+				modal.setProdCode(resultSet.getInt("PRODUCT_ID"));
+				modal.setItems(resultSet.getString("product"));
+				modal.setUnit(resultSet.getString("Unit"));
+				double quantity = resultSet.getDouble("quantity");
+				modal.setQuantity(quantity);
+				double unitPrice = resultSet.getDouble("unitprice");
+				modal.setUnitprice(unitPrice);
+				modal.setLinetotal(quantity * unitPrice); 
+				modal.setLineNo(lineNumber);
+				list.add(modal);
+				lineNumber++;
+			}
+
+		} catch (SQLException e) {
+			log.error(Commons.dbExcutionLog(query, e.getMessage()));
+			AlertsUtils.databaseErrorAlert();
+		} finally {
+			try {
+				if (resultSet != null)
+					resultSet.close();
+				if (preStatement != null)
+					preStatement.close();
+			} catch (SQLException e) {
+				log.error(Commons.dbClosingLog(e.getMessage()));
+			}
+		}
+
+		return list;
 	}
 
 }
